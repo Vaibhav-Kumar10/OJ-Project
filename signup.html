@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav class="nav">
+            <div class="nav-logo">
+                <p>OJ</p>
+            </div>
+
+            <div class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="" class="link active">Home</a></li>
+                    <li><a href="" class="link">Problem Statements</a></li>
+                    <li><a href="" class="link">Mode</a></li>
+                    <li><a href=""" class=" link">About</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-button">
+                <div class="nav-button">
+                    <button type="button" class=" btn white-btn" id="signupBtn">Sign Up</button>
+                    <button type="button" class="btn " id="loginBtn">Sign In</button>
+                </div>
+            </div>
+
+            <div class="nav-menu-btn">
+                <i class="bx bx-menu"></i>
+            </div>
+        </nav>
+    </div>
+
+
+    <div class="form-wrapper">
+        <!------------------------- Form Box ------------------------->
+        <div class="form-box">
+            <!------------------------- SignUp Form ------------------------->
+            <div class="signUp-container" id="SignUp">
+                <div class="top">
+                    <header>Sign Up</header>
+                </div>
+
+                <form action="signup" method="POST">
+                    <div class="two-forms">
+                        <!-- box for firstname entry -->
+                        <div class="input-box">
+                            <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname"
+                                required>
+                            <i class="bx bx-user"></i>
+                        </div>
+
+                        <!-- box for lastname entry -->
+                        <div class="input-box">
+                            <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname"
+                                required>
+                            <i class="bx bx-user"></i>
+                        </div>
+                    </div>
+
+                    <!-- box for email entry -->
+                    <div class="input-box">
+                        <input type="email" class="input-field" id="email" placeholder="Email/Mobile No." name="email"
+                            required>
+                        <i class="bx bx-envelope"></i>
+                    </div>
+
+                    <!-- box for password entry -->
+                    <div class="input-box">
+                        <input type="password" class="input-field" id="password" placeholder="Password" name="password"
+                            required>
+                        <i class="bx bx-lock-alt"></i>
+                    </div>
+
+                    <!-- box for submit -->
+                    <div class="input-box">
+                        <input type="submit" class="submit" id="signup" value=" Sign Up">
+                    </div>
+
+                    <div class="two-col">
+                        <div class="one">
+                            <input type="checkbox" id="signup-check">
+                            <label for="signup-check"> Remember Me</label>
+                        </div>
+                        <div class="two">
+                            <label><a href="#">Terms & conditions</a></label>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- box for login -->
+                <div class="input-box"><br>
+                    <a href="login">
+                        <button class="sign-in-btn">
+                            Already have an account?<br>Login </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
