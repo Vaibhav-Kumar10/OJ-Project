@@ -9,82 +9,84 @@
 </head>
 
 <body>
-    <div class="wrapper">
-        <nav class="nav">
-            <div class="nav-logo">
-                <p>OJ</p>
+    <div class="nav">
+        <div class="nav-logo">
+            OJ
+        </div>
+
+        <!-- Nav Bar -->
+        <div class="nav-menu">
+            <ul>
+                <li>
+                    <a href="home.html" class="link active">Home</a>
+                </li>
+                <li>
+                    <a href="problems" class="link">All Problems</a>
+                </li>
+                <li>
+                    <a href="leaderboard.html" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="contests.html" class="link">Contest</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-button">
+            <button type="button" class="btn" id="loginBtn">Sign In</button>
+            <button type="button" class="btn white-btn" id="signupBtn" href="signup.html">Sign Up</button>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-box">
+        <div class="login-container" id="login">
+            <div class="top">
+                <header>Login</header>
             </div>
-            <div class="nav-menu" id="navMenu">
-                <ul>
-                    <li><a href="" class="link active">Home</a></li>
-                    <li><a href="" class="link">Problem Statements</a></li>
-                    <li><a href="" class="link">Mode</a></li>
-                    <li><a href=""" class=" link">About</a></li>
-                </ul>
-            </div>
-            <div class="nav-button">
-                <div class="nav-button">
-                    <button type="button" class="btn white-btn" id="signupBtn" \>Sign Up</button>
-                    <button type="button" class="btn " id="loginBtn">Sign In</button>
+
+            <form action="login" method="POST">
+                <!-- Username box-->
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Username/email" id="uname" name="uname"
+                        required>
+                    <!-- <i class="bx bx-user"></i> -->
                 </div>
-            </div>
 
-            <div class="nav-menu-btn">
-                <i class="bx bx-menu""></i>
-            </div>
-        </nav>
+                <!-- Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
+                        required>
+                    <!-- <i class="bx bx-lock-alt"></i> -->
+                </div>
 
-        <div class=" form-wrapper">
-                    <!------------------------- Form Box ------------------------->
-                    <div class="form-box" ,>
-                        <!------------------------- SignIn Form ------------------------->
-                        <div class="signIn-container" id="SignIn">
-                            <div class="top">
-                                <header>Login</header>
-                            </div>
+                <!-- Submit box -->
+                <div class="input-box">
+                    <input type="submit" class="submit" id="login" value="Login" href="dashboard">
+                </div>
 
-                            <form action="login" method="POST">
-                                <!-- box for email entry -->
-                                <div class="input-box">
-                                    <input type="email" class="input-field" id="email" placeholder="Email/Mobile No."
-                                        name="email" required>
-                                    <i class="bx bx-envelope"></i>
-                                </div>
-
-                                <!-- box for password entry -->
-                                <div class="input-box">
-                                    <input type="password" class="input-field" id="password" placeholder="Password"
-                                        name="password" required>
-                                    <i class="bx bx-lock-alt"></i>
-                                </div>
-
-                                <!-- box for submit -->
-                                <div class="input-box">
-                                    <input type="submit" class="submit" id="signin" value="Login" href="dashboard">
-                                </div>
-
-                                <div class="two-col">
-                                    <div class="one">
-                                        <input type="checkbox" id="login-check">
-                                        <label for="login-check"> Remember Me</label>
-                                    </div>
-                                    <div class="two">
-                                        <label><a href="#">Forgot password?</a></label>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- box for signUp -->
-                            <div class="input-box"><br>
-                                <a href="signup">
-                                    <button class="sign-up-btn">
-                                        New User?<br>Sign Up
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
+                <div class="two-col">
+                    <div class="one">
+                        <input type="checkbox" id="login-check">
+                        <label for="login-check"> Remember Me</label>
                     </div>
-            </div>
+                    <div class="two">
+                        <label><a href="#">Forgot password?</a></label>
+                    </div>
+                </div>
+
+                <!-- Sign Up box -->
+                <div class="input-box"><br>
+                    <a href="signup">
+                        <button class="signupBtn" href="signup.html">
+                            New User?<br>Sign Up
+                        </button>
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
 
 </body>
 
