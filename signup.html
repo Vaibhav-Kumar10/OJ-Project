@@ -4,104 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignUp Page</title>
+    <title>Sign Up Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="wrapper">
-        <nav class="nav">
-            <div class="nav-logo">
-                <p>OJ</p>
-            </div>
+    <div class="nav">
+        <div class="nav-logo">
+            OJ
+        </div>
 
-            <div class="nav-menu" id="navMenu">
-                <ul>
-                    <li><a href="" class="link active">Home</a></li>
-                    <li><a href="" class="link">Problem Statements</a></li>
-                    <li><a href="" class="link">Mode</a></li>
-                    <li><a href=""" class=" link">About</a></li>
-                </ul>
-            </div>
+        <!-- Nav Bar -->
+        <div class="nav-menu">
+            <ul>
+                <li>
+                    <a href="home.html" class="link active">Home</a>
+                </li>
+                <li>
+                    <a href="problems" class="link">All Problems</a>
+                </li>
+                <li>
+                    <a href="leaderboard.html" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="contests.html" class="link">Contest</a>
+                </li>
+            </ul>
+        </div>
 
-            <div class="nav-button">
-                <div class="nav-button">
-                    <button type="button" class=" btn white-btn" id="signupBtn">Sign Up</button>
-                    <button type="button" class="btn " id="loginBtn">Sign In</button>
-                </div>
-            </div>
-
-            <div class="nav-menu-btn">
-                <i class="bx bx-menu"></i>
-            </div>
-        </nav>
+        <div class="nav-button">
+            <button type="button" class="btn  white-btn" id="loginBtn" href="login.html">Sign In</button>
+            <button type="button" class="btn" id="signupBtn">Sign Up</button>
+        </div>
     </div>
 
-
-    <div class="form-wrapper">
-        <!------------------------- Form Box ------------------------->
-        <div class="form-box">
-            <!------------------------- SignUp Form ------------------------->
-            <div class="signUp-container" id="SignUp">
-                <div class="top">
-                    <header>Sign Up</header>
+    <!-- Form -->
+    <div class="form-box">
+        <div class="signUp-container" id="SignUp">
+            <div class="top">
+                <header>Sign Up</header>
+            </div>
+            <form action="signUp" method="POST">
+                <!-- Name entry Box -->
+                <div class="two-forms">
+                    <!-- Fname box-->
+                    <div class="input-box">
+                        <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname" required>
+                        <!-- <i class="bx bx-user"></i> -->
+                    </div>
+                    <div class="input-box">
+                        <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname" required>
+                        <!-- <i class="bx bx-user"></i> -->
+                    </div>
                 </div>
 
-                <form action="signup" method="POST">
-                    <div class="two-forms">
-                        <!-- box for firstname entry -->
-                        <div class="input-box">
-                            <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname"
-                                required>
-                            <i class="bx bx-user"></i>
-                        </div>
+                <!-- Email entry Box -->
+                <div class="input-box">
+                    <input type="email" class="input-field" placeholder="Email" id="email" name="email" required>
+                    <!-- <i class="bx bx-envelope"></i> -->
+                </div>
+                <!-- Uname entry Box -->
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required>
+                    <!-- <i class="bx bx-envelope"></i> -->
+                </div>
 
-                        <!-- box for lastname entry -->
-                        <div class="input-box">
-                            <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname"
-                                required>
-                            <i class="bx bx-user"></i>
-                        </div>
-                    </div>
+                <!-- Mobile No. entry Box -->
+                <div class="input-box">
+                    <input type="number" class="input-field" placeholder="Mobile No." id="mobileno" name="mobileno"
+                        required>
+                    <!-- <i class="bx bx-envelope"></i> -->
+                </div>
 
-                    <!-- box for email entry -->
-                    <div class="input-box">
-                        <input type="email" class="input-field" id="email" placeholder="Email/Mobile No." name="email"
-                            required>
-                        <i class="bx bx-envelope"></i>
-                    </div>
+                <!-- Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
+                        required>
+                    <!-- <i class="bx bx-lock-alt"></i> -->
+                </div>
+                <!-- Re enter Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Re-password" id="repassword"
+                        name="repassword" required>
+                    <!-- <i class="bx bx-lock-alt"></i> -->
+                </div>
 
-                    <!-- box for password entry -->
-                    <div class="input-box">
-                        <input type="password" class="input-field" id="password" placeholder="Password" name="password"
-                            required>
-                        <i class="bx bx-lock-alt"></i>
-                    </div>
+                <!-- Submit box -->
+                <div class="input-box">
+                    <input type="submit" class="submit" id="signup" value="Sign Up">
+                </div>
 
-                    <!-- box for submit -->
-                    <div class="input-box">
-                        <input type="submit" class="submit" id="signup" value=" Sign Up">
-                    </div>
-
-                    <div class="two-col">
-                        <div class="one">
-                            <input type="checkbox" id="signup-check">
-                            <label for="signup-check"> Remember Me</label>
-                        </div>
-                        <div class="two">
-                            <label><a href="#">Terms & conditions</a></label>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- box for login -->
+                <!-- Login box -->
                 <div class="input-box"><br>
                     <a href="login">
-                        <button class="sign-in-btn">
-                            Already have an account?<br>Login </button>
+                        <button class="loginBtn" href="login.html">
+                            Already a User?<br>Sign In
+                        </button>
                     </a>
                 </div>
-            </div>
+
+            </form>
         </div>
     </div>
 
