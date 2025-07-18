@@ -1,5 +1,5 @@
 """
-WSGI config for OJ project.
+WSGI config for oj project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OJ.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'oj.settings')
 
 application = get_wsgi_application()

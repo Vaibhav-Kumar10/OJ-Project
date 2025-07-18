@@ -517,23 +517,23 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="home.html" class="link">Home</a>
+                    <a href="{% url 'core:home' %} " class="link">Home</a>
                 </li>
                 <li>
-                    <a href="problems.html" class="link active">All Problems</a>
+                    <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
                 </li>
                 <li>
-                    <a href="leaderboard.html" class="link">Leaderboard</a>
+                    <a href="{% url 'core:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="contests.html" class="link">Contest</a>
+                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
 
         <div class="nav-button">
-            <button type="button" class="btn" id="loginBtn">Sign In</button>
-            <button type="button" class="btn white-btn" id="signupBtn" href="signup">Sign Up</button>
+            <a href="{% url 'core:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'core:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
         </div>
     </div>
 

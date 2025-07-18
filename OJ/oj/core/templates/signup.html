@@ -18,24 +18,25 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="home.html" class="link active">Home</a>
+                    <a href="{% url 'core:home' %} " class="link active">Home</a>
                 </li>
                 <li>
-                    <a href="problems" class="link">All Problems</a>
+                    <a href="{% url 'core:problems' %}" class=" link">All Problems</a>
                 </li>
                 <li>
-                    <a href="leaderboard.html" class="link">Leaderboard</a>
+                    <a href="{% url 'core:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="contests.html" class="link">Contest</a>
+                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
 
         <div class="nav-button">
-            <button type="button" class="btn  white-btn" id="loginBtn" href="login.html">Sign In</button>
-            <button type="button" class="btn" id="signupBtn">Sign Up</button>
+            <a href="{% url 'core:login' %}" class="btn white-btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'core:signup' %}" class="btn" id="signupBtn">Sign Up</a>
         </div>
+
     </div>
 
     <!-- Form -->
@@ -97,7 +98,7 @@
                 <!-- Login box -->
                 <div class="input-box"><br>
                     <a href="login">
-                        <button class="loginBtn" href="login.html">
+                        <button class="loginBtn" href="{% url 'core:login' %}">
                             Already a User?<br>Sign In
                         </button>
                     </a>

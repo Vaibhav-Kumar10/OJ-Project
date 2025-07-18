@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contests Page</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="../static/style.css">
 </head>
 
@@ -18,25 +18,31 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="home.html" class="link">Home</a>
+                    <a href="{% url 'core:home' %} " class="link">Home</a>
                 </li>
                 <li>
-                    <a href="problems.html" class="link">All Problems</a>
+                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="leaderboard.html" class="link">Leaderboard</a>
+                    <a href="{% url 'core:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="contests.html" class="link active">Contest</a>
+                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
 
+
         <div class="nav-button">
-            <button type="button" class="btn" id="loginBtn">Sign In</button>
-            <button type="button" class="btn white-btn" id="signupBtn" href="signup.html">Sign Up</button>
+            <a href="{% url 'core:logout' %}" class="btn" id="logoutBtn">Logout</a>
         </div>
     </div>
+
+    {% if user.is_authenticated %}
+    <div class="nav-user">
+        <span>Welcome, {{ user.username }}</span>
+    </div>
+    {% else %}
 
 
 </body>
