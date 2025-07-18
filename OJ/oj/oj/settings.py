@@ -28,10 +28,22 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# -------------------
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # if you have a project-level /static/
+]
+# -------------------
+
+
 # Application definition
 
 INSTALLED_APPS = [
-    "core.apps.CoreConfig",
+    "auth",
+    "compiler",
+    "contests",
+    "core",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -55,7 +67,7 @@ ROOT_URLCONF = "oj.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [BASE_DIR / "core" / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

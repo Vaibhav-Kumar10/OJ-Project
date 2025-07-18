@@ -6,7 +6,7 @@ def home(request):
     """
     Render the home page of the OJ application.
     """
-    return render(request, "home.html")
+    return render(request, "core/home.html")
 
 
 def all_problems(request):
