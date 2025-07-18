@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard Page</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+    <div class="nav">
+        <div class="nav-logo">
+            OJ
+        </div>
+
+        <!-- Nav Bar -->
+        <div class="nav-menu">
+            <ul>
+                <li>
+                    <a href="{% url 'core:home' %} " class="link">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:leaderboard' %}" class="link active">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-button">
+            <a href="{% url 'core:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'core:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
