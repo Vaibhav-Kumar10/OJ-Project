@@ -484,10 +484,10 @@
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                    <a href="#">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:contests' %}" class="link">Contest</a>
+                    <a href="#">Contests</a>
                 </li>
             </ul>
         </div>
@@ -495,7 +495,6 @@
         <div class="nav-button">
             {% if user.is_authenticated %}
 
-            <a href="{% url 'core:profile' %}" class="link">Profile</a>
 
             <p class="description">Welcome back, {{ user.username }}!</p>
 
@@ -519,7 +518,6 @@
         </p>
         <div class="cta-buttons">
             <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">Start Coding</a>
-            <a href="{% url 'contests:contests' %}" class="cta-btn cta-secondary">Join Contest</a>
         </div>
     </section>
 

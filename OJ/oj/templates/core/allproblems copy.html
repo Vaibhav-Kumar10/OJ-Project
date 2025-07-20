@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Problmes</title>
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
 
 
     <style>
@@ -500,6 +501,9 @@
 </head>
 
 <body>
+    <!-- {% include 'partials/navbar.html' %} -->
+
+
     <div class="nav">
         <div class="nav-logo">
             OJ
@@ -514,6 +518,12 @@
                 <li>
                     <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
                 </li>
+                <li>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:contests' %}" class="link">Contest</a>
+                </li>
             </ul>
         </div>
 
@@ -527,10 +537,9 @@
         </div>
     </div>
 
-    <!-- Problems Section -->
-    <div class="problems-container">
 
-        <!-- Header -->
+    <div class="problems-container">
+        <!-- Heading -->
         <div class="problems-header">
             <h1>All Problems</h1>
             <p>Master your coding skills with our comprehensive problem collection</p>
@@ -538,6 +547,7 @@
 
         <!-- Filters -->
         <div class="filters-section">
+
             <div class="filters-grid">
                 <!-- F1 - Difficulty-->
                 <div class="filter-group">
@@ -592,6 +602,7 @@
         <!-- Problems Stats and Sorting -->
         <div class="problems-stats">
             <div class="problems-count">
+                <!-- Showing 1-20 of 1,247 problems -->
                 Showing problems
             </div>
 
@@ -603,12 +614,122 @@
                 </select>
             </div>
         </div>
-
         <!-- Problems Table -->
-        <table class="problems-table">
+
+        <!--             
+        <div class="problems-table">
+            Problems Table Heading
+            <div class="table-header">
+                <div>Status</div>
+                <div>Title</div>
+                <div>Difficulty</div>
+                <div>Tags</div>
+            </div>
+
+            Problems Table Rows - 10 problems for example
+            
+            <div class="table-row">
+                <div class="status-icon status-solved">✓</div>
+                <div class="problem-title">1. Two Sum</div>
+                <div><span class="difficulty easy">Easy</span></div>
+                <div class="tags">
+                    <span class="tag">Array</span>
+                    <span class="tag">Hash Table</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-attempted">○</div>
+                <div class="problem-title">2. Add Two Numbers</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">Linked List</span>
+                    <span class="tag">Math</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-unsolved">—</div>
+                <div class="problem-title">3. Longest Substring Without Repeating Characters</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">String</span>
+                    <span class="tag">Sliding Window</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-unsolved">—</div>
+                <div class="problem-title">4. Median of Two Sorted Arrays</div>
+                <div><span class="difficulty hard">Hard</span></div>
+                <div class="tags">
+                    <span class="tag">Array</span>
+                    <span class="tag">Binary Search</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-solved">✓</div>
+                <div class="problem-title">5. Longest Palindromic Substring</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">String</span>
+                    <span class="tag">Dynamic Programming</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-unsolved">—</div>
+                <div class="problem-title">6. ZigZag Conversion</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">String</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-attempted">○</div>
+                <div class="problem-title">7. Reverse Integer</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">Math</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-unsolved">—</div>
+                <div class="problem-title">8. String to Integer (atoi)</div>
+                <div><span class="difficulty medium">Medium</span></div>
+                <div class="tags">
+                    <span class="tag">String</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-solved">✓</div>
+                <div class="problem-title">9. Palindrome Number</div>
+                <div><span class="difficulty easy">Easy</span></div>
+                <div class="tags">
+                    <span class="tag">Math</span>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="status-icon status-unsolved">—</div>
+                <div class="problem-title">10. Regular Expression Matching</div>
+                <div><span class="difficulty hard">Hard</span></div>
+                <div class="tags">
+                    <span class="tag">String</span>
+                    <span class="tag">Dynamic Programming</span>
+                </div>
+            </div> 
+        </div>
+        -->
+
+        <table class="problem-table">
             <thead>
-                <tr class="table-row">
-                    <th>ID</th>
+                <tr>
+                    <th>Problem ID</th>
                     <th>Title</th>
                     <th>Difficulty</th>
                     <th>Score</th>
@@ -618,27 +739,33 @@
 
             <tbody>
                 {% for problem in problems %}
-                <tr class="table-row">
-                    <td class="problem-id">
-                        <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.id }}</a>
-                    </td>
-                    <td>
-                        <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title }}</a>
-                    </td>
-                    <td class="problem-title">
-                        <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title }}</a>
-                    </td>
+                <tr>
+                    <td class="problem-id">{{ problem.id }}</td>
+                    <td class="problem-title"><a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title
+                            }}</a></td>
                     <td class="difficulty">{{ problem.difficulty }}</td>
                     <td>{{ problem.score }}</td>
                     <td class="tag">{{ problem.tags }}</td>
                 </tr>
                 {% empty %}
-                <tr class="table-row">
+                <tr>
                     <td colspan="5">No problems available.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- <div class="pagination">
+            <button disabled>Previous</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button>
+            <span class="pagination-info">...</span>
+            <button>62</button>
+            <button>Next</button>
+        </div> -->
     </div>
 
     <script>
@@ -659,10 +786,9 @@
             document.getElementById('status').value = '';
             document.getElementById('search').value = '';
 
-            // console.log('Filters cleared');
+            // Reset filters logic would go here
+            console.log('Filters cleared');
         }
-
-
 
         // Add click handlers for problem rows
         document.querySelectorAll('.table-row').forEach(row => {
@@ -676,3 +802,55 @@
 </body>
 
 </html>
+
+
+
+
+
+<!-- 
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Problems</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+    {% include 'partials/navbar.html' %}
+
+    <div class="container">
+        <h1>All Problems</h1>
+        <table class="problem-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Difficulty</th>
+                    <th>Score</th>
+                    <th>Tags</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problem in problems %}
+                <tr>
+                    <td><a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title }}</a></td>
+                    <td>{{ problem.difficulty }}</td>
+                    <td>{{ problem.score }}</td>
+                    <td>{{ problem.tags }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">No problems available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html> -->

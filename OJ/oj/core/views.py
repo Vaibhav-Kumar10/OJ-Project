@@ -6,10 +6,8 @@ from .models import Problem, Submission, TestCase
 
 
 # ----------------- Home Page ----------------- #
-def home(request):
-    featured_problems = Problem.objects.filter(is_complete=True).order_by("-score")[
-        :4
-    ]
+def home_view(request):
+    featured_problems = Problem.objects.filter(is_complete=True).order_by("-score")[:4]
     return render(request, "core/home.html", {"featured_problems": featured_problems})
 
 

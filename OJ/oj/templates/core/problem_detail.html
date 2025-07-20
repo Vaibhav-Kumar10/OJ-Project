@@ -4,15 +4,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ problem.title }}</title>
-    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
-
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
-    <!-- {% include 'partials/navbar.html' %} -->
-
     <!-- Navbar -->
     <div class="nav">
         <div class="nav-logo">OJ</div>
@@ -20,8 +16,8 @@
             <ul>
                 <li><a href="{% url 'core:home' %}" class="link">Home</a></li>
                 <li><a href="{% url 'core:problems' %}" class="link">All Problems</a></li>
-                <li><a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a></li>
-                <li><a href="{% url 'contests:contests' %}" class="link">Contest</a></li>
+                <li><a href="#" class="link">Leaderboard</a></li>
+                <li><a href="#" class="link">Contest</a></li>
             </ul>
         </div>
         <div class="nav-button">
@@ -39,70 +35,77 @@
         <!-- Header -->
         <div class="problems-header">
             <h1>{{ problem.title }}</h1>
-            <p>
-                <strong>Difficulty:</strong> {{ problem.difficulty }} | <strong>Score:</strong> {{ problem.score }}
-            </p>
+            <p><strong>Difficulty:</strong> {{ problem.difficulty }} | <strong>Score:</strong> {{ problem.score }}</p>
             <p><strong>Tags:</strong> {{ problem.tags }}</p>
         </div>
 
-        <h3>Problem Statement</h3>
-        <p>{{ problem.statement }}</p>
+        <!-- Statement -->
+        <div class="filters-section">
+            <h2 style="color: white; margin-bottom: 1rem;">Problem Statement</h2>
+            <p style="color: rgba(255,255,255,0.9); line-height: 1.7;">{{ problem.statement }}</p>
 
-        <h4>Input Example:</h4>
-        <pre>{{ problem.input_example }}</pre>
+            <br>
+            <h3 style="color: white;">Input Example</h3>
+            <pre class="filter-input" style="white-space: pre-wrap;">{{ problem.input_example }}</pre>
 
-        <h4>Output Example:</h4>
-        <pre>{{ problem.output_example }}</pre>
-
-        <hr>
+            <h3 style="color: white;">Output Example</h3>
+            <pre class="filter-input" style="white-space: pre-wrap;">{{ problem.output_example }}</pre>
+        </div>
 
         <!-- Submission Form -->
-        <h2>Submit Your Solution</h2>
-        <form method="POST" action="{% url 'core:submit' %}">
-            {% csrf_token %}
-            <input type="hidden" name="problem_id" value="{{ problem.id }}">
+        <div class="filters-section" style="margin-top: 2rem;">
+            <h2 style="color: white; margin-bottom: 1rem;">Submit Your Code</h2>
+            <form method="POST" action="{% url 'core:submit' %}">
+                {% csrf_token %}
+                <input type="hidden" name="problem_id" value="{{ problem.id }}">
 
-            <label for="language">Language:</label>
-            <select name="language" required>
-                <option value="python">Python</option>
-                <option value="cpp">C++</option>
-                <option value="java">Java</option>
-            </select>
+                <div class="filter-group">
+                    <label for="language">Language</label>
+                    <select name="language" class="filter-select" required>
+                        <option value="">Select language</option>
+                        <option value="python">Python</option>
+                        <option value="cpp">C++</option>
+                        <option value="java">Java</option>
+                    </select>
+                </div>
 
-            <br><br>
+                <div class="filter-group">
+                    <label for="code">Your Code</label>
+                    <textarea name="code" rows="15" class="filter-input" placeholder="Write your code here..."
+                        required></textarea>
+                </div>
 
-            <label for="code">Code:</label><br>
-            <textarea name="code" rows="15" cols="80" placeholder="Write your code here..." required></textarea>
+                <br>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
 
-            <br><br>
-            <button type="submit">Submit</button>
-        </form>
-
-        <hr>
-
-        <!-- Previous Submissions -->
-        <h2>Your Submissions</h2>
+        <!-- Submission History -->
         {% if submissions %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Language</th>
-                    <th>Verdict</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in submissions %}
-                <tr>
-                    <td>{{ s.submitted_at }}</td>
-                    <td>{{ s.language }}</td>
-                    <td>{{ s.verdict }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>You haven't submitted any solutions yet.</p>
+        <div class="filters-section" style="margin-top: 2rem;">
+            <h2 style="color: white; margin-bottom: 1rem;">Your Submissions</h2>
+            <table class="problems-table">
+                <thead>
+                    <tr class="table-row">
+                        <th>Time</th>
+                        <th>Language</th>
+                        <th>Verdict</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in submissions %}
+                    <tr class="table-row">
+                        <td>{{ submission.submitted_at }}</td>
+                        <td>{{ submission.language }}</td>
+                        <td
+                            class="difficulty {% if submission.verdict == 'Accepted' %}easy{% elif submission.verdict == 'Wrong Answer' %}medium{% else %}hard{% endif %}">
+                            {{ submission.verdict }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
     </div>
 
