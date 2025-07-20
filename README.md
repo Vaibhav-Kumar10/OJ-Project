@@ -48,6 +48,7 @@ OJ-PROJECT/
 |     |---problem_detail
 |
 ├── manage.py
+├── Dockerfile
 |
 │(vesrion2)      
 ├── contests/         
