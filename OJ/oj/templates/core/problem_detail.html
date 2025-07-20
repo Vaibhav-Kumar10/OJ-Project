@@ -487,14 +487,24 @@
     <!-- Navbar -->
     <div class="nav">
         <div class="nav-logo">OJ</div>
+        <!-- Nav Bar -->
         <div class="nav-menu">
             <ul>
-                <li><a href="{% url 'core:home' %}" class="link">Home</a></li>
-                <li><a href="{% url 'core:problems' %}" class="link">All Problems</a></li>
-                <li><a href="#" class="link">Leaderboard</a></li>
-                <li><a href="#" class="link">Contest</a></li>
+                <li>
+                    <a href="{% url 'core:home' %}" class="link">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                </li>
             </ul>
         </div>
+
         <div class="nav-button">
             {% if user.is_authenticated %}
             <a href="{% url 'user_auth:logout' %}" class="btn">Logout</a>

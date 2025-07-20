@@ -514,9 +514,14 @@
                 <li>
                     <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
                 </li>
+                <li>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                </li>
             </ul>
         </div>
-
         <div class="nav-button">
             {% if user.is_authenticated %}
             <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>

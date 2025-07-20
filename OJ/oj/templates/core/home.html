@@ -484,14 +484,13 @@
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="#">Leaderboard</a>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="#">Contests</a>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
-
         <div class="nav-button">
             {% if user.is_authenticated %}
 

@@ -4,8 +4,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaderboard Page</title>
-    <link rel="stylesheet" href="../static/style.css">
+
+    <meta name="description" content="View top performers and track your ranking on our coding platform.">
+    <meta property="og:title" content="Leaderboard - OJ Platform" />
+    <meta property="og:description" content="See who's leading the competition and find your position among coders." />
+
+    <title>Leaderboard - OJ Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu .link {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu .link:hover,
+        .nav-menu .link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-button {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:not(.white-btn) {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn:not(.white-btn):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .white-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .white-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .leaderboard-container {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .leaderboard-table {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .rank {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .rank.gold {
+            color: #ffd700;
+        }
+
+        .rank.silver {
+            color: #c0c0c0;
+        }
+
+        .rank.bronze {
+            color: #cd7f32;
+        }
+
+        .username {
+            font-weight: 600;
+            color: white;
+        }
+
+        .points {
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .problems-solved {
+            color: #2ecc71;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-menu ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .nav-button {
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .leaderboard-container {
+                padding: 1rem;
+            }
+
+            .leaderboard-table {
+                padding: 1rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th,
+            td {
+                padding: 0.7rem 0.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -18,27 +326,124 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="{% url 'core:home' %} " class="link">Home</a>
+                    <a href="{% url 'core:home' %}" class="link">Home</a>
                 </li>
                 <li>
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="{% url 'core:leaderboard' %}" class="link active">Leaderboard</a>
+                    <a href="{% url 'contests:leaderboard' %}" class="link active">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
-
         <div class="nav-button">
-            <a href="{% url 'core:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'core:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            {% if user.is_authenticated %}
+            <p class="description">Welcome back, {{ user.username }}!</p>
+            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
+            {% else %}
+            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            {% endif %}
         </div>
     </div>
 
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>🏆 Leaderboard</h1>
+        <p class="subtitle">
+            See who's leading the competition and track your progress among the top coders.
+        </p>
+    </section>
 
+    <!-- Leaderboard Table -->
+    <section class="leaderboard-container">
+        <div class="leaderboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Username</th>
+                        <th>Points</th>
+                        <th>Problems Solved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="rank gold">🥇 1</td>
+                        <td class="username">CodeMaster_42</td>
+                        <td class="points">2,850</td>
+                        <td class="problems-solved">287</td>
+                    </tr>
+                    <tr>
+                        <td class="rank silver">🥈 2</td>
+                        <td class="username">AlgoWizard</td>
+                        <td class="points">2,720</td>
+                        <td class="problems-solved">265</td>
+                    </tr>
+                    <tr>
+                        <td class="rank bronze">🥉 3</td>
+                        <td class="username">DataStructureGuru</td>
+                        <td class="points">2,650</td>
+                        <td class="problems-solved">251</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">4</td>
+                        <td class="username">BinarySearchPro</td>
+                        <td class="points">2,480</td>
+                        <td class="problems-solved">234</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">5</td>
+                        <td class="username">GraphTheoryExpert</td>
+                        <td class="points">2,390</td>
+                        <td class="points">228</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">6</td>
+                        <td class="username">DynamicProgrammer</td>
+                        <td class="points">2,280</td>
+                        <td class="problems-solved">217</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">7</td>
+                        <td class="username">RecursionMaster</td>
+                        <td class="points">2,150</td>
+                        <td class="problems-solved">203</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">8</td>
+                        <td class="username">SortingKing</td>
+                        <td class="points">2,050</td>
+                        <td class="problems-solved">195</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">9</td>
+                        <td class="username">HashingHero</td>
+                        <td class="points">1,980</td>
+                        <td class="problems-solved">189</td>
+                    </tr>
+                    <tr>
+                        <td class="rank">10</td>
+                        <td class="username">TreeTraversal</td>
+                        <td class="points">1,920</td>
+                        <td class="problems-solved">182</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2025 OJ Platform. All rights reserved.</p>
+        <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </footer>
 </body>
 
 </html>

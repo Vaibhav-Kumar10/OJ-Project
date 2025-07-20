@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -21,13 +22,13 @@
                     <a href="{% url 'core:home' %} " class="link active">Home</a>
                 </li>
                 <li>
-                    <a href="{% url 'core:problems' %}" class=" link">All Problems</a>
+                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
                     <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:contests' %}" class="link">Contest</a>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
