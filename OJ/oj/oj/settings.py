@@ -20,30 +20,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0i_4fz6%$-f8@mza%u%9qh(v@(zpke8)4yv03=it5cayes81gq"
+SECRET_KEY = "django-insecure-ejbyui=mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# -------------------
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # if you have a project-level /static/
-]
-# -------------------
+AUTH_USER_MODEL = "user_auth.User"
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/auth/login/"
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "auth",
-    "compiler",
-    "contests",
+    "user_auth",
     "core",
+    "contests",
+    "compiler",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -67,7 +63,7 @@ ROOT_URLCONF = "oj.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

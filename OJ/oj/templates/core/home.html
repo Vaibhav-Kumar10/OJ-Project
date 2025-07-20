@@ -440,23 +440,23 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="{% url 'core:home' %} " class="link active">Home</a>
+                    <a href="home/" class="link active">Home</a>
                 </li>
                 <li>
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="{% url 'core:leaderboard' %}" class="link">Leaderboard</a>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="{% url 'core:contests' %}" class="link">Contest</a>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
 
         <div class="nav-button">
-            <a href="{% url 'core:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'core:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            <a href="{% url 'auth:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
         </div>
     </div>
 
@@ -471,7 +471,7 @@
         </p>
         <div class="cta-buttons">
             <a href="{% url 'core:problem' %}" class="cta-btn cta-primary">Start Coding</a>
-            <a href="{% url 'core:contest' %}" class="cta-btn cta-secondary">Join Contest</a>
+            <a href="{% url 'contests:contest' %}" class="cta-btn cta-secondary">Join Contest</a>
         </div>
     </section>
 
