@@ -38,8 +38,8 @@ LOGOUT_REDIRECT_URL = "/auth/login/"
 INSTALLED_APPS = [
     "user_auth",
     "core",
-    "contests",
-    "compiler",
+    # "contests",
+    # "compiler",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

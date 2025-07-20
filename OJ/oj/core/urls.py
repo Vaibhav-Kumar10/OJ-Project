@@ -1,5 +1,10 @@
-# app_name = "core"
+from django.urls import path
+from .views import home_view, all_problems_view, problem_view, submit_solution
 
-# urlpatterns = [
-#     path("", views.home_view, name="home"),  # or whatever your home view is
-# ]
+app_name = "core"
+urlpatterns = [
+    path("", home_view, name="home"),
+    path("problems/", all_problems_view, name="all_problems"),
+    path("problem/<int:id>/", problem_view, name="problem_detail"),
+    path("submit/", submit_solution, name="submit_solution"),
+]

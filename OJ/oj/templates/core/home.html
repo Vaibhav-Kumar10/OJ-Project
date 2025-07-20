@@ -4,6 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="Solve coding problems, join contests, and improve your skills on our Online Judge platform.">
+    <meta property="og:title" content="OJ Platform - Code, Compete, Conquer" />
+    <meta property="og:description"
+        content="Join thousands of developers sharpening their skills on our coding platform." />
+    <!-- <meta property="og:image" content="/static/assets/oj-banner.png" /> -->
+
     <title>OJ Platform - Code, Compete, Conquer</title>
     <style>
         * {
@@ -427,6 +435,36 @@
                 grid-template-columns: 1fr;
             }
         }
+
+
+
+
+        /* FOOTERS */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
     </style>
 </head>
 
@@ -440,7 +478,7 @@
         <div class="nav-menu">
             <ul>
                 <li>
-                    <a href="home/" class="link active">Home</a>
+                    <a href="{% url 'core:home' %} " class="link active">Home</a>
                 </li>
                 <li>
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
@@ -449,14 +487,24 @@
                     <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                    <a href="{% url 'contests:contests' %}" class="link">Contest</a>
                 </li>
             </ul>
         </div>
 
         <div class="nav-button">
-            <a href="{% url 'auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            {% if user.is_authenticated %}
+
+            <a href="{% url 'core:profile' %}" class="link">Profile</a>
+
+            <p class="description">Welcome back, {{ user.username }}!</p>
+
+
+            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
+            {% else %}
+            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            {% endif %}
         </div>
     </div>
 
@@ -470,8 +518,8 @@
             your career, our platform provides the perfect environment to grow.
         </p>
         <div class="cta-buttons">
-            <a href="{% url 'core:problem' %}" class="cta-btn cta-primary">Start Coding</a>
-            <a href="{% url 'contests:contest' %}" class="cta-btn cta-secondary">Join Contest</a>
+            <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">Start Coding</a>
+            <a href="{% url 'contests:contests' %}" class="cta-btn cta-secondary">Join Contest</a>
         </div>
     </section>
 
@@ -543,56 +591,39 @@
     <!-- Featured Problems Section -->
     <section class="recent-problems">
         <h2>Featured Problems</h2>
+        {% if user.is_authenticated %}
         <div class="problems-grid">
-            <!-- P1 -->
-            <div class="problem-card">
+            {% for problem in featured_problems %}
+            <a href="{% url 'core:problem_detail' problem.id %}" class="problem-card">
                 <div class="problem-header">
-                    <h3 class="problem-title">Two Sum</h3>
-                    <span class="difficulty easy">Easy</span>
+                    <h3 class="problem-title">{{ problem.title }}</h3>
+                    <span class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</span>
                 </div>
                 <div class="problem-stats">
-                    <span>✓ 45,234 solved</span>
-                    <span>💡 Array, Hash Table</span>
+                    <span>💡 {{ problem.tags }}</span>
+                    <span>🏆 {{ problem.score }} points</span>
                 </div>
-            </div>
-            <!-- P2 -->
-            <div class="problem-card">
-                <div class="problem-header">
-                    <h3 class="problem-title">Binary Tree Traversal</h3>
-                    <span class="difficulty medium">Medium</span>
-                </div>
-                <div class="problem-stats">
-                    <span>✓ 23,456 solved</span>
-                    <span>💡 Tree, DFS, BFS</span>
-                </div>
-            </div>
-            <!-- P3 -->
-            <div class="problem-card">
-                <div class="problem-header">
-                    <h3 class="problem-title">Graph Shortest Path</h3>
-                    <span class="difficulty hard">Hard</span>
-                </div>
-                <div class="problem-stats">
-                    <span>✓ 8,729 solved</span>
-                    <span>💡 Graph, Dijkstra</span>
-                </div>
-            </div>
-            <!-- P4 -->
-            <div class="problem-card">
-                <div class="problem-header">
-                    <h3 class="problem-title">Dynamic Programming</h3>
-                    <span class="difficulty medium">Medium</span>
-                </div>
-                <div class="problem-stats">
-                    <span>✓ 15,892 solved</span>
-                    <span>💡 DP, Optimization</span>
-                </div>
-            </div>
+            </a>
+            {% endfor %}
         </div>
+        {% endif %}
+
+
         <div style="text-align: center;">
-            <a href="{% url 'core:pronlems' %}" class="cta-btn cta-primary">View All Problems</a>
+            <!-- <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">View All Problems</a> -->
+            <a href="{% url 'core:problems' %}" class="cta-btn cta-primary" role="button" tabindex="0">Start Coding</a>
         </div>
     </section>
+
+    <footer class="footer">
+        <p>© 2025 OJ Platform. All rights reserved.</p>
+        <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </footer>
+
 
 </body>
 

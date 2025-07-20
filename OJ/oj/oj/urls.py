@@ -20,6 +20,18 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.urls", namespace="core")),
+    # path("", include("core.urls", namespace="core")),
     path("auth/", include("user_auth.urls", namespace="user_auth")),
 ]
+
+
+# from django.contrib import admin
+# from django.urls import path, include
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('', include('core.urls')),
+#     path('auth/', include('auth.urls')),
+#     path('contests/', include('contests.urls')),
+#     path('compiler/', include('compiler.urls')),
+# ]
