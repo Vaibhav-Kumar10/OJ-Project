@@ -1,23 +1,28 @@
 ## Home 
-<img width="1912" height="967" alt="Screenshot 2025-07-20 170217" src="https://github.com/user-attachments/assets/484aa7e6-c21e-4cc9-91bf-d492de7657f2" />
-<img width="1919" height="926" alt="Screenshot 2025-07-20 170229" src="https://github.com/user-attachments/assets/7a039fa0-6e8e-414a-adbb-d131a3e75ed3" />
-<img width="1919" height="924" alt="Screenshot 2025-07-20 170237" src="https://github.com/user-attachments/assets/80d5341c-4977-4beb-a164-8b0b46419531" />
+<img width="1919" height="1079" alt="Screenshot 2025-07-22 164127" src="https://github.com/user-attachments/assets/4f317c15-5f92-4ace-8034-cb4152071916" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164141" src="https://github.com/user-attachments/assets/e305ac8d-8446-4a2c-ab0b-cebb0dc234b4" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164147" src="https://github.com/user-attachments/assets/d3ba7b47-f9f3-4e63-b8ec-bf546f7b85ce" />
 
 
 ## All Problems
-<img width="1919" height="921" alt="Screenshot 2025-07-20 170247" src="https://github.com/user-attachments/assets/c8e25840-5612-4a0a-917b-274c34502d31" />
-
-## Problem
-<img width="1918" height="980" alt="Screenshot 2025-07-20 170256" src="https://github.com/user-attachments/assets/d0c12578-514e-47a7-9208-68b30fc2f9b1" />
-<img width="1919" height="925" alt="Screenshot 2025-07-20 170304" src="https://github.com/user-attachments/assets/98abb1a7-61b8-46c3-996b-056bcd1d2e59" />
-<img width="1919" height="971" alt="Screenshot 2025-07-20 170309" src="https://github.com/user-attachments/assets/dacf5e98-9a6f-4755-98e1-321b43b14d7f" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/363b007b-40a4-494c-8416-fe881186b228" />
 
 ## Leaderboard 
-<img width="1917" height="879" alt="Screenshot 2025-07-21 185251" src="https://github.com/user-attachments/assets/4378097f-9011-4ade-b6b7-62ba4c485438" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164247" src="https://github.com/user-attachments/assets/0db87655-b4b2-43cc-b41f-dfb79a4f19d9" />
 
 ## Contests
-<img width="1919" height="886" alt="Screenshot 2025-07-21 185320" src="https://github.com/user-attachments/assets/35bda68e-ca84-424d-93fb-41468fd65a80" />
-<img width="1919" height="882" alt="Screenshot 2025-07-21 185307" src="https://github.com/user-attachments/assets/16c6e3e5-7d1a-4071-b42b-ae658d905cf1" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164255" src="https://github.com/user-attachments/assets/25e9bb04-f799-4bc3-b46f-b72ab6044e6c" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164258" src="https://github.com/user-attachments/assets/32bff8c3-dfe3-4472-a248-41de13c58f94" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164258" src="https://github.com/user-attachments/assets/bea0f134-a5d3-49d5-b7ac-9476fede379c" />
+
+## Problem
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164359" src="https://github.com/user-attachments/assets/bcf9ae82-89be-4355-ae61-40bf6ead6392" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164431" src="https://github.com/user-attachments/assets/ba10a0a4-7c5a-49f1-9dda-221f52b08936" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164441" src="https://github.com/user-attachments/assets/12e09c87-7670-497e-bfd7-fc9ccd443630" />
+<img width="1920" height="1080" alt="Screenshot 2025-07-22 164452" src="https://github.com/user-attachments/assets/0fdb59bf-290e-41de-8b41-0780394ca6d9" />
+### Submissions added
+<img width="1766" height="583" alt="image" src="https://github.com/user-attachments/assets/7293604e-9602-4660-a9c3-8a7fef1f711a" />
+
 
 ## Docker Container
 <img width="1916" height="1019" alt="Screenshot 2025-07-21 185338" src="https://github.com/user-attachments/assets/35adcd0b-3b28-4a57-86a2-ce3a8d04dbf8" />
@@ -54,15 +59,14 @@ OJ-PROJECT/
 |     |---home    
 |     |---allproblems 
 |     |---problem_detail
+|     |---contest     
+|     |---leaderboard      
+|
+├── contests/         
+│ ├── models.py # Contest, Participation.       
+│ ├── views.py      
+│ ├── urls.py       
 |
 ├── manage.py
 ├── Dockerfile
-|
-│(vesrion2)      
-├── contests/         
-│ ├── models.py # Contest, Participation   
-│ ├── views.py   
-│ ├── urls.py     
-│ ├── templates/    
-|     |---contest     
-|     |---leaderboard 
+├── requirements.txt
