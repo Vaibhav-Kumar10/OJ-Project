@@ -12,7 +12,15 @@
 <img width="1919" height="925" alt="Screenshot 2025-07-20 170304" src="https://github.com/user-attachments/assets/98abb1a7-61b8-46c3-996b-056bcd1d2e59" />
 <img width="1919" height="971" alt="Screenshot 2025-07-20 170309" src="https://github.com/user-attachments/assets/dacf5e98-9a6f-4755-98e1-321b43b14d7f" />
 
+## Leaderboard 
+<img width="1917" height="879" alt="Screenshot 2025-07-21 185251" src="https://github.com/user-attachments/assets/4378097f-9011-4ade-b6b7-62ba4c485438" />
 
+## Contests
+<img width="1919" height="886" alt="Screenshot 2025-07-21 185320" src="https://github.com/user-attachments/assets/35bda68e-ca84-424d-93fb-41468fd65a80" />
+<img width="1919" height="882" alt="Screenshot 2025-07-21 185307" src="https://github.com/user-attachments/assets/16c6e3e5-7d1a-4071-b42b-ae658d905cf1" />
+
+## Docker Container
+<img width="1916" height="1019" alt="Screenshot 2025-07-21 185338" src="https://github.com/user-attachments/assets/35adcd0b-3b28-4a57-86a2-ce3a8d04dbf8" />
 
 
 ## My File Structure
@@ -48,6 +56,7 @@ OJ-PROJECT/
 |     |---problem_detail
 |
 ├── manage.py
+├── Dockerfile
 |
 │(vesrion2)      
 ├── contests/         
