@@ -58,12 +58,12 @@ OJ-PROJECT/
 |     |---allproblems 
 |     |---problem_detail
 |     |---contest     
-|     |---leaderboard 
+|     |---leaderboard      
 |
 ├── contests/         
-│ ├── models.py # Contest, Participation   
-│ ├── views.py   
-│ ├── urls.py     
+│ ├── models.py # Contest, Participation.       
+│ ├── views.py      
+│ ├── urls.py       
 |
 ├── manage.py
 ├── Dockerfile
