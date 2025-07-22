@@ -1,0 +1,4 @@
+  File "F:\App\OJ-Project\oj\compiler\codes\e2ebc2a9-5f84-456d-913c-29c01d0aaab1.py", line 5
+    int main()
+        ^^^^
+SyntaxError: invalid syntax

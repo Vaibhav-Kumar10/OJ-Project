@@ -339,7 +339,7 @@
             border-radius: 15px;
             background: rgba(0, 0, 0, 0.3);
             /* color: #4ecdc4; */
-            color:black;
+            color: black;
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             line-height: 1.4;
@@ -426,9 +426,11 @@
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-size: 0.8rem;
-            font-weight: 600;
+            font-weight: bold;
             text-transform: uppercase;
+            display: inline-block;
         }
+
 
         .verdict.accepted {
             background: rgba(46, 204, 113, 0.3);
@@ -580,7 +582,7 @@
         <!-- Submission Form -->
         <div class="submission-section">
             <h2>Submit Your Solution</h2>
-            <form method="POST" action="{% url 'compiler:run_code' %}" id="runCodeForm">
+            <form method="POST" id="runCodeForm">
                 {% csrf_token %}
                 <input type="hidden" name="problem_id" value="{{ problem.id }}">
 
@@ -605,17 +607,28 @@
                         placeholder="Enter input for test run...">{{ input_data|default_if_none:"" }}</textarea>
                 </div>
 
-                <button type="submit" class="submit-btn" id="runButton">Run Code</button>
+                <!-- <button type="submit" class="submit-btn" id="runButton">Run Code</button> -->
+
+                <button type="submit" formaction="{% url 'compiler:run_code' %}" class="submit-btn" id="runButton">Run
+                    Code</button>
+                <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn"
+                    id="submitButton">Submit Code</button>
             </form>
 
             <!-- Output area -->
             <div class="content-card" style="margin-top: 2rem;">
                 <h3>Output:</h3>
                 <pre id="outputBox" style="color: black; font-size: 12;">
-                    {% if output %}
+                    {% if mode == "run" and output %}
                         {{ output }}
-                    {% else %}
+                    {% elif mode == "run" %}
                         Your output will appear here...
+                    {% elif mode == "submit" %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
                 </pre>
             </div>
@@ -639,7 +652,7 @@
                         <tr>
                             <td>{{ s.submitted_at|date:"M d, Y H:i" }}</td>
                             <td>{{ s.language|upper }}</td>
-                            <td><span class="verdict {{ s.verdict|lower|cut:' '|cut:'_' }}">{{ s.verdict }}</span></td>
+                            <td><span class="verdict {{ s.verdict|lower|slugify }}">{{ s.verdict }}</span></td>
                         </tr>
                         {% endfor %}
                     </tbody>

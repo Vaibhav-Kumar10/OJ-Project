@@ -6,7 +6,6 @@ from pathlib import Path
 
 def execute_code(language, code, input_data):
     COMPILER_PATH = Path(settings.BASE_DIR) / "compiler"
-
     directories = ["codes", "inputs", "outputs"]
     for directory in directories:
         dir_path = COMPILER_PATH / directory
@@ -95,6 +94,8 @@ def run_cpp(codes_dir, unique, codes_file_path, input_file_path, output_file_pat
 
 
 import re
+
+
 def force_class_name_main(code):
     # Replace any public class with 'Main'
     code = re.sub(r"public\s+class\s+\w+", "public class Main", code)

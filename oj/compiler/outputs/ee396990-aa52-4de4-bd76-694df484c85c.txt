@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "F:\App\OJ-Project\oj\compiler\codes\ee396990-aa52-4de4-bd76-694df484c85c.py", line 3, in <module>
+    b = int(inout())
+            ^^^^^
+NameError: name 'inout' is not defined. Did you mean: 'input'?

@@ -1,9 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.contrib import messages
-from .models import Problem, Submission, TestCase
-from compiler.execution import execute_code as run_c
+from .models import Problem, Submission
 
 
 # ----------------- Home Page ----------------- #
@@ -30,49 +27,3 @@ def problem_view(request, id):
         "submissions": user_submissions,
     }
     return render(request, "core/problem_detail.html", context=context)
-
-
-# ----------------- Run Code ----------------- #
-# @login_required
-# def run_code(request):
-#     if request.method == "POST":
-#         user = request.user
-#         problem_id = request.POST.get("problem_id")
-#         language = request.POST.get("language")
-#         code = request.POST.get("code")
-
-#         try:
-#             problem = Problem.objects.get(id=problem_id)
-#         except Problem.DoesNotExist:
-#             messages.error(request, "Problem not found.")
-#             return redirect("core:problems")
-
-#         try:
-#             output = run_c(language, code)
-#         except Exception as e:
-#             output = f"Error: {str(e)}"
-
-#         # Save submission
-#         Submission.objects.create(
-#             user=user,
-#             problem=problem,
-#             code=code,
-#             verdict=output,
-#             language=language,
-#             submitted_at=timezone.now(),
-#         )
-
-#         user_submissions = Submission.objects.filter(
-#             user=user, problem=problem
-#         ).order_by("-submitted_at")
-
-#         return render(
-#             request,
-#             "core/problem_detail.html",
-#             {
-#                 "problem": problem,
-#                 "submissions": user_submissions,
-#                 "output": output,
-#             },
-#         )
-#     return redirect("core:problems")

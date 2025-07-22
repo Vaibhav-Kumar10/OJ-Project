@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from .execution import execute_code
+from .evaluation import submit_code
+from core.models import Problem, Submission
+from django.utils import timezone
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def run_code_view(request):
     if request.method == "POST":
         code = request.POST.get("code")
@@ -14,32 +20,67 @@ def run_code_view(request):
         except Exception as e:
             output = f"Error: {str(e)}"
 
-        from core.models import Problem, Submission
-
         problem = Problem.objects.get(id=problem_id)
         submissions = Submission.objects.filter(
             user=request.user, problem=problem
         ).order_by("-submitted_at")
 
-        return render(
-            request,
-            "core/problem_detail.html",
-            {
-                "problem": problem,
-                "submissions": submissions,
-                "output": output,
-                "code": code,
-                "input_data": input_data,
-                "language": language,
-            },
-        )
+        context = {
+            "problem": problem,
+            "submissions": submissions,
+            "output": output,
+            "code": code,
+            "input_data": input_data,
+            "language": language,
+            "mode": "run",
+        }
 
+        return render(request, "core/problem_detail.html", context=context)
     return redirect("core:problems")
 
 
+@login_required
 def submit_code_view(request):
-    # problem_id = request.POST.get("problem_id")
-    # testcases = TestCase.objects.get(pk_id=problem_id)
-    # for testcase in testcases:
-    #     run_code()
-    pass
+    if request.method == "POST":
+        user = request.user
+        problem_id = request.POST.get("problem_id")
+        code = request.POST.get("code")
+        language = request.POST.get("language")
+
+        problem = Problem.objects.get(id=problem_id)
+        output = submit_code(problem, code, language)
+
+        if output == "AC":
+            verdict = "Accepted"
+            messages.success(request, "Your solution was accepted!")
+        elif output == "WA":
+            verdict = "Wrong Answer"
+            messages.error(request, f"Submission failed with verdict {verdict}")
+        else:
+            verdict = "Submission Failed"
+            messages.error(request, f"Submission failed with verdict {output}")
+
+        # Save submission
+        Submission.objects.create(
+            user=user,
+            problem=problem,
+            code=code,
+            verdict=verdict,
+            language=language,
+            submitted_at=timezone.now(),
+        )
+
+        user_submissions = Submission.objects.filter(
+            user=user, problem=problem
+        ).order_by("-submitted_at")
+
+        context = {
+            "problem": problem,
+            "submissions": user_submissions,
+            "code": code,
+            "language": language,
+            "mode": "submit",
+        }
+
+        return render(request, "core/problem_detail.html", context=context)
+    return redirect("core:problems")
