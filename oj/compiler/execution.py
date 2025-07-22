@@ -42,7 +42,7 @@ def execute_code(language, code, input_data):
         run_cpp(codes_dir, unique, codes_file_path, input_file_path, output_file_path)
 
     # JAVA
-    if language == "java":
+    elif language == "java":
         # Always save as Main.java
         code = force_class_name_main(code)
         unique_code_file_name = "Main.java"

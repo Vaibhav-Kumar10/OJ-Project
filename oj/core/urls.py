@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home_view, all_problems_view, problem_view, run_code, submit_solution
+from .views import home_view, all_problems_view, problem_view
 
 app_name = "core"
 urlpatterns = [

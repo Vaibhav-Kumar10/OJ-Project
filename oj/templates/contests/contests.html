@@ -467,7 +467,6 @@
         </div>
         <div class="nav-button">
             {% if user.is_authenticated %}
-            <p class="description">Welcome back, {{ user.username }}!</p>
             <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
             {% else %}
             <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>

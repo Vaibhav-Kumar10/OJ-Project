@@ -313,7 +313,7 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             background: rgba(0, 0, 0, 0.3);
-            color: #4ecdc4;
+            color: black;
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             line-height: 1.4;
@@ -328,6 +328,32 @@
         }
 
         .code-editor::placeholder {
+            color: rgba(78, 205, 196, 0.6);
+        }
+
+        .input-editor {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            /* color: #4ecdc4; */
+            color:black;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .input-editor:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .input-editor::placeholder {
             color: rgba(78, 205, 196, 0.6);
         }
 
@@ -476,6 +502,10 @@
                 min-height: 250px;
             }
 
+            .input-editor {
+                min-height: 80px;
+            }
+
             .form-select {
                 width: 100%;
             }
@@ -566,21 +596,22 @@
                 <div class="form-group">
                     <label for="code">Your Code:</label>
                     <textarea name="code" id="codeEditor" class="code-editor" placeholder="Write your code here..."
-                        required></textarea>
+                        required>{{ code|default_if_none:"" }}</textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="inputData">Custom Input (optional):</label>
-                    <textarea id="inputData" class="code-editor" placeholder="Enter input for test run..."></textarea>
+                    <textarea id="inputData" name="input_data" class="input-editor"
+                        placeholder="Enter input for test run...">{{ input_data|default_if_none:"" }}</textarea>
                 </div>
 
-                <button type="button" class="submit-btn" id="runButton">Run Code</button>
+                <button type="submit" class="submit-btn" id="runButton">Run Code</button>
             </form>
 
             <!-- Output area -->
             <div class="content-card" style="margin-top: 2rem;">
                 <h3>Output:</h3>
-                <pre id="outputBox">
+                <pre id="outputBox" style="color: black; font-size: 12;">
                     {% if output %}
                         {{ output }}
                     {% else %}
@@ -622,7 +653,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         // Add syntax highlighting effect for code editor
         const codeEditor = document.getElementById('code');
 
@@ -656,7 +687,7 @@
         }
 
         document.getElementById('code').addEventListener('input', autoResize);
-    </script>
+    </script> -->
 </body>
 
 </html>
