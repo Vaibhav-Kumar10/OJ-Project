@@ -6,6 +6,7 @@ urlpatterns = [
     path("", home_view, name="home"),
     path("problems/", all_problems_view, name="problems"),
     path("problem/<int:id>/", problem_view, name="problem_detail"),
+    path("dashboard/", dashboard_view, name="dashboard"),
     # path("submit/", submit_solution, name="submit"),
     # path("run/", run_code, name="run"),
 ]

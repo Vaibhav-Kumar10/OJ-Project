@@ -27,3 +27,8 @@ def problem_view(request, id):
         "submissions": user_submissions,
     }
     return render(request, "core/problem_detail.html", context=context)
+
+
+@login_required
+def dashboaed_view(request):
+    return render(request, "core/dashboadr.html")
