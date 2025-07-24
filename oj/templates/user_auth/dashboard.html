@@ -280,13 +280,11 @@
     </div>
 
     {% if user.is_authenticated %}
-    <div class="nav-user">
-        <span>Welcome, {{ user.username }}</span>
-    </div>
 
     <section class="hero">
+        <h1>Welcome, {{ user.username }}</h1>
         <h1>Welcome, {{ user.first_name }}</h1>
-        <h1>Welcome, {{ user.first_name }}</h1>
+        <h1>Welcome, {{ user.last_name }}</h1>
         <p>Username: {{ user.username }}</p>
         <p>Email: {{ user.email }}</p>
         <p>Mobile: {{ user.mobile_no }}</p>

@@ -613,7 +613,20 @@
                     Code</button>
                 <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn"
                     id="submitButton">Submit Code</button>
+                <!-- <button type="submit" formaction="{% url 'core:ai_review' %}" class="submit-btn" id="submitButton">Get
+                    AI
+                    review</button> -->
             </form>
+
+            <form method="POST" action="{% url 'core:ai_review' %}">
+                {% csrf_token %}
+                <input type="hidden" name="problem_id" value="{{ problem.id }}">
+                <input type="hidden" name="language" value="{{ language }}">
+                <input type="hidden" name="code" value="{{ code }}">
+                <input type="hidden" name="input_data" value="{{ input_data }}">
+                <button type="submit" class="submit-btn">Get AI Review</button>
+            </form>
+
 
             <!-- Output area -->
             <div class="content-card" style="margin-top: 2rem;">
@@ -632,6 +645,14 @@
                     {% endif %}
                 </pre>
             </div>
+
+            {% if ai_review %}
+            <div class="content-card" style="margin-top: 2rem;">
+                <h3>AI Review:</h3>
+                <pre style="font-size: 13px; color: #333;">{{ ai_review|safe }}</pre>
+            </div>
+            {% endif %}
+
         </div>
 
         <!-- Previous Submissions -->
