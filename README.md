@@ -8,7 +8,7 @@
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/363b007b-40a4-494c-8416-fe881186b228" />
 
 ## Leaderboard 
-<img width="1920" height="1080" alt="Screenshot 2025-07-22 164247" src="https://github.com/user-attachments/assets/0db87655-b4b2-43cc-b41f-dfb79a4f19d9" />
+<img width="1919" height="856" alt="image" src="https://github.com/user-attachments/assets/4d3d3c27-616d-48c5-a2b9-8d02e5453c2e" />
 
 ## Contests
 <img width="1920" height="1080" alt="Screenshot 2025-07-22 164255" src="https://github.com/user-attachments/assets/25e9bb04-f799-4bc3-b46f-b72ab6044e6c" />
