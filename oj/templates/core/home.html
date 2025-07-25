@@ -589,6 +589,7 @@
             <a href="{% url 'core:problem_detail' problem.id %}" class="problem-card">
                 <div class="problem-header">
                     <h3 class="problem-title">{{ problem.title }}</h3>
+                    {% if problem.is_solved %}✅{% endif %}
                     <span class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</span>
                 </div>
                 <div class="problem-stats">
@@ -598,8 +599,9 @@
             </a>
             {% endfor %}
         </div>
+        {% else %}
+        <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems.</p>
         {% endif %}
-
 
         <div style="text-align: center;">
             <!-- <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">View All Problems</a> -->
