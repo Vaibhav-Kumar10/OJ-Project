@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Problem, Submission
+from contests.models import ProblemCompletion, UserScore
 from google import genai
 import markdown
 import os
@@ -10,8 +11,25 @@ import os
 
 # ----------------- Home Page ----------------- #
 def home_view(request):
-    featured_problems = Problem.objects.filter(is_complete=True).order_by("-score")[:4]
-    return render(request, "core/home.html", {"featured_problems": featured_problems})
+    featured_problems = []
+
+    if request.user.is_authenticated:
+        featured_problems = (
+            ProblemCompletion.objects.filter(user=request.user, is_complete=True)
+            .select_related("problem")
+            .order_by("-score_awarded")[:4]
+        )
+
+    scores = UserScore.objects.select_related("user").order_by(
+        "-score", "-problems_solved"
+    )
+
+    context = {
+        "featured_problems": featured_problems,
+        "scores": scores,
+    }
+
+    return render(request, "core/home.html", context)
 
 
 # ----------------- List All Problems ----------------- #

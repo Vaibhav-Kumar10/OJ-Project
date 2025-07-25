@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from .execution import execute_code
-from .evaluation import submit_code
-from core.models import Problem, Submission
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .execution import execute_code
+from .evaluation import submit_code
+from core.models import Problem, Submission
+from contests.models import UserScore, ProblemCompletion
 
 
 @login_required
@@ -52,10 +53,28 @@ def submit_code_view(request):
 
         if output == "AC":
             verdict = "Accepted"
+
+            problem_status, _ = ProblemCompletion.objects.get_or_create(
+                user=user, problem=problem
+            )
+
+            if not problem_status.is_complete:
+
+                problem_status.is_complete = True
+                problem_status.score_awarded = problem.score
+                problem_status.save()
+
+                user_score, _ = UserScore.objects.get_or_create(user=user)
+                user_score.score += problem.score
+                user_score.problems_solved += 1
+                user_score.save()
+
             messages.success(request, "Your solution was accepted!")
+
         elif output == "WA":
             verdict = "Wrong Answer"
             messages.error(request, f"Submission failed with verdict {verdict}")
+
         else:
             verdict = "Submission Failed"
             messages.error(request, f"Submission failed with verdict {output}")

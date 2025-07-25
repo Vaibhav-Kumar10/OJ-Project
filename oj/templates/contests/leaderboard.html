@@ -369,68 +369,28 @@
                         <th>Problems Solved</th>
                     </tr>
                 </thead>
+                {% if scores %}
                 <tbody>
-                    <tr>
-                        <td class="rank gold">🥇 1</td>
-                        <td class="username">CodeMaster_42</td>
-                        <td class="points">2,850</td>
-                        <td class="problems-solved">287</td>
-                    </tr>
-                    <tr>
-                        <td class="rank silver">🥈 2</td>
-                        <td class="username">AlgoWizard</td>
-                        <td class="points">2,720</td>
-                        <td class="problems-solved">265</td>
-                    </tr>
-                    <tr>
-                        <td class="rank bronze">🥉 3</td>
-                        <td class="username">DataStructureGuru</td>
-                        <td class="points">2,650</td>
-                        <td class="problems-solved">251</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">4</td>
-                        <td class="username">BinarySearchPro</td>
-                        <td class="points">2,480</td>
-                        <td class="problems-solved">234</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">5</td>
-                        <td class="username">GraphTheoryExpert</td>
-                        <td class="points">2,390</td>
-                        <td class="points">228</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">6</td>
-                        <td class="username">DynamicProgrammer</td>
-                        <td class="points">2,280</td>
-                        <td class="problems-solved">217</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">7</td>
-                        <td class="username">RecursionMaster</td>
-                        <td class="points">2,150</td>
-                        <td class="problems-solved">203</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">8</td>
-                        <td class="username">SortingKing</td>
-                        <td class="points">2,050</td>
-                        <td class="problems-solved">195</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">9</td>
-                        <td class="username">HashingHero</td>
-                        <td class="points">1,980</td>
-                        <td class="problems-solved">189</td>
-                    </tr>
-                    <tr>
-                        <td class="rank">10</td>
-                        <td class="username">TreeTraversal</td>
-                        <td class="points">1,920</td>
-                        <td class="problems-solved">182</td>
-                    </tr>
+
                 </tbody>
+                <tbody>
+                    {% for entry in scores %}
+                    <!-- <tr class="{% if entry.user == request.user %}highlight-user{% endif %}"> -->
+                    <tr
+                        class="{% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %} {% if entry.user == request.user %}highlight-user{% endif %}">
+
+                        <td class="rank">{{ forloop.counter }}</td>
+                        <td class="username">{{ entry.user.username }}</td>
+                        <td class="points">{{ entry.score }}</td>
+                        <td class="problems-solved">{{ entry.problems_solved }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+                {% else %}
+                <p>No submissions yet. Be the first to get on the board!</p>
+                {% endif %}
+
             </table>
         </div>
     </section>

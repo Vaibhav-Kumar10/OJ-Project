@@ -4,9 +4,9 @@ from .models import Problem, TestCase, Submission
 
 @admin.register(Problem)
 class ProblemAdmin(admin.ModelAdmin):
-    list_display = ["title", "difficulty", "score", "is_complete"]
+    list_display = ["title", "difficulty", "score"]
     search_fields = ["title", "tags"]
-    list_filter = ["difficulty", "is_complete"]
+    list_filter = ["difficulty", "title"]
 
 
 @admin.register(TestCase)

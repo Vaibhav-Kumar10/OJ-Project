@@ -10,7 +10,6 @@ class Problem(models.Model):
     output_example = models.TextField()
     tags = models.TextField()
     score = models.IntegerField()
-    is_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
