@@ -1,4 +1,0 @@
-  File "F:\App\OJ-Project\oj\compiler\codes\9e946a79-990f-4166-9e29-59e2c616e5ff.py", line 3
-    using namespace std;
-          ^^^^^^^^^
-SyntaxError: invalid syntax

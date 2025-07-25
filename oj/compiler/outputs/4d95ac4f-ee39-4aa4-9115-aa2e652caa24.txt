@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "F:\App\OJ-Project\oj\compiler\codes\4d95ac4f-ee39-4aa4-9115-aa2e652caa24.py", line 1, in <module>
-    a
-NameError: name 'a' is not defined

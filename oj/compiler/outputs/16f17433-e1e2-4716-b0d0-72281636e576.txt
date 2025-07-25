@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "F:\App\OJ-Project\oj\compiler\codes\16f17433-e1e2-4716-b0d0-72281636e576.py", line 1, in <module>
-    qwert
-NameError: name 'qwert' is not defined

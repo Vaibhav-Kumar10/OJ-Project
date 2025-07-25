@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "F:\App\OJ-Project\oj\compiler\codes\5ac06797-f393-4c78-a4db-3472a9843bd3.py", line 3, in <module>
-    b = int(input())
-            ~~~~~^^
-EOFError: EOF when reading a line
