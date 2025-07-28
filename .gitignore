@@ -1,3 +1,11 @@
-.venv
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
 
-oj/.env
+# Env
+.venv/
+.env
+
+# UV
+uv.lock

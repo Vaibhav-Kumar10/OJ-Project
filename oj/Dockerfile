@@ -12,11 +12,11 @@ WORKDIR /app
 
 COPY . /app
 
-# RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache django
-RUN pip install --no-cache markdown
-RUN pip install --no-cache dotenv
-RUN pip install --no-cache google-genai
+RUN pip install --no-cache-dir -r requirements.txt
+# RUN pip install --no-cache django
+# RUN pip install --no-cache markdown
+# RUN pip install --no-cache dotenv
+# RUN pip install --no-cache google-genai
 
 RUN python manage.py makemigrations
 RUN python manage.py migrate
