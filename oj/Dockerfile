@@ -1,4 +1,5 @@
-FROM python:3.11-slim
+FROM python:3.9-slim
+
 # Install gcc, g++, openjdk, and other dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -7,10 +8,12 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y libpq-dev
+
 WORKDIR /app
 
 COPY . /app
-RUN pip install --upgrade pip
+
 RUN pip install --no-cache django
 RUN pip install --no-cache markdown
 RUN pip install --no-cache dotenv
