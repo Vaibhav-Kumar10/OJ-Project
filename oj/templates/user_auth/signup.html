@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <div class="nav">
+        <div class="nav-logo">
+            OJ
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <p style="color: red">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+
+
+        <!-- Nav Bar -->
+        <div class="nav-menu">
+            <ul>
+                <li>
+                    <a href="{% url 'core:home' %} " class="link active">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-button">
+            <a href="{% url 'user_auth:login' %}" class="btn white-btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn" id="signupBtn">Sign Up</a>
+        </div>
+
+    </div>
+
+    <!-- Form -->
+    <div class="form-box">
+        <div class="signUp-container" id="SignUp">
+            <div class="top">
+                <header>Sign Up</header>
+            </div>
+            <form action="{% url 'user_auth:signup' %}" method="POST">
+                {% csrf_token %}
+                <!-- Name entry Box -->
+                <div class="two-forms">
+                    <!-- Fname box-->
+                    <div class="input-box">
+                        <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname" required>
+                    </div>
+                </div>
+
+                <!-- Email entry Box -->
+                <div class="input-box">
+                    <input type="email" class="input-field" placeholder="Email" id="email" name="email" required>
+                </div>
+                <!-- Uname entry Box -->
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required>
+                </div>
+
+                <!-- Mobile No. entry Box -->
+                <div class="input-box">
+                    <input type="number" class="input-field" placeholder="Mobile No." id="mobileno" name="mobileno">
+                </div>
+
+                <!-- Date of Birth entry Box -->
+                <div class="input-box">
+                    <input type="date" class="input-field" placeholder="Date Of Birth" id="dob" name="dob" required>
+                </div>
+
+                <!-- Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
+                        required>
+                </div>
+                <!-- Re enter Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Re-password" id="repassword"
+                        name="repassword" required>
+                </div>
+
+                <!-- Submit box -->
+                <div class="input-box">
+                    <input type="submit" class="submit" id="signup" value="Sign Up">
+                </div>
+
+                <!-- Login box -->
+                <div class="input-box"><br>
+                    <a href="{% url 'user_auth:login' %}">
+                        Already a User?<br>Sign In
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

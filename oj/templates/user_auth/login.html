@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <div class="nav">
+        <div class="nav-logo">
+            OJ
+        </div>
+
+        <!-- Nav Bar -->
+        <div class="nav-menu">
+            <ul>
+                <li>
+                    <a href="{% url 'core:home' %} " class="link active">Home</a>
+                </li>
+                <li>
+                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                </li>
+                <li>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nav-button">
+            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-box">
+        <div class="login-container" id="Login">
+            <div class="top">
+                <header>Login</header>
+            </div>
+
+            <form action="{% url 'user_auth:login' %}" method="POST">
+                {% csrf_token %}
+                <!-- Username box-->
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Username/email" id="uname" name="uname"
+                        required>
+                </div>
+
+                <!-- Password entry box -->
+                <div class="input-box">
+                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
+                        required>
+                </div>
+
+                <!-- Submit box -->
+                <div class="input-box">
+                    <input type="submit" class="submit" id="login" value="Login">
+                </div>
+
+                <div class="two-col">
+                    <div class="one">
+                        <input type="checkbox" id="login-check">
+                        <label for="login-check"> Remember Me</label>
+                    </div>
+                    <div class="two">
+                        <label><a href="#">Forgot password?</a></label>
+                    </div>
+                </div>
+
+                <!-- Sign Up box -->
+                <div class="input-box"><br>
+                    <a href="{% url 'user_auth:signup' %}">
+                        New User?<br>Sign Up
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
