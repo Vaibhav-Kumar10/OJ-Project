@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t vaibhavkumar10/ojproject:latest -f oj\Dockerfile oj
+        run: docker build --pull --rm -f oj/Dockerfile -t vaibhavkumar10/ojproject:latest oj
 
       - name: Push Docker image
         run: docker push vaibhavkumar10/ojproject:latest
