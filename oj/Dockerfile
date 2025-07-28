@@ -28,8 +28,11 @@ ENV DJANGO_SETTINGS_MODULE=oj.settings
 ENV PYTHONUNBUFFERED=1
 
 # RUN python manage.py makemigrations
+
 # RUN python manage.py migrate
 
-CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
+# CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+CMD bash -c "python manage.py migrate && gunicorn oj.wsgi:application --bind 0.0.0.0:$PORT"
 
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
