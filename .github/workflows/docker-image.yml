@@ -10,7 +10,7 @@ jobs:
   publish_images:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout
+    - name: checkout code
       uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker build --pull --rm -f '\oj\Dockerfile' -t 'vaibhavkumar10/ojproject:latest' 'oj'
