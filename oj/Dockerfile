@@ -29,10 +29,14 @@ ENV PYTHONUNBUFFERED=1
 
 # RUN python manage.py makemigrations
 
-# RUN python manage.py migrate
+RUN python manage.py migrate
 
 # CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
 
-CMD bash -c "python manage.py migrate && gunicorn oj.wsgi:application --bind 0.0.0.0:$PORT"
+# CMD bash -c "python manage.py migrate && gunicorn oj.wsgi:application --bind 0.0.0.0:$PORT"
+
+# RUN ["python", "manage.py", "migrate"]
+
+CMD ["gunicorn", "oj.wsgi:application", "-bind", "0.0.0.0:8000"]
 
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
