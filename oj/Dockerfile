@@ -14,13 +14,10 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install --upgrade pip
-RUN pip install --no-cache django
-RUN pip install --no-cache markdown
-RUN pip install --no-cache dotenv
-RUN pip install --no-cache google-genai
-RUN pip install --no-cache psycopg2
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python manage.py collectstatic --noinput
 RUN python manage.py makemigrations
 RUN python manage.py migrate
 
@@ -29,4 +26,9 @@ EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=oj.settings
 ENV PYTHONUNBUFFERED=1
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENV DJANGO_SETTINGS_MODULE=oj.settings
+ENV PYTHONUNBUFFERED=1
+
+CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
