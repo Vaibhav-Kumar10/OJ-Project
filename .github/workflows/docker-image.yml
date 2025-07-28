@@ -6,6 +6,20 @@ on:
   pull_request:
     branches: ["main"]
 
+services:
+  postgres:
+    image: postgres:13
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRESS_USER_NAME }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRESS_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRESS_DB_NAME }}
+    ports:
+      - 5432:5432
+    options: >-
+      --health-cmd pg_isready
+      --health-interval 10s
+      --health-timeout 5s
+      --health-retries 5
 jobs:
   publish_images:
     runs-on: ubuntu-latest
