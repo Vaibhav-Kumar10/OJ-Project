@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install upgrade pip
+RUN pip install --upgrade pip
 RUN pip install --no-cache django
 RUN pip install --no-cache markdown
 RUN pip install --no-cache dotenv
