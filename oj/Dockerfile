@@ -31,9 +31,6 @@ EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=oj.settings
 ENV PYTHONUNBUFFERED=1
 
-ENV DJANGO_SETTINGS_MODULE=oj.settings
-ENV PYTHONUNBUFFERED=1
-
 CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

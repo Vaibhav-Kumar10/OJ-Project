@@ -29,9 +29,9 @@ SECRET_KEY = "django-insecure-ejbyui=mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://my-oj-project.onrender.com',
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     'https://my-oj-project.onrender.com',
+# ]
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,17 +90,9 @@ WSGI_APPLICATION = "oj.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
 
 # DATABASES = {
 #     'default': {
