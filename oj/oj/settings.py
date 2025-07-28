@@ -29,6 +29,10 @@ SECRET_KEY = "django-insecure-ejbyui=mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://my-oj-project.onrender.com',
+]
+
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = "user_auth.User"
