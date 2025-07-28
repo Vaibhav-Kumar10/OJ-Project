@@ -15,7 +15,12 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+
+RUN pip install --no-cache django
+RUN pip install --no-cache markdown
+RUN pip install --no-cache dotenv
+RUN pip install --no-cache google-genai
+RUN pip install --no-cache gunicorn psycopg2-binary dj-database-url whitenoise
 
 RUN python manage.py collectstatic --noinput
 RUN python manage.py makemigrations
