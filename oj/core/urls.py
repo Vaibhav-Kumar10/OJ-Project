@@ -3,7 +3,6 @@ from .views import (
     home_view,
     all_problems_view,
     problem_view,
-    dashboard_view,
     get_ai_review,
     profile_view,
 )
