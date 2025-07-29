@@ -8,19 +8,13 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y bash
-
-RUN apt-get update && apt-get install -y libpq-dev
-
 WORKDIR /app
 
 COPY . /app
 
 RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache django markdown dotenv google-genai 
 
-RUN pip install --no-cache django markdown dotenv google-genai gunicorn psycopg2-binary dj-database-url whitenoise
-
-RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
@@ -29,12 +23,9 @@ ENV PYTHONUNBUFFERED=1
 
 # RUN python manage.py makemigrations
 
-# RUN python manage.py migrate
+RUN python manage.py migrate
 
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+# RUN pip install --no-cache django markdown dotenv google-genai gunicorn psycopg2-binary dj-database-url whitenoise
 # CMD ["gunicorn", "oj.wsgi:application", "--bind", "0.0.0.0:8000"]
-
-CMD sh -c "python manage.py migrate && gunicorn oj.wsgi:application --bind 0.0.0.0:8000"
-
-# RUN ["python", "manage.py", "migrate"]
-
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
