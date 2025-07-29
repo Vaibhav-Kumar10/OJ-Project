@@ -4,16 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description"
-        content="Solve coding problems, join contests, and improve your skills on our Online Judge platform.">
-    <meta property="og:title" content="OJ Platform - Code, Compete, Conquer" />
-    <meta property="og:description"
-        content="Join thousands of developers sharpening their skills on our coding platform." />
-    <!-- <meta property="og:image" content="/static/assets/oj-banner.png" /> -->
-
-    <title>OJ Platform - Code, Compete, Conquer</title>
+    <title>CodeForge - Online Judge Platform</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            /* Dark Theme Colors */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --bg-card: rgba(26, 26, 46, 0.8);
+            --accent-primary: #ffa116;
+            --accent-secondary: #00d9ff;
+            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --border: #3a3a5c;
+            --border-hover: #4a4a6c;
+
+            /* Glass morphism */
+            --glass-bg: rgba(26, 26, 46, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+
+            /* Radius */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -21,14 +60,172 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            position: relative;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
             overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
         }
 
-        body::before {
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-lg);
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand::before {
+            content: "⚡";
+            font-size: 2rem;
+            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
+            -webkit-text-fill-color: var(--accent-primary);
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: var(--bg-elevated);
+            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.875rem;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: var(--bg-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-hover);
+            border-color: var(--accent-primary);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: var(--space-3xl) var(--space-lg);
+            text-align: center;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            position: relative;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
             content: '';
             position: absolute;
             top: 0;
@@ -36,357 +233,473 @@
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            z-index: 1;
+                radial-gradient(circle at 25% 25%, rgba(255, 161, 22, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 200, 81, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            animation: backgroundShift 20s ease-in-out infinite;
         }
 
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        @keyframes backgroundShift {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .hero-content {
             position: relative;
-            z-index: 100;
-        }
-
-        .nav-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-menu ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu .link {
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-menu .link:hover,
-        .nav-menu .link.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .nav-button {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .btn:not(.white-btn) {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        }
-
-        .btn:not(.white-btn):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .white-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .white-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .hero {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem;
-            text-align: center;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
+        }
+
+        .hero-welcome {
+            font-size: 1.25rem;
+            color: var(--accent-secondary);
+            margin-bottom: var(--space-md);
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            animation: fadeInUp 1s ease-out;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
         }
 
-        .hero .subtitle {
+        .hero-subtitle {
             font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease-out 0.2s both;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            font-weight: 500;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
         }
 
-        .hero .description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-            animation: fadeInUp 1s ease-out 0.4s both;
-        }
-
-        .cta-buttons {
+        .user-stats {
             display: flex;
-            gap: 1.5rem;
             justify-content: center;
-            margin-bottom: 4rem;
-            animation: fadeInUp 1s ease-out 0.6s both;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
         }
 
-        .cta-btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .cta-primary {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
-        }
-
-        .cta-secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .cta-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-3px);
-        }
-
-        .features {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 3rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
+        .user-stat {
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
-        }
-
-        .stats {
-            position: relative;
-            z-index: 10;
-            padding: 3rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            border: 1px solid var(--glass-border);
+            padding: var(--space-lg);
+            border-radius: var(--radius-xl);
             text-align: center;
-        }
-
-        .stat-item {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
+            min-width: 140px;
         }
 
-        .stat-item:hover {
-            transform: translateY(-3px);
+        .user-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
         }
 
-        .stat-number {
-            font-size: 2.5rem;
+        .user-stat-number {
+            font-size: 2rem;
             font-weight: 800;
-            color: #ff6b6b;
-            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .stat-label {
-            color: rgba(255, 255, 255, 0.9);
+        .user-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: var(--space-xs);
             font-weight: 500;
         }
 
-        .recent-problems {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        .hero-actions {
+            display: flex;
+            gap: var(--space-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1s forwards;
         }
 
-        .recent-problems h2 {
-            text-align: center;
-            font-size: 2.5rem;
+        .btn-hero {
+            padding: var(--space-lg) var(--space-2xl);
+            font-size: 1.125rem;
+            border-radius: var(--radius-xl);
             font-weight: 700;
-            color: white;
-            margin-bottom: 3rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.3px;
+        }
+
+        /* Featured Problems Section */
+        .section {
+            padding: var(--space-3xl) var(--space-lg);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .problems-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            gap: var(--space-xl);
+            max-width: 1200px;
+            margin: 0 auto var(--space-2xl);
         }
 
         .problem-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--bg-card);
             backdrop-filter: blur(20px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .problem-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
+            transition: left 0.6s ease;
         }
 
         .problem-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .problem-card:hover::before {
+            opacity: 1;
+        }
+
+        .problem-card:hover::after {
+            left: 100%;
         }
 
         .problem-header {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: var(--space-lg);
+            gap: var(--space-md);
         }
 
         .problem-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+            flex: 1;
         }
 
-        .difficulty {
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .problem-solved {
+            color: var(--success);
+            font-size: 1.25rem;
+            margin-left: var(--space-sm);
+        }
+
+        .difficulty-badge {
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
-        .difficulty.easy {
-            background: rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
+        .difficulty-easy {
+            background: rgba(0, 200, 81, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(0, 200, 81, 0.3);
         }
 
-        .difficulty.medium {
-            background: rgba(241, 196, 15, 0.3);
-            color: #f1c40f;
+        .difficulty-medium {
+            background: rgba(255, 187, 51, 0.2);
+            color: var(--warning);
+            border: 1px solid rgba(255, 187, 51, 0.3);
         }
 
-        .difficulty.hard {
-            background: rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
+        .difficulty-hard {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--error);
+            border: 1px solid rgba(255, 68, 68, 0.3);
         }
 
         .problem-stats {
             display: flex;
-            gap: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border);
         }
 
+        .problem-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Activity Section */
+        .activity-section {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: var(--space-xl);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .activity-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .view-all-link {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .view-all-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .submission-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-sm);
+            background: var(--bg-elevated);
+            transition: all 0.2s ease;
+        }
+
+        .submission-item:hover {
+            background: var(--border);
+            transform: translateX(4px);
+        }
+
+        .submission-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-ac {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(0, 200, 81, 0.4);
+        }
+
+        .status-wa {
+            background: var(--error);
+            box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
+        }
+
+        .status-tle {
+            background: var(--warning);
+            box-shadow: 0 0 8px rgba(255, 187, 51, 0.4);
+        }
+
+        .submission-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .submission-problem {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .submission-time {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+
+        /* .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-sm);
+            background: var(--bg-elevated);
+            transition: all 0.2s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: var(--border);
+            transform: translateX(4px);
+        }
+
+        .leaderboard-rank {
+            font-weight: 800;
+            color: var(--accent-primary);
+            font-size: 1.1rem;
+            min-width: 30px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .leaderboard-user {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .leaderboard-username {
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .leaderboard-score {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        } */
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-lg);
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -399,215 +712,351 @@
             }
         }
 
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .nav-menu ul {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .nav-button {
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .features-grid,
-            .problems-grid {
+        @media (max-width: 1024px) {
+            .activity-grid {
                 grid-template-columns: 1fr;
             }
         }
 
+        @media (max-width: 768px) {
+            .navbar {
+                padding: var(--space-md);
+            }
 
+            .navbar-nav {
+                display: none;
+            }
 
+            .hero {
+                padding: var(--space-2xl) var(--space-md);
+                min-height: 70vh;
+            }
 
-        /* FOOTERS */
-        .footer {
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .user-stats {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: var(--space-2xl) var(--space-md);
+            }
+
+            .problem-card {
+                padding: var(--space-lg);
+            }
+
+            .problem-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-sm);
+            }
+
+            .problem-stats {
+                flex-direction: column;
+                gap: var(--space-sm);
+                align-items: flex-start;
+            }
+        }
+
+        /* Login prompt styling */
+        .login-prompt {
             text-align: center;
-            padding: 2rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: var(--space-2xl);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            margin: var(--space-xl) 0;
         }
 
-        .footer-links {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+        .login-prompt p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
         }
 
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+        .login-prompt a {
+            color: var(--accent-primary);
             text-decoration: none;
+            font-weight: 600;
         }
 
-        .footer-links a:hover {
-            color: white;
+        .login-prompt a:hover {
+            color: var(--accent-secondary);
         }
     </style>
 </head>
 
 <body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %} " class="link active">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-            </ul>
-        </div>
-        <div class="nav-button">
+        <ul class="navbar-nav">
+            <li>
+                <a href="{% url 'core:home' %} " class="nav-link active">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:contest' %}" class="nav-link">Contest</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
+            </li>
+        </ul>
+
+        <div class="navbar-actions">
             {% if user.is_authenticated %}
-            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
+            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
             {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary" id="signupBtn">Get Started</a>
             {% endif %}
         </div>
-    </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Code, Compete, Conquer</h1>
-        <p class="subtitle">Master algorithms and data structures with our comprehensive online judge platform</p>
-        <p class="description">
-            Join thousands of developers who are sharpening their programming skills through challenging problems,
-            competitive contests, and real-time evaluation. Whether you're preparing for interviews or advancing
-            your career, our platform provides the perfect environment to grow.
-        </p>
-        <div class="cta-buttons">
-            <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">Start Coding</a>
+        <div class="hero-content">
+            <div class="hero-welcome">
+                {% if user.is_authenticated %}
+                Welcome back, {{ user.username }}!
+                {% else %}
+                Welcome to OJ
+                {% endif %}
+            </div>
+            <h1>Code, Compete, Conquer</h1>
+
+            <p class="hero-subtitle">
+                Master algorithms and data structures with our comprehensive online judge platform
+            </p>
+
+            <!-- {% if user.is_authenticated %}
+            <div class="user-stats">
+                <div class="user-stat">
+                    <span class="user-stat-number">{{ user_stats.problems_solved|default(0) }}</span>
+                    <div class="user-stat-label">Problems Solved</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">{{ user_stats.current_streak|default(0) }}</span>
+                    <div class="user-stat-label">Day Streak</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">{{ user_stats.total_score|default(0) }}</span>
+                    <div class="user-stat-label">Total Score</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">{{ user_stats.rank|default('-') }}</span>
+                    <div class="user-stat-label">Global Rank</div>
+                </div>
+            </div>
+
+            {% else %} -->
+            <div class="user-stats">
+                <div class="user-stat">
+                    <span class="user-stat-number">1,2+</span>
+                    <div class="user-stat-label">Problems</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">50+</span>
+                    <div class="user-stat-label">Active Users</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">20+</span>
+                    <div class="user-stat-label">Submissions</div>
+                </div>
+                <div class="user-stat">
+                    <span class="user-stat-number">5+</span>
+                    <div class="user-stat-label">Contests</div>
+                </div>
+            </div>
+            <!-- {% endif %} -->
+
+            <div class="hero-actions">
+                <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">Start Coding</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'user_auth:profile' %}" class="btn btn-secondary btn-hero">View Profile</a>
+                {% else %}
+                <a href="{% url 'user_auth:signup' %}" class="btn btn-secondary btn-hero">Join Now</a>
+                {% endif %}
+
+            </div>
         </div>
     </section>
 
-    <!-- Platform Stats -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">1,200+</div>
-                <div class="stat-label">Problems</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">50K+</div>
-                <div class="stat-label">Active Users</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">2M+</div>
-                <div class="stat-label">Submissions</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">100+</div>
-                <div class="stat-label">Contests</div>
-            </div>
-        </div>
-    </section>
 
     <!-- Features Section -->
-    <section class="features">
-        <h2>Why Choose Our Platform?</h2>
+    <section class="section features">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose Our Platform?</h2>
+            <p class="section-subtitle">
+                Designed to help developers code smarter, faster, and better.
+            </p>
+        </div>
+
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🚀</div>
-                <h3>Instant Evaluation</h3>
-                <p>Get real-time feedback on your code submissions with our advanced automated testing system.
-                    Support for multiple programming languages including Python, Java, C++, and more.</p>
+                <h3 class="feature-title">Instant Evaluation</h3>
+                <p class="feature-desc">
+                    Get real-time feedback on your code submissions with our advanced automated testing system.
+                    Support for multiple programming languages including Python, Java, C++, and more.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">🏆</div>
-                <h3>Competitive Contests</h3>
-                <p>Participate in weekly coding contests and climb the leaderboard. Challenge yourself against
-                    programmers worldwide and showcase your problem-solving skills.</p>
+                <h3 class="feature-title">Competitive Contests</h3>
+                <p class="feature-desc">
+                    Participate in weekly coding contests and climb the leaderboard. Challenge yourself against
+                    programmers worldwide and showcase your problem-solving skills.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">📚</div>
-                <h3>Comprehensive Library</h3>
-                <p>Access a vast collection of problems covering algorithms, data structures, dynamic programming,
-                    graph theory, and more. Organized by difficulty and topic for structured learning.</p>
+                <h3 class="feature-title">Comprehensive Library</h3>
+                <p class="feature-desc">
+                    Access a vast collection of problems covering algorithms, data structures, dynamic programming,
+                    graph theory, and more. Organized by difficulty and topic for structured learning.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">💡</div>
-                <h3>Learning Resources</h3>
-                <p>Detailed explanations, hints, and editorial solutions help you understand concepts and
-                    improve your problem-solving approach. Learn from the community and expert solutions.</p>
+                <h3 class="feature-title">Learning Resources</h3>
+                <p class="feature-desc">
+                    Detailed explanations, hints, and editorial solutions help you understand concepts and
+                    improve your problem-solving approach. Learn from the community and expert solutions.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
-                <h3>Progress Tracking</h3>
-                <p>Monitor your coding journey with detailed statistics, performance analytics, and personalized
-                    recommendations. Track your growth and identify areas for improvement.</p>
+                <h3 class="feature-title">Progress Tracking</h3>
+                <p class="feature-desc">
+                    Monitor your coding journey with detailed statistics, performance analytics, and personalized
+                    recommendations. Track your growth and identify areas for improvement.
+                </p>
             </div>
+
             <div class="feature-card">
                 <div class="feature-icon">🛡️</div>
-                <h3>Secure Environment</h3>
-                <p>Code in a safe, sandboxed environment with robust security measures. Our platform ensures
-                    fair evaluation and protects against malicious code execution.</p>
+                <h3 class="feature-title">Secure Environment</h3>
+                <p class="feature-desc">
+                    Code in a safe, sandboxed environment with robust security measures. Our platform ensures
+                    fair evaluation and protects against malicious code execution.
+                </p>
             </div>
         </div>
     </section>
 
+
     <!-- Featured Problems Section -->
-    <section class="recent-problems">
-        <h2>Featured Problems</h2>
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Featured Problems</h2>
+            <p class="section-subtitle">
+                Handpicked challenges to help you master essential algorithms and data structures
+            </p>
+        </div>
+
         {% if user.is_authenticated %}
         <div class="problems-grid">
             {% for problem in featured_problems %}
             <a href="{% url 'core:problem_detail' problem.id %}" class="problem-card">
                 <div class="problem-header">
-                    <h3 class="problem-title">{{ problem.title }}</h3>
-                    {% if problem.is_solved %}✅{% endif %}
-                    <span class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</span>
+                    <h3 class="problem-title">
+                        {{ problem.title }}
+                        {% if problem.is_solved %}
+                        <span class="problem-solved">✅</span>
+                        {% endif %}
+                    </h3>
+                    <span class="difficulty-badge difficulty-{{ problem.difficulty|lower }}">
+                        {{ problem.difficulty }}
+                    </span>
                 </div>
                 <div class="problem-stats">
-                    <span>💡 {{ problem.tags }}</span>
-                    <span>🏆 {{ problem.score_awarded }} points</span>
+                    <div class="problem-stat">
+                        <span>💡</span>
+                        <span>{{ problem.tags|default('Algorithm') }}</span>
+                    </div>
+                    <div class="problem-stat">
+                        <span>🏆</span>
+                        <span>{{ problem.score_awarded|default(100) }} points</span>
+                    </div>
                 </div>
             </a>
             {% endfor %}
         </div>
         {% else %}
-        <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems.</p>
+        <div class="login-prompt">
+            <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems and start your
+                coding journey!</p>
+            <a href="{% url 'user_auth:login' %}" class="btn btn-primary">Sign In to Continue</a>
+        </div>
         {% endif %}
 
-        <div style="text-align: center;">
-            <!-- <a href="{% url 'core:problems' %}" class="cta-btn cta-primary">View All Problems</a> -->
-            <a href="{% url 'core:problems' %}" class="cta-btn cta-primary" role="button" tabindex="0">Start Coding</a>
+        <div style="text-align: center; margin-top: var(--space-2xl);">
+            <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">View All Problems</a>
         </div>
     </section>
+
+    <section class="section activity-section">
+        <div class="section-header">
+            <h2 class="section-title">Community Highlights</h2>
+            <p class="section-subtitle">Track your progress and see who’s leading the charge</p>
+        </div>
+
+        <div class="activity-grid">
+            <!-- Recent Submissions -->
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h3 class="activity-title">Recent Submissions</h3>
+                    <a href="{% url 'core:submissions' %}" class="view-all-link">View All</a>
+                </div>
+                {% for submission in recent_submissions %}
+                <div class="submission-item">
+                    <div class="submission-status status-{{ submission.status|lower }}"></div>
+                    <div class="submission-info">
+                        <div class="submission-problem">{{ submission.problem.title }}</div>
+                        <div class="submission-time">{{ submission.created_at|timesince }} ago</div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No recent submissions yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+
 
     <footer class="footer">
         <p>© 2025 OJ Platform. All rights reserved.</p>

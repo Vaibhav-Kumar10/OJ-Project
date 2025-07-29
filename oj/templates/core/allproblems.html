@@ -1,14 +1,60 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Problmes</title>
-
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Problems | CodeForge</title>
     <style>
+        :root {
+            /* Dark Theme Colors */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --accent-primary: #ffa116;
+            --accent-secondary: #00d9ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --success: #00c851;
+            --fail: #ff4d4d;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --glass: rgba(26, 26, 46, 0.8);
+            --border-radius: 12px;
+
+            --bg-card: rgba(26, 26, 46, 0.8);
+            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
+            --text-muted: #6c6c6c;
+            --border: #3a3a5c;
+            --border-hover: #4a4a6c;
+
+            /* Glass morphism */
+            --glass-bg: rgba(26, 26, 46, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(12px);
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+
+            /* Radius */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,178 +62,230 @@
         }
 
         body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
             position: relative;
             overflow-x: hidden;
         }
 
+        /* Animated background */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            z-index: 1;
+                radial-gradient(circle at 20% 80%, rgba(255, 161, 22, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 161, 22, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
 
-        .nav {
+        /* Navbar */
+        .navbar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 100;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-lg);
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
 
-        .nav-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .nav-menu ul {
+        .navbar-brand::before {
+            content: "⚡";
+            font-size: 2rem;
+            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
+            -webkit-text-fill-color: var(--accent-primary);
+        }
+
+        .navbar-nav {
             display: flex;
+            align-items: center;
+            gap: var(--space-lg);
             list-style: none;
-            gap: 2rem;
         }
 
-        .nav-menu .link {
+        .nav-link {
+            color: var(--text-secondary);
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            overflow: hidden;
         }
 
-        .nav-menu .link:hover,
-        .nav-menu .link.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.1), transparent);
+            transition: left 0.5s ease;
         }
 
-        .nav-button {
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: var(--bg-elevated);
+            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
+        }
+
+        .navbar-actions {
             display: flex;
-            gap: 1rem;
+            align-items: center;
+            gap: var(--space-md);
         }
 
         .btn {
-            padding: 0.8rem 2rem;
+            padding: var(--space-sm) var(--space-lg);
             border: none;
-            border-radius: 25px;
+            border-radius: var(--radius-full);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn:not(.white-btn) {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        .btn-primary {
+            background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: var(--shadow-md);
         }
 
-        .btn:not(.white-btn):hover {
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
-        .white-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+        .btn-primary:hover {
+            box-shadow: var(--shadow-glow);
         }
 
-        .white-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
+        /* Main Content */
         .problems-container {
             position: relative;
             z-index: 10;
-            padding: 2rem;
+            padding: var(--space-2xl);
             max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .problems-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: var(--space-3xl);
             animation: fadeInUp 0.8s ease-out;
         }
 
         .problems-header h1 {
             font-size: 3rem;
             font-weight: 800;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .problems-header p {
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
         }
 
+        /* Filters Section */
         .filters-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            border: 1px solid var(--glass-border);
             animation: fadeInUp 0.8s ease-out 0.2s both;
+            box-shadow: var(--shadow-md);
         }
 
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: var(--space-sm);
         }
 
         .filter-group label {
-            color: white;
+            color: var(--text-primary);
             font-weight: 600;
             font-size: 0.9rem;
         }
 
         .filter-select,
         .filter-input {
-            padding: 0.8rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            padding: var(--space-md);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
@@ -195,230 +293,244 @@
         .filter-select:focus,
         .filter-input:focus {
             outline: none;
-            border-color: #ff6b6b;
-            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 3px rgba(255, 161, 22, 0.1);
         }
 
         .filter-select option {
-            background: #764ba2;
-            color: white;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
         }
 
         .filter-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
         }
 
         .filter-actions {
             display: flex;
-            gap: 1rem;
+            gap: var(--space-md);
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .filter-btn {
-            padding: 0.6rem 1.5rem;
+            padding: var(--space-md) var(--space-xl);
             border: none;
-            border-radius: 20px;
+            border-radius: var(--radius-full);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .filter-btn.primary {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: var(--accent-gradient);
             color: white;
+            box-shadow: var(--shadow-md);
         }
 
         .filter-btn.secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
         .filter-btn:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
+        .filter-btn.primary:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Problems Stats */
         .problems-stats {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-lg);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
             animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
         .problems-count {
-            color: white;
+            color: var(--text-primary);
             font-weight: 600;
         }
 
         .sort-controls {
             display: flex;
-            gap: 1rem;
+            gap: var(--space-md);
             align-items: center;
         }
 
         .sort-label {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
+        /* Problems Table */
         .problems-table {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
             animation: fadeInUp 0.8s ease-out 0.6s both;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .table-header {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 1rem;
-            display: grid;
-            grid-template-columns: 0.8fr 3fr 1fr 1fr 1fr 1fr;
-            gap: 1rem;
+        .problems-table thead {
+            background: rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .problems-table th {
+            padding: var(--space-lg);
             font-weight: 600;
-            color: white;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            text-align: left;
         }
 
         .table-row {
-            padding: 1rem;
-            display: grid;
-            grid-template-columns: 0.8fr 3fr 1fr 1fr 1fr 1fr;
-            gap: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+            opacity: 0.1;
+        }
+
+        .table-row:hover::before {
+            width: 4px;
         }
 
         .table-row:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
         }
 
-        .table-row:last-child {
+        .problems-table td {
+            padding: var(--space-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+
+        .problems-table tbody tr:last-child td {
             border-bottom: none;
         }
 
         .problem-id {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-muted);
             font-weight: 500;
+            font-family: 'Courier New', monospace;
         }
 
-        .problem-title {
-            color: white;
+        .problem-id a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .problem-title a {
+            color: var(--text-primary);
             font-weight: 600;
             font-size: 1.1rem;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .problem-title:hover {
-            color: #ff6b6b;
+        .problem-title a:hover {
+            color: var(--accent-primary);
         }
 
+        /* Difficulty Badges */
         .difficulty {
-            padding: 0.4rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: bold;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
             text-align: center;
+            width: fit-content;
+            display: inline-block;
+            text-transform: capitalize;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
 
         .difficulty.easy {
-            background: rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
 
         .difficulty.medium {
-            background: rgba(241, 196, 15, 0.3);
-            color: #f1c40f;
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
         }
 
         .difficulty.hard {
-            background: rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
+        /* Tags */
         .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.3rem;
+            gap: var(--space-xs);
         }
 
-        .tag {
-            background: rgba(78, 205, 196, 0.3);
-            color: #4ecdc4;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
-
-        .status-icon {
-            font-size: 1.2rem;
-            text-align: center;
-        }
-
-        .status-solved {
-            color: #2ecc71;
-        }
-
-        .status-attempted {
-            color: #f1c40f;
-        }
-
-        .status-unsolved {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding: 1rem;
-        }
-
-        .pagination button {
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
+        .tag-pill {
+            background: linear-gradient(135deg, var(--accent-secondary), #0891b2);
             color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.7rem;
+            border-radius: var(--radius-full);
+            display: inline-block;
             font-weight: 500;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            margin: 2px;
         }
 
-        .pagination button:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .tag-pill:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 217, 255, 0.3);
         }
 
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .score {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
         }
 
-        .pagination button.active {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-        }
-
-        .pagination-info {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -431,26 +543,76 @@
             }
         }
 
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading .table-row {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl);
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-lg);
+            opacity: 0.5;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav {
+            .navbar {
                 flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
+                gap: var(--space-md);
+                padding: var(--space-md);
             }
 
-            .nav-menu ul {
+            .navbar-nav {
+                order: 2;
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--space-md);
                 text-align: center;
+                display: none;
             }
 
-            .nav-button {
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .navbar-actions {
+                order: 1;
                 justify-content: center;
             }
 
+            .problems-container {
+                padding: var(--space-lg);
+            }
+
             .problems-header h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .filters-grid {
@@ -459,92 +621,94 @@
 
             .problems-stats {
                 flex-direction: column;
-                gap: 1rem;
+                gap: var(--space-md);
+                text-align: center;
             }
 
             .sort-controls {
                 justify-content: center;
             }
 
-            .table-header,
-            .table-row {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-                text-align: center;
+            .problems-table {
+                font-size: 0.9rem;
             }
 
-            .table-header {
-                display: none;
-            }
-
-            .table-row {
-                display: block;
-                padding: 1.5rem;
-                text-align: left;
-            }
-
-            .table-row>div {
-                margin-bottom: 0.5rem;
-            }
-
-            .problem-title {
-                font-size: 1.2rem;
-                margin-bottom: 0.8rem;
+            .problems-table th,
+            .problems-table td {
+                padding: var(--space-md);
             }
 
             .tags {
                 justify-content: flex-start;
             }
+
+            .difficulty {
+                width: fit-content;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
         }
     </style>
 </head>
 
 <body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">CodeForge</a>
+        <ul class="navbar-nav" id="navbarNav">
+            <li><a class="nav-link" href="{% url 'core:home' %}">Home</a></li>
+            <li><a class="nav-link active" href="#problems">Problems</a></li>
+            <li><a class="nav-link" href="#contests">Contests</a></li>
+            <li><a class="nav-link" href="{% url 'core:leaderboard' %}">Leaderboard</a></li>
+        </ul>
+        <div class="navbar-actions">
+            <a href="#login" class="btn btn-secondary">Sign In</a>
+            <a href="#signup" class="btn btn-primary">Sign Up</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
         </div>
+    </nav>
 
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %} " class="link">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-            </ul>
-        </div>
-        <div class="nav-button">
-            {% if user.is_authenticated %}
-            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
-            {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Problems Section -->
     <div class="problems-container">
-
-        <!-- Header -->
         <div class="problems-header">
             <h1>All Problems</h1>
-            <p>Master your coding skills with our comprehensive problem collection</p>
+            <p>Master your coding skills with our comprehensive problem collection. Filter, search, and solve your way
+                to excellence.</p>
         </div>
 
-        <!-- Filters -->
+        <!-- Filters Section -->
         <div class="filters-section">
             <div class="filters-grid">
-                <!-- F1 - Difficulty-->
                 <div class="filter-group">
                     <label for="difficulty">Difficulty</label>
                     <select id="difficulty" class="filter-select">
@@ -554,8 +718,6 @@
                         <option value="hard">Hard</option>
                     </select>
                 </div>
-
-                <!-- F2 - Category -->
                 <div class="filter-group">
                     <label for="category">Category</label>
                     <select id="category" class="filter-select">
@@ -567,24 +729,22 @@
                         <option value="dp">Dynamic Programming</option>
                         <option value="sorting">Sorting</option>
                         <option value="searching">Searching</option>
+                        <option value="greedy">Greedy</option>
+                        <option value="math">Mathematics</option>
                     </select>
                 </div>
-
-                <!-- F3 - Status -->
                 <div class="filter-group">
                     <label for="status">Status</label>
                     <select id="status" class="filter-select">
                         <option value="">All Status</option>
-                        <option value="solved">Solved</option>
-                        <option value="attempted">Attempted</option>
-                        <option value="unsolved">Unsolved</option>
+                        <option value="solved">Solved ✓</option>
+                        <option value="attempted">Attempted ⚠</option>
+                        <option value="unsolved">Unsolved ○</option>
                     </select>
                 </div>
-
-                <!-- F4 - Search -->
                 <div class="filter-group">
                     <label for="search">Search</label>
-                    <input type="text" id="search" class="filter-input" placeholder="Search problems...">
+                    <input type="text" id="search" class="filter-input" placeholder="Search problems by title...">
                 </div>
             </div>
 
@@ -594,17 +754,18 @@
             </div>
         </div>
 
-        <!-- Problems Stats and Sorting -->
+        <!-- Problems Stats -->
         <div class="problems-stats">
             <div class="problems-count">
-                Showing problems
+                Showing <span id="problemCount">{{ problems|length }}</span> problems
             </div>
-
             <div class="sort-controls">
                 <span class="sort-label">Sort by:</span>
-                <select class="filter-select" style="width: auto;">
+                <select class="filter-select" style="width: auto;" onchange="sortProblems(this.value)">
                     <option value="default">Default</option>
                     <option value="difficulty">Difficulty</option>
+                    <option value="title">Title A-Z</option>
+                    <option value="score">Score</option>
                 </select>
             </div>
         </div>
@@ -620,26 +781,33 @@
                     <th>Tags</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for problem in problems %}
-                <tr class="table-row">
+                <tr class="table-row" onclick="navigateToProblem('{% url 'core:problem_detail' problem.id %}')">
                     <td class="problem-id">
-                        <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.id }}</a>
-                    </td>
-                    <td>
-                        <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title }}</a>
+                        <a href="{% url 'core:problem_detail' problem.id %}">#{{ problem.id|stringformat:"03d" }}</a>
                     </td>
                     <td class="problem-title">
                         <a href="{% url 'core:problem_detail' problem.id %}">{{ problem.title }}</a>
                     </td>
-                    <td class="difficulty">{{ problem.difficulty }}</td>
-                    <td>{{ problem.score }}</td>
-                    <td class="tag">{{ problem.tags }}</td>
+                    <td>
+                        <span class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</span>
+                    </td>
+                    <td class="score">{{ problem.score }}</td>
+                    <td class="tags">
+                        {% if problem.tags %}
+                        {% for tag in problem.tags|split:',' %}
+                        <span class="tag-pill">{{ tag|trim }}</span>
+                        {% endfor %}
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr class="table-row">
-                    <td colspan="5">No problems available.</td>
+                    <td colspan="5" class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No problems available.</p>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -647,15 +815,20 @@
     </div>
 
     <script>
-        // JavaScript for handling filters and interactions
+        // Filter functionality
         function applyFilters() {
             const difficulty = document.getElementById('difficulty').value;
             const category = document.getElementById('category').value;
             const status = document.getElementById('status').value;
             const search = document.getElementById('search').value;
 
-            // Filter logic would go here
-            console.log('Applying filters:', { difficulty, category, status, search });
+            const params = new URLSearchParams();
+            if (difficulty) params.append('difficulty', difficulty);
+            if (category) params.append('category', category);
+            if (status) params.append('status', status);
+            if (search) params.append('search', search);
+
+            window.location.href = `?${params.toString()}`;
         }
 
         function clearFilters() {
@@ -663,18 +836,68 @@
             document.getElementById('category').value = '';
             document.getElementById('status').value = '';
             document.getElementById('search').value = '';
-
-            // console.log('Filters cleared');
+            window.location.href = window.location.pathname;
         }
 
+        // Navigation functionality
+        function navigateToProblem(url) {
+            window.location.href = url;
+        }
 
+        // Search on Enter key
+        document.getElementById('search').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
 
-        // Add click handlers for problem rows
-        document.querySelectorAll('.table-row').forEach(row => {
-            row.addEventListener('click', function () {
-                const title = this.querySelector('.problem-title').textContent;
-                console.log('Clicked on problem:', title);
-                // Navigate to problem page
+        // Sort functionality (placeholder)
+        function sortProblems(sortBy) {
+            // This would typically be handled server-side
+            console.log('Sorting by:', sortBy);
+            // For now, redirect with sort parameter
+            const params = new URLSearchParams(window.location.search);
+            params.set('sort', sortBy);
+            window.location.href = `?${params.toString()}`;
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navbarNav');
+            nav.classList.toggle('active');
+        }
+
+        // Set current filter values from URL parameters
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.get('difficulty')) {
+                document.getElementById('difficulty').value = params.get('difficulty');
+            }
+            if (params.get('category')) {
+                document.getElementById('category').value = params.get('category');
+            }
+            if (params.get('status')) {
+                document.getElementById('status').value = params.get('status');
+            }
+            if (params.get('search')) {
+                document.getElementById('search').value = params.get('search');
+            }
+        });
+
+        // Add click handlers for table rows (excluding the header)
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableRows = document.querySelectorAll('tbody .table-row');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function (e) {
+                    // Prevent navigation if clicking on a link directly
+                    if (e.target.tagName !== 'A') {
+                        const link = this.querySelector('a');
+                        if (link) {
+                            window.location.href = link.href;
+                        }
+                    }
+                });
             });
         });
     </script>

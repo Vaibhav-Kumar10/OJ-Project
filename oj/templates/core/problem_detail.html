@@ -1,12 +1,59 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ problem.title }}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeForge | Problem Detail</title>
     <style>
+        /* CSS Variables - Design System */
+        :root {
+            /* Colors */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --accent-primary: #ffa116;
+            --accent-secondary: #00d9ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --border: #3a3a5c;
+            --border-hover: #4a4a6c;
+
+            /* Glass morphism */
+            --glass-bg: rgba(26, 26, 46, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+
+            /* Gradients */
+            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* Border Radius */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
+
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
+        }
+
+        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
@@ -14,557 +61,482 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .nav {
+        /* Navigation */
+        .navbar {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 100;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-lg);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .nav-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .nav-menu ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
+        .navbar-brand::before {
+            content: "⚡";
+            font-size: 2rem;
+            -webkit-text-fill-color: var(--accent-primary);
         }
 
-        .nav-menu .link {
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
             transition: all 0.3s ease;
             position: relative;
         }
 
-        .nav-menu .link:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            transform: translateY(-1px);
         }
 
-        .nav-button {
+        .navbar-actions {
             display: flex;
-            gap: 1rem;
+            align-items: center;
+            gap: var(--space-md);
         }
 
         .btn {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
         }
 
-        .btn:not(.white-btn) {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #000;
         }
 
-        .btn:not(.white-btn):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
-        .white-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
         }
 
-        .white-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+        /* Main Layout */
+        .main-split-view {
+            display: grid;
+            grid-template-columns: 1.2fr 1.8fr;
+            gap: var(--space-lg);
+            padding: var(--space-lg);
+            min-height: calc(100vh - 80px);
         }
 
-        .problems-container {
-            position: relative;
-            z-index: 10;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
+        .left-panel,
+        .right-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            overflow-y: auto;
         }
 
-        .problems-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
+        /* Problem Details */
         .problems-header h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .problem-meta {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-
-        .meta-item {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            color: white;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
         }
 
         .difficulty {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
             font-weight: 600;
             text-transform: uppercase;
         }
 
         .difficulty.easy {
-            background: rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
-            border: 1px solid #2ecc71;
+            background: rgba(0, 200, 81, 0.2);
+            color: var(--success);
         }
 
         .difficulty.medium {
-            background: rgba(241, 196, 15, 0.3);
-            color: #f1c40f;
-            border: 1px solid #f1c40f;
+            background: rgba(255, 187, 51, 0.2);
+            color: var(--warning);
         }
 
         .difficulty.hard {
-            background: rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .meta-item {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         .tags-container {
             display: flex;
-            justify-content: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
         }
 
         .tag {
-            background: rgba(78, 205, 196, 0.3);
-            color: #4ecdc4;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            border: 1px solid rgba(78, 205, 196, 0.5);
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
         }
 
         .content-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 0.8s ease-out;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--border);
         }
 
-        .content-card h3 {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
+        .content-card h3,
         .content-card h4 {
-            color: #4ecdc4;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 1.5rem 0 0.5rem 0;
-        }
-
-        .content-card p {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
-            font-size: 1rem;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-md);
         }
 
         .content-card pre {
-            background: rgba(0, 0, 0, 0.3);
-            color: #4ecdc4;
-            padding: 1rem;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
+            background: var(--bg-primary);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
             overflow-x: auto;
-            border: 1px solid rgba(78, 205, 196, 0.3);
-            margin: 0.5rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
         }
 
-        .submission-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        .submission-section h2 {
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
+        /* Editor Panel */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--space-lg);
         }
 
         .form-group label {
             display: block;
-            color: white;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
+            margin-bottom: var(--space-sm);
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
-        .form-select {
-            width: 200px;
-            padding: 0.8rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-select:focus {
-            outline: none;
-            border-color: #ff6b6b;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .form-select option {
-            background: #764ba2;
-            color: white;
-        }
-
-        .code-editor {
-            width: 100%;
-            min-height: 300px;
-            padding: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            color: black;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            resize: vertical;
-            transition: all 0.3s ease;
-        }
-
-        .code-editor:focus {
-            outline: none;
-            border-color: #ff6b6b;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        .code-editor::placeholder {
-            color: rgba(78, 205, 196, 0.6);
-        }
-
+        .form-select,
+        .code-editor,
         .input-editor {
             width: 100%;
-            min-height: 100px;
-            padding: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            /* color: #4ecdc4; */
-            color: black;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            resize: vertical;
-            transition: all 0.3s ease;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: var(--space-md);
+            font-family: var(--font-mono);
+            transition: border-color 0.2s ease;
         }
 
+        .form-select:focus,
+        .code-editor:focus,
         .input-editor:focus {
             outline: none;
-            border-color: #ff6b6b;
-            background: rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px rgba(255, 161, 22, 0.2);
         }
 
-        .input-editor::placeholder {
-            color: rgba(78, 205, 196, 0.6);
+        .code-editor,
+        .input-editor {
+            min-height: 200px;
+            resize: vertical;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .button-group {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 1rem 2rem;
+            background: var(--accent-gradient);
+            color: #000;
             border: none;
-            border-radius: 25px;
-            font-size: 1rem;
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.2s ease;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            box-shadow: var(--shadow-md);
         }
 
-        .submissions-table {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
-        }
-
-        .submissions-table h2 {
-            color: white;
-            font-size: 2rem;
-            font-weight: 700;
-            padding: 2rem 2rem 1rem 2rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .table-container {
+        /* Output Section */
+        #outputBox {
+            background: var(--bg-primary);
+            border: 1px dashed var(--accent-secondary);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            min-height: 100px;
+            white-space: pre-wrap;
             overflow-x: auto;
         }
 
-        .submissions-table table {
+        /* Submissions Sidebar */
+        .sidebar-toggle {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--border);
+        }
+
+        .submissions-sidebar {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 400px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border);
+            padding: var(--space-xl);
+            transition: right 0.3s ease;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        .submissions-sidebar.visible {
+            right: 0;
+        }
+
+        .submissions-sidebar h2 {
+            margin-bottom: var(--space-lg);
+            color: var(--accent-primary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: var(--space-sm);
+            border-radius: var(--radius);
+        }
+
+        .close-btn:hover {
+            background: var(--bg-elevated);
+        }
+
+        .submissions-sidebar table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: var(--space-xl);
         }
 
-        .submissions-table th {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            font-weight: 600;
-            padding: 1rem;
+        .submissions-sidebar th,
+        .submissions-sidebar td {
+            padding: var(--space-sm);
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid var(--border);
         }
 
-        .submissions-table td {
-            color: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .submissions-table tr:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .submissions-sidebar th {
+            color: var(--accent-primary);
+            font-weight: 600;
         }
 
         .verdict {
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
-            display: inline-block;
         }
 
-
         .verdict.accepted {
-            background: rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
+            background: rgba(0, 200, 81, 0.2);
+            color: var(--success);
         }
 
         .verdict.wrong-answer {
-            background: rgba(231, 76, 60, 0.3);
-            color: #e74c3c;
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--error);
         }
 
-        .verdict.time-limit {
-            background: rgba(241, 196, 15, 0.3);
-            color: #f1c40f;
-        }
-
-        .no-submissions {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 2rem;
-            font-style: italic;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .verdict.time-limit-exceeded {
+            background: rgba(255, 187, 51, 0.2);
+            color: var(--warning);
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-split-view {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+
+            .submissions-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
         @media (max-width: 768px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
+            .navbar {
+                padding: var(--space-md);
             }
 
-            .nav-menu ul {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+            .navbar-nav {
+                display: none;
             }
 
-            .nav-button {
-                justify-content: center;
+            .main-split-view {
+                padding: var(--space-md);
+            }
+
+            .left-panel,
+            .right-panel {
+                padding: var(--space-lg);
+            }
+
+            .button-group {
+                flex-direction: column;
             }
 
             .problems-header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
+        }
 
-            .problem-meta {
-                gap: 1rem;
-            }
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
 
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
+        .text-center {
+            text-align: center;
+        }
 
-            .problems-container {
-                padding: 1rem;
-            }
+        .mb-0 {
+            margin-bottom: 0;
+        }
 
-            .code-editor {
-                min-height: 250px;
-            }
-
-            .input-editor {
-                min-height: 80px;
-            }
-
-            .form-select {
-                width: 100%;
-            }
+        .mt-lg {
+            margin-top: var(--space-lg);
         }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <div class="nav">
-        <div class="nav-logo">OJ</div>
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %}" class="link">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link active">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-            </ul>
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
-        <div class="nav-button">
+        <ul class="navbar-nav">
+            <li><a href="{% url 'core:home' %}" class="nav-link active">Home</a></li>
+            <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
+            <li><a href="{% url 'contests:contest' %}" class="nav-link">Contest</a></li>
+            <li><a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a></li>
+        </ul>
+
+        <div class="navbar-actions">
             {% if user.is_authenticated %}
-            <a href="{% url 'user_auth:logout' %}" class="btn">Logout</a>
+            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
             {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn">Login</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn">Sign Up</a>
+            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
             {% endif %}
         </div>
-    </div>
+    </nav>
 
-    <!-- Problem Detail Section -->
-    <div class="problems-container">
-        <!-- Header -->
-        <div class="problems-header">
-            <h1>{{ problem.title }}</h1>
-            <div class="problem-meta">
-                <div class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</div>
-                <div class="meta-item">Score: {{ problem.score }}</div>
+    <!-- Main Content -->
+    <div class="main-split-view">
+        <!-- Left Panel: Problem Details -->
+        <div class="left-panel">
+            <div class="problems-header">
+                <h1>{{ problem.title }}</h1>
+                <div class="problem-meta">
+                    <div class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</div>
+                    <div class="meta-item">Score: {{ problem.score }}</div>
+                </div>
+                <div class="tags-container">
+                    {% for tag in problem.tags.split %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="tags-container">
-                {% for tag in problem.tags.split %}
-                <span class="tag">{{ tag }}</span>
-                {% endfor %}
-            </div>
-        </div>
 
-        <!-- Problem Content -->
-        <div class="content-grid">
             <div class="content-card">
                 <h3>Problem Statement</h3>
                 <p>{{ problem.statement }}</p>
@@ -573,21 +545,19 @@
             <div class="content-card">
                 <h4>Input Example:</h4>
                 <pre>{{ problem.input_example }}</pre>
-
                 <h4>Output Example:</h4>
                 <pre>{{ problem.output_example }}</pre>
             </div>
         </div>
 
-        <!-- Submission Form -->
-        <div class="submission-section">
-            <h2>Submit Your Solution</h2>
+        <!-- Right Panel: Editor and Controls -->
+        <div class="right-panel">
             <form method="POST" id="runCodeForm">
                 {% csrf_token %}
                 <input type="hidden" name="problem_id" value="{{ problem.id }}">
 
                 <div class="form-group">
-                    <label for="language">Programming Language:</label>
+                    <label for="language">Language:</label>
                     <select name="language" id="language" class="form-select" required>
                         <option value="py">Python</option>
                         <option value="cpp">C++</option>
@@ -596,7 +566,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="code">Your Code:</label>
+                    <label for="codeEditor">Code:</label>
                     <textarea name="code" id="codeEditor" class="code-editor" placeholder="Write your code here..."
                         required>{{ code|default_if_none:"" }}</textarea>
                 </div>
@@ -607,15 +577,12 @@
                         placeholder="Enter input for test run...">{{ input_data|default_if_none:"" }}</textarea>
                 </div>
 
-                <!-- <button type="submit" class="submit-btn" id="runButton">Run Code</button> -->
-
-                <button type="submit" formaction="{% url 'compiler:run_code' %}" class="submit-btn" id="runButton">Run
-                    Code</button>
-                <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn"
-                    id="submitButton">Submit Code</button>
-                <!-- <button type="submit" formaction="{% url 'core:ai_review' %}" class="submit-btn" id="submitButton">Get
-                    AI
-                    review</button> -->
+                <div class="button-group">
+                    <button type="submit" formaction="{% url 'compiler:run_code' %}" class="submit-btn">Run
+                        Code</button>
+                    <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn">Submit
+                        Code</button>
+                </div>
             </form>
 
             <form method="POST" action="{% url 'core:ai_review' %}">
@@ -624,104 +591,63 @@
                 <input type="hidden" name="language" value="{{ language }}">
                 <input type="hidden" name="code" value="{{ code }}">
                 <input type="hidden" name="input_data" value="{{ input_data }}">
-                <button type="submit" class="submit-btn">Get AI Review</button>
+                <button type="submit" class="submit-btn mt-lg">Get AI Review</button>
             </form>
 
-
-            <!-- Output area -->
-            <div class="content-card" style="margin-top: 2rem;">
+            <!-- Output -->
+            <div class="content-card">
                 <h3>Output:</h3>
-                <pre id="outputBox" style="color: black; font-size: 12;">
-                    {% if mode == "run" and output %}
-                        {{ output }}
-                    {% elif mode == "run" %}
-                        Your output will appear here...
-                    {% elif mode == "submit" %}
-                        {% if messages %}
-                            {% for message in messages %}
-                                {{ message }}
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                </pre>
+                <pre
+                    id="outputBox">{% if mode == "run" and output %}{{ output }}{% elif mode == "run" %}Your output will appear here...{% elif mode == "submit" %}{% if messages %}{% for message in messages %}{{ message }}{% endfor %}{% endif %}{% endif %}</pre>
             </div>
 
             {% if ai_review %}
-            <div class="content-card" style="margin-top: 2rem;">
+            <div class="content-card">
                 <h3>AI Review:</h3>
-                <pre style="font-size: 13px; color: #333;">{{ ai_review|safe }}</pre>
+                <pre>{{ ai_review|safe }}</pre>
             </div>
             {% endif %}
 
-        </div>
-
-        <!-- Previous Submissions -->
-        <div class="submissions-table">
-            <h2>Your Submissions</h2>
-            {% if submissions %}
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Submission Time</th>
-                            <th>Language</th>
-                            <th>Verdict</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in submissions %}
-                        <tr>
-                            <td>{{ s.submitted_at|date:"M d, Y H:i" }}</td>
-                            <td>{{ s.language|upper }}</td>
-                            <td><span class="verdict {{ s.verdict|lower|slugify }}">{{ s.verdict }}</span></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="no-submissions">
-                <p>You haven't submitted any solutions yet. Be the first to solve this problem!</p>
-            </div>
-            {% endif %}
+            <!-- Toggle Previous Submissions -->
+            <button class="sidebar-toggle" onclick="toggleSubmissions()">📄 View Submissions</button>
         </div>
     </div>
 
-    <!-- <script>
-        // Add syntax highlighting effect for code editor
-        const codeEditor = document.getElementById('code');
+    <!-- Submissions Sidebar -->
+    <div id="submissionsSidebar" class="submissions-sidebar hidden">
+        <button onclick="toggleSubmissions()" class="close-btn">✖</button>
+        <h2>Your Submissions</h2>
+        {% if submissions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Lang</th>
+                    <th>Verdict</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in submissions %}
+                <tr>
+                    <td>{{ s.submitted_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ s.language|upper }}</td>
+                    <td><span class="verdict {{ s.verdict|lower|slugify }}">{{ s.verdict }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No submissions yet.</p>
+        {% endif %}
+    </div>
 
-        codeEditor.addEventListener('input', function () {
-            // Simple syntax highlighting could be added here
-            this.style.height = 'auto';
-            this.style.height = Math.max(300, this.scrollHeight) + 'px';
-        });
-
-        // Add confirmation for form submission
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const code = document.getElementById('code').value.trim();
-            if (code.length < 10) {
-                e.preventDefault();
-                alert('Please write a more substantial solution before submitting.');
-                return false;
-            }
-
-            const confirmed = confirm('Are you ready to submit your solution?');
-            if (!confirmed) {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Auto-resize textarea
-        function autoResize() {
-            const textarea = document.getElementById('code');
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.max(300, textarea.scrollHeight) + 'px';
+    <script>
+        function toggleSubmissions() {
+            const sidebar = document.getElementById('submissionsSidebar');
+            sidebar.classList.toggle('visible');
+            sidebar.classList.toggle('hidden');
         }
-
-        document.getElementById('code').addEventListener('input', autoResize);
-    </script> -->
+    </script>
 </body>
 
 </html>
