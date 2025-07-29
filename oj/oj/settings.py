@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+import dj_database_url
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ejbyui=mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower == "true"
 
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://my-oj-project.onrender.com',
@@ -88,16 +90,22 @@ WSGI_APPLICATION = "oj.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRESS_DB_NAME"),
-        "USER": os.getenv("POSTGRESS_USER_NAME"),
-        "PASSWORD": os.getenv("POSTGRESS_PASSWORD"),
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
-}
+# postgresql://oj_database_user:oFB5FBNpiwCiUvGA1hRtXQ2xbAPuxb7o@dpg-d23r82muk2gs738rmg1g-a.oregon-postgres.render.com/oj_database
+
+DATABASES = {}
+
+DATABASES["default"] = dj_database_url.parse(os.getenv("DATABSE_URL"))
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRESS_DB_NAME"),
+#         "USER": os.getenv("POSTGRESS_USER_NAME"),
+#         "PASSWORD": os.getenv("POSTGRESS_PASSWORD"),
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
