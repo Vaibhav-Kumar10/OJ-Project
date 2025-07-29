@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
 import dj_database_url
 
 load_dotenv()
@@ -26,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = "mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower == "true"
+DEBUG = True
 
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://my-oj-project.onrender.com',
@@ -59,7 +58,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -92,9 +92,9 @@ WSGI_APPLICATION = "oj.wsgi.application"
 
 # postgresql://oj_database_user:oFB5FBNpiwCiUvGA1hRtXQ2xbAPuxb7o@dpg-d23r82muk2gs738rmg1g-a.oregon-postgres.render.com/oj_database
 
-DATABASES = {}
+# DATABASES = {}
 
-DATABASES["default"] = dj_database_url.parse(os.getenv("DATABSE_URL"))
+# DATABASES["default"] = dj_database_url.parse(os.getenv("DATABSE_URL"))
 
 # DATABASES = {
 #     "default": {
@@ -103,6 +103,25 @@ DATABASES["default"] = dj_database_url.parse(os.getenv("DATABSE_URL"))
 #         "USER": os.getenv("POSTGRESS_USER_NAME"),
 #         "PASSWORD": os.getenv("POSTGRESS_PASSWORD"),
 #         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "railway",
+#         "USER": "postgres",
+#         "PASSWORD": "RUQtRTGRVaNCJYbxDNqswUTsqdcRmbJK",
+#         "HOST": "postgres.railway.internal",
 #         "PORT": "5432",
 #     }
 # }
