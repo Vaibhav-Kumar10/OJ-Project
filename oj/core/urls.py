@@ -5,6 +5,7 @@ from .views import (
     problem_view,
     dashboard_view,
     get_ai_review,
+    profile_view,
 )
 
 app_name = "core"
@@ -12,8 +13,7 @@ urlpatterns = [
     path("", home_view, name="home"),
     path("problems/", all_problems_view, name="problems"),
     path("problem/<int:id>/", problem_view, name="problem_detail"),
-    path("dashboard/", dashboard_view, name="dashboard"),
     path("ai_review/", get_ai_review, name="ai_review"),
-    # path("submit/", submit_solution, name="submit"),
-    # path("run/", run_code, name="run"),
+    path("profile/", profile_view, name="profile"),  # Current user's profile
+    path("profile/<str:username>/", profile_view, name="user_profile"),  # Other user's profile
 ]

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeForge | {{ profile_user.username }}'s Profile</title>
+    <style>
+        /* CSS Variables - Design System */
+        :root {
+            /* Colors */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --accent-primary: #ffa116;
+            --accent-secondary: #00d9ff;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --border: #3a3a5c;
+            --border-hover: #4a4a6c;
+
+            /* Glass morphism */
+            --glass-bg: rgba(26, 26, 46, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+
+            /* Gradients */
+            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
+            --card-gradient: linear-gradient(135deg, rgba(255, 161, 22, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%);
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+
+            /* Border Radius */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 50%;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
+
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md) var(--space-lg);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-brand::before {
+            content: "⚡";
+            font-size: 2rem;
+            -webkit-text-fill-color: var(--accent-primary);
+        }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            transform: translateY(-1px);
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .btn {
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #000;
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-lg);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--card-gradient);
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #000;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(8px);
+        }
+
+        .profile-meta h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .profile-detail {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .profile-detail .icon {
+            font-size: 1.2rem;
+        }
+
+        .streak-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 161, 22, 0.1);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 161, 22, 0.2);
+        }
+
+        .streak-fire {
+            font-size: 1.5rem;
+            animation: flicker 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 0.8;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .streak-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-sm);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .stat-card.easy .stat-number {
+            background: linear-gradient(135deg, #00c851, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.medium .stat-number {
+            background: linear-gradient(135deg, #ffbb33, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.hard .stat-number {
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Activity Calendar */
+        .activity-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .calendar-container {
+            position: relative;
+        }
+
+        .calendar-months {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(53, 1fr);
+            gap: 3px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .calendar-day {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            background: var(--bg-elevated);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.2);
+        }
+
+        .calendar-day.level-0 {
+            background: var(--bg-elevated);
+        }
+
+        .calendar-day.level-1 {
+            background: rgba(0, 217, 255, 0.3);
+        }
+
+        .calendar-day.level-2 {
+            background: rgba(0, 217, 255, 0.5);
+        }
+
+        .calendar-day.level-3 {
+            background: rgba(0, 217, 255, 0.7);
+        }
+
+        .calendar-day.level-4 {
+            background: var(--accent-secondary);
+        }
+
+        .calendar-legend {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .legend-scale {
+            display: flex;
+            gap: 2px;
+        }
+
+        .legend-day {
+            width: 10px;
+            height: 10px;
+            border-radius: 1px;
+        }
+
+        /* Badges Section */
+        .badges-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .badge {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
+        }
+
+        .badge.earned {
+            background: linear-gradient(135deg, rgba(255, 161, 22, 0.1), rgba(0, 217, 255, 0.05));
+            border-color: var(--accent-primary);
+        }
+
+        .badge.earned::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+        }
+
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-sm);
+            display: block;
+        }
+
+        .badge-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .badge-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .badge.locked {
+            opacity: 0.5;
+        }
+
+        .badge.locked .badge-icon {
+            filter: grayscale(1);
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--bg-elevated);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .activity-icon.success {
+            background: rgba(0, 200, 81, 0.2);
+            color: var(--success);
+        }
+
+        .activity-icon.error {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .activity-icon.warning {
+            background: rgba(255, 187, 51, 0.2);
+            color: var(--warning);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .activity-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Language Stats */
+        .language-stats {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .language-tag {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+            }
+
+            .container {
+                padding: var(--space-lg) var(--space-md);
+            }
+
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--space-lg);
+            }
+
+            .avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+
+            .profile-meta h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-md);
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(26, 1fr);
+            }
+
+            .badges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-months {
+                font-size: 0.75rem;
+            }
+
+            .calendar-day {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+        /* Profile Button Styles */
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+        }
+
+        .profile-btn:hover {
+            background: var(--border-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
+        }
+
+        .profile-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .profile-name {
+                display: none;
+                /* Hide name on mobile, show only avatar */
+            }
+
+            .profile-btn {
+                padding: var(--space-sm);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
+
+        <ul class="navbar-nav">
+            <li><a href="{% url 'core:home' %}" class="nav-link">Home</a></li>
+            <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
+            <li><a href="{% url 'contests:contest' %}" class="nav-link">Contest</a></li>
+            <li><a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a></li>
+            <li><a href="#" class="nav-link active">Profile</a></li>
+        </ul>
+
+        <div class="navbar-actions">
+            {% if user.is_authenticated %}
+            <!-- Profile Button with Avatar -->
+            <div class="profile-dropdown">
+                <a href="{% url 'core:profile' %}" class="profile-btn">
+                    <div class="nav-avatar">
+                        {{ user.first_name|first|default:user.username|first|upper }}{{
+                        user.last_name|first|default:user.username|slice:"1:2"|upper }}
+                    </div>
+                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                </a>
+            </div>
+            {% if user.is_authenticated %}
+            {% if user == profile_user %}
+            <a href="#" class="btn btn-secondary">Settings</a>
+            {% endif %}
+            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
+            {% else %}
+            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container"><!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="avatar">
+                    {{ profile_user.first_name|first|default:profile_user.username|first|upper }}{{
+                    profile_user.last_name|first|default:profile_user.username|slice:"1:2"|upper }}
+                </div>
+                <div class="profile-meta">
+                    <h1>
+                        {% if profile_user.first_name or profile_user.last_name %}
+                        {{ profile_user.first_name }} {{ profile_user.last_name }}
+                        {% else %}
+                        {{ profile_user.username }}
+                        {% endif %}
+                    </h1>
+                    <div class="profile-details">
+                        <div class="profile-detail">
+                            <span class="icon">📅</span>
+                            <span>Member since: {{ profile_user.date_joined|date:"F Y" }}</span>
+                        </div>
+                        {% if profile_user.email and user == profile_user %}
+                        <div class="profile-detail">
+                            <span class="icon">✉️</span>
+                            <span>{{ profile_user.email }}</span>
+                        </div>
+                        {% endif %}
+                        {% if profile_user.dob and user == profile_user %}
+                        <div class="profile-detail">
+                            <span class="icon">🎂</span>
+                            <span>{{ user_age }} years old</span>
+                        </div>
+                        {% endif %}
+                        {% if profile_user.mobile_no and user == profile_user %}
+                        <div class="profile-detail">
+                            <span class="icon">📱</span>
+                            <span>{{ profile_user.mobile_no }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="streak-indicator">
+                            <span class="streak-fire">🔥</span>
+                            <span class="streak-number">{{ current_streak|default:0 }}</span>
+                            <span>day streak</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ user_score.problems_solved|default:0 }}</div>
+                <div class="stat-label">Problems Solved</div>
+            </div>
+            <div class="stat-card easy">
+                <div class="stat-number">{{ difficulty_stats.easy|default:0 }}</div>
+                <div class="stat-label">Easy</div>
+            </div>
+            <div class="stat-card medium">
+                <div class="stat-number">{{ difficulty_stats.medium|default:0 }}</div>
+                <div class="stat-label">Medium</div>
+            </div>
+            <div class="stat-card hard">
+                <div class="stat-number">{{ difficulty_stats.hard|default:0 }}</div>
+                <div class="stat-label">Hard</div>
+            </div>
+        </div>
+
+        <!-- Activity Calendar -->
+        <div class="activity-section">
+            <h2 class="section-title">
+                <span>📊</span>
+                Activity Calendar
+            </h2>
+            <div class="calendar-container">
+                <div class="calendar-months">
+                    <span>Jan</span>
+                    <span>Feb</span>
+                    <span>Mar</span>
+                    <span>Apr</span>
+                    <span>May</span>
+                    <span>Jun</span>
+                    <span>Jul</span>
+                    <span>Aug</span>
+                    <span>Sep</span>
+                    <span>Oct</span>
+                    <span>Nov</span>
+                    <span>Dec</span>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar days will be generated by JavaScript -->
+                </div>
+                <div class="calendar-legend">
+                    <span>Less</span>
+                    <div class="legend-scale">
+                        <div class="legend-day level-0"></div>
+                        <div class="legend-day level-1"></div>
+                        <div class="legend-day level-2"></div>
+                        <div class="legend-day level-3"></div>
+                        <div class="legend-day level-4"></div>
+                    </div>
+                    <span>More</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges & Achievements -->
+        <div class="badges-section">
+            <h2 class="section-title">
+                <span>🏆</span>
+                Badges & Achievements
+            </h2>
+            <div class="badges-grid">
+                <!-- First Solve Badge -->
+                <div class="badge {% if user_score.problems_solved > 0 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">🎯</span>
+                    <div class="badge-title">First Solve</div>
+                    <div class="badge-description">Solve your first problem</div>
+                </div>
+
+                <!-- Problem Solver Badge -->
+                <div class="badge {% if user_score.problems_solved >= 10 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">💡</span>
+                    <div class="badge-title">Problem Solver</div>
+                    <div class="badge-description">Solve 10+ problems</div>
+                </div>
+
+                <!-- Dedicated Coder Badge -->
+                <div class="badge {% if user_score.problems_solved >= 50 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">⚡</span>
+                    <div class="badge-title">Dedicated Coder</div>
+                    <div class="badge-description">Solve 50+ problems</div>
+                </div>
+
+                <!-- Master Solver Badge -->
+                <div class="badge {% if user_score.problems_solved >= 100 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">🏆</span>
+                    <div class="badge-title">Master Solver</div>
+                    <div class="badge-description">Solve 100+ problems</div>
+                </div>
+
+                <!-- High Scorer Badge -->
+                <div class="badge {% if user_score.score >= 1000 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">💎</span>
+                    <div class="badge-title">High Scorer</div>
+                    <div class="badge-description">Earn 1000+ points</div>
+                </div>
+
+                <!-- Streak Master Badge -->
+                <div class="badge {% if current_streak >= 7 %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">🔥</span>
+                    <div class="badge-title">Streak Master</div>
+                    <div class="badge-description">Maintain a 7-day streak</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h2 class="section-title">
+                <span>⚡</span>
+                Recent Activity
+            </h2>
+            <div class="activity-list">
+                {% if recent_submissions %}
+                {% for submission in recent_submissions %}
+                <div class="activity-item">
+                    <div
+                        class="activity-icon {% if submission.verdict == 'Accepted' %}success{% elif submission.verdict == 'Wrong Answer' %}error{% else %}warning{% endif %}">
+                        {% if submission.verdict == 'Accepted' %}✓{% elif submission.verdict == 'Wrong Answer' %}✗{%
+                        else %}⏱{% endif %}
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            {% if submission.verdict == 'Accepted' %}Solved{% else %}Attempted{% endif %} "{{
+                            submission.problem.title }}"
+                        </div>
+                        <div class="activity-meta">
+                            {{ submission.submitted_at|timesince }} ago • {{ submission.language|upper }} • {{
+                            submission.verdict }}
+                            {% if submission.verdict == 'Accepted' %}
+                            <span style="color: var(--success);">+{{ submission.problem.score }} pts</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: var(--bg-elevated); color: var(--text-muted);">📝
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">No recent activity</div>
+                        <div class="activity-meta">Start solving problems to see your activity here!</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Language Statistics -->
+        {% if language_stats %}
+        <div class="activity-section">
+            <h2 class="section-title">
+                <span>💻</span>
+                Language Statistics
+            </h2>
+            <div class="language-stats">
+                {% for lang, count in language_stats.items %}
+                <div class="language-tag">
+                    {{ lang|upper }}: {{ count }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Generate calendar grid with actual submission data
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const today = new Date();
+            const startDate = new Date(today.getFullYear(), 0, 1); // Start from Jan 1st
+
+            // Get submission data from template (you'll need to pass this from the view)
+            const submissionData = {{ submission_calendar| safe |default: '{}'
+        }};
+
+        // Generate 365 days
+        for (let i = 0; i < 365; i++) {
+            const day = document.createElement('div');
+            day.className = 'calendar-day';
+
+            const currentDate = new Date(startDate);
+            currentDate.setDate(startDate.getDate() + i);
+            const dateStr = currentDate.toISOString().split('T')[0];
+
+            // Get submission count for this date
+            const submissions = submissionData[dateStr] || 0;
+            let level = 0;
+            if (submissions > 0) level = 1;
+            if (submissions > 2) level = 2;
+            if (submissions > 4) level = 3;
+            if (submissions > 6) level = 4;
+
+            day.classList.add(`level-${level}`);
+            day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
+
+            grid.appendChild(day);
+        }
+        }
+
+        // Initialize calendar when page loads
+        document.addEventListener('DOMContentLoaded', generateCalendar);
+
+        // Add hover effects to stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Badge click interactions
+        document.querySelectorAll('.badge').forEach(badge => {
+            badge.addEventListener('click', function () {
+                if (!this.classList.contains('locked')) {
+                    // Show badge details
+                    const title = this.querySelector('.badge-title').textContent;
+                    console.log('Badge earned:', title);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

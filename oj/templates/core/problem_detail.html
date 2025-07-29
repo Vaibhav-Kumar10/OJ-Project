@@ -495,6 +495,65 @@
         .mt-lg {
             margin-top: var(--space-lg);
         }
+
+        /* Profile Button Styles */
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+        }
+
+        .profile-btn:hover {
+            background: var(--border-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
+        }
+
+        .profile-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .profile-name {
+                display: none;
+                /* Hide name on mobile, show only avatar */
+            }
+
+            .profile-btn {
+                padding: var(--space-sm);
+            }
+        }
     </style>
 </head>
 
@@ -510,8 +569,23 @@
             <li><a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a></li>
         </ul>
 
+
         <div class="navbar-actions">
             {% if user.is_authenticated %}
+            <!-- Profile Button with Avatar -->
+            <div class="profile-dropdown">
+                <a href="{% url 'core:profile' %}" class="profile-btn">
+                    <div class="nav-avatar">
+                        {{ user.first_name|first|default:user.username|first|upper }}{{
+                        user.last_name|first|default:user.username|slice:"1:2"|upper }}
+                    </div>
+                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                </a>
+            </div>
+            {% if user.is_authenticated %}
+            {% if user == profile_user %}
+            <a href="#" class="btn btn-secondary">Settings</a>
+            {% endif %}
             <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
             {% else %}
             <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>

@@ -55,7 +55,7 @@ def signup_view(request):
             dob=dob,
         )
         login(request, user)
-        return redirect("user_auth:dashboard")
+        return redirect("core:dashboard")
 
     return render(request, "user_auth/signup.html")
 
@@ -75,7 +75,7 @@ def login_view(request):
         # Check if the user is authenticated
         if user is not None:
             login(request, user)
-            return redirect("user_auth:dashboard")
+            return redirect("core:dashboard")
         else:
             messages.error(request, "Invalid username or password.")
             return redirect("user_auth:login")
@@ -88,8 +88,3 @@ def logout_view(request):
     """
     logout(request)
     return redirect("user_auth:login")
-
-
-@login_required
-def dashboard_view(request):
-    return render(request, "user_auth/dashboard.html", {"user": request.user})
