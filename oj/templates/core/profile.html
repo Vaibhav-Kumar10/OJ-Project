@@ -955,8 +955,7 @@
             const startDate = new Date(today.getFullYear(), 0, 1); // Start from Jan 1st
 
             // Get submission data from template (you'll need to pass this from the view)
-            const submissionData = {{ submission_calendar| safe |default: '{}'
-        }};
+            const submissionData = {{ submission_calendar|default:"{}"|safe }};
 
         // Generate 365 days
         for (let i = 0; i < 365; i++) {
