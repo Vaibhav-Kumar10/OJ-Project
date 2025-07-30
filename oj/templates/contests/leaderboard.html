@@ -369,31 +369,29 @@
                         <th>Problems Solved</th>
                     </tr>
                 </thead>
-                {% if scores %}
                 <tbody>
-
-                </tbody>
-                <tbody>
+                    {% if scores %}
                     {% for entry in scores %}
-                    <!-- <tr class="{% if entry.user == request.user %}highlight-user{% endif %}"> -->
                     <tr
                         class="{% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %} {% if entry.user == request.user %}highlight-user{% endif %}">
-
                         <td class="rank">{{ forloop.counter }}</td>
                         <td class="username">{{ entry.user.username }}</td>
                         <td class="points">{{ entry.score }}</td>
                         <td class="problems-solved">{{ entry.problems_solved }}</td>
                     </tr>
                     {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No submissions yet. Be the first to get on the
+                            board!</td>
+                    </tr>
+                    {% endif %}
                 </tbody>
-
-                {% else %}
-                <p>No submissions yet. Be the first to get on the board!</p>
-                {% endif %}
-
             </table>
         </div>
     </section>
+
+
 
     <footer class="footer">
         <p>© 2025 OJ Platform. All rights reserved.</p>
