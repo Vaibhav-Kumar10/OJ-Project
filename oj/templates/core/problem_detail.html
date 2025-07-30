@@ -576,8 +576,11 @@
             <div class="profile-dropdown">
                 <a href="{% url 'core:profile' %}" class="profile-btn">
                     <div class="nav-avatar">
-                        {{ user.first_name|first|default:user.username|first|upper }}{{
-                        user.last_name|first|default:user.username|slice:"1:2"|upper }}
+                        {% if user.first_name and user.last_name %}
+                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {% else %}
+                            {{ user.username|slice:":2"|upper }}
+                        {% endif %}
                     </div>
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 </a>
