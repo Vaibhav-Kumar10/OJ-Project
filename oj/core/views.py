@@ -118,7 +118,6 @@ def get_ai_review(request):
 
     return redirect("core:problems")
 
-
 # Get your custom User model
 User = get_user_model()
 

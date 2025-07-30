@@ -1036,35 +1036,6 @@
         </div>
     </section>
 
-    <section class="section activity-section">
-        <div class="section-header">
-            <h2 class="section-title">Community Highlights</h2>
-            <p class="section-subtitle">Track your progress and see who's leading the charge</p>
-        </div>
-
-        <div class="activity-grid">
-            <!-- Recent Submissions -->
-            <div class="activity-card">
-                <div class="activity-header">
-                    <h3 class="activity-title">Recent Submissions</h3>
-                    <a href="{% url 'core:submissions' %}" class="view-all-link">View All</a>
-                </div>
-                {% for submission in recent_submissions %}
-                <div class="submission-item">
-                    <div class="submission-status status-{{ submission.status|lower }}"></div>
-                    <div class="submission-info">
-                        <div class="submission-problem">{{ submission.problem.title }}</div>
-                        <div class="submission-time">{{ submission.created_at|timesince }} ago</div>
-                    </div>
-                </div>
-                {% empty %}
-                <p>No recent submissions yet.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-
     <footer class="footer">
         <p>© 2025 OJ Platform. All rights reserved.</p>
         <ul class="footer-links">

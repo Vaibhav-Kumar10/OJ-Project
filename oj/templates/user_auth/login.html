@@ -50,15 +50,22 @@
                 {% csrf_token %}
                 <!-- Username box-->
                 <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Username/email" id="uname" name="uname"
-                        required>
+                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required
+                        autocomplete="username">
                 </div>
 
                 <!-- Password entry box -->
                 <div class="input-box">
                     <input type="password" class="input-field" placeholder="Password" id="password" name="password"
-                        required>
+                        required autocomplete="current-password">
                 </div>
+                <button type="button" onclick="togglePassword()" class="show-password">👁️</button>
+                <script>
+                    function togglePassword() {
+                        const password = document.getElementById('password');
+                        password.type = password.type === 'password' ? 'text' : 'password';
+                    }
+                </script>
 
                 <!-- Submit box -->
                 <div class="input-box">
@@ -67,7 +74,7 @@
 
                 <div class="two-col">
                     <div class="one">
-                        <input type="checkbox" id="login-check">
+                        <input type="checkbox" id="login-check" name="remember_me">
                         <label for="login-check"> Remember Me</label>
                     </div>
                     <div class="two">
@@ -81,6 +88,12 @@
                         New User?<br>Sign Up
                     </a>
                 </div>
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="form-error">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
 
             </form>
         </div>

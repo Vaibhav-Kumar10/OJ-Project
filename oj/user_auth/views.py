@@ -72,6 +72,12 @@ def login_view(request):
 
         user = authenticate(request, username=username, password=password)
 
+        remember = request.POST.get("remember_me")
+        if remember:
+            request.session.set_expiry(1209600)  # 2 weeks
+        else:
+            request.session.set_expiry(0)  # Expires on browser close
+
         # Check if the user is authenticated
         if user is not None:
             login(request, user)

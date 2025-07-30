@@ -17,7 +17,10 @@
 
         {% if messages %}
         {% for message in messages %}
-        <p style="color: red">{{ message }}</p>
+        <div class="form-error">
+            {{ message }}
+        </div>
+
         {% endfor %}
         {% endif %}
 
@@ -59,41 +62,47 @@
                 <div class="two-forms">
                     <!-- Fname box-->
                     <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname" required>
+                        <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname" required
+                            autocomplete="given-name">
                     </div>
                     <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname" required>
+                        <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname" required
+                            autocomplete="family-name">
                     </div>
                 </div>
 
                 <!-- Email entry Box -->
                 <div class="input-box">
-                    <input type="email" class="input-field" placeholder="Email" id="email" name="email" required>
+                    <input type="email" class="input-field" placeholder="Email" id="email" name="email" required
+                        autocomplete="email">
                 </div>
                 <!-- Uname entry Box -->
                 <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required>
+                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required
+                        autocomplete="username">
                 </div>
 
                 <!-- Mobile No. entry Box -->
                 <div class="input-box">
-                    <input type="number" class="input-field" placeholder="Mobile No." id="mobileno" name="mobileno">
+                    <input type="tel" class="input-field" placeholder="Mobile No." id="mobileno" name="mobileno"
+                        autocomplete="tel">
                 </div>
 
                 <!-- Date of Birth entry Box -->
                 <div class="input-box">
-                    <input type="date" class="input-field" placeholder="Date Of Birth" id="dob" name="dob" required>
+                    <input type="date" class="input-field" placeholder="Date Of Birth" id="dob" name="dob" required
+                        autocomplete="bday">
                 </div>
 
                 <!-- Password entry box -->
                 <div class="input-box">
                     <input type="password" class="input-field" placeholder="Password" id="password" name="password"
-                        required>
+                        required autocomplete="new-password">
                 </div>
                 <!-- Re enter Password entry box -->
                 <div class="input-box">
                     <input type="password" class="input-field" placeholder="Re-password" id="repassword"
-                        name="repassword" required>
+                        name="repassword" required autocomplete="new-password">>
                 </div>
 
                 <!-- Submit box -->
