@@ -744,8 +744,11 @@
             <div class="profile-dropdown">
                 <a href="{% url 'core:profile' %}" class="profile-btn">
                     <div class="nav-avatar">
-                        {{ user.first_name|first|default:user.username|first|upper }}{{
-                        user.last_name|first|default:user.username|slice:"1:2"|upper }}
+                        {% if user.first_name and user.last_name %}
+                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {% else %}
+                            {{ user.username|slice:":2"|upper }}
+                        {% endif %}
                     </div>
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 </a>
@@ -766,15 +769,18 @@
         <div class="profile-header">
             <div class="profile-info">
                 <div class="avatar">
-                    {{ profile_user.first_name|first|default:profile_user.username|first|upper }}{{
-                    profile_user.last_name|first|default:profile_user.username|slice:"1:2"|upper }}
+                    {% if profile_user.first_name and profile_user.last_name %}
+                        {{ profile_user.first_name|first|upper }}{{ profile_user.last_name|first|upper }}
+                    {% else %}
+                        {{ profile_user.username|slice:":2"|upper }}
+                    {% endif %}
                 </div>
                 <div class="profile-meta">
                     <h1>
                         {% if profile_user.first_name or profile_user.last_name %}
-                        {{ profile_user.first_name }} {{ profile_user.last_name }}
+                            {{ profile_user.first_name }} {{ profile_user.last_name }}
                         {% else %}
-                        {{ profile_user.username }}
+                            {{ profile_user.username }}
                         {% endif %}
                     </h1>
                     <div class="profile-details">
@@ -955,7 +961,8 @@
             const startDate = new Date(today.getFullYear(), 0, 1); // Start from Jan 1st
 
             // Get submission data from template (you'll need to pass this from the view)
-            const submissionData = {{ submission_calendar|default:"{}"|safe }};
+            const submissionData = {{ submission_calendar|default: "{}" | safe
+        }};
 
         // Generate 365 days
         for (let i = 0; i < 365; i++) {
