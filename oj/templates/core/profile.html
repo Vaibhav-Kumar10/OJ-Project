@@ -745,9 +745,9 @@
                 <a href="{% url 'core:profile' %}" class="profile-btn">
                     <div class="nav-avatar">
                         {% if user.first_name and user.last_name %}
-                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
                         {% else %}
-                            {{ user.username|slice:":2"|upper }}
+                        {{ user.username|slice:":2"|upper }}
                         {% endif %}
                     </div>
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -770,17 +770,17 @@
             <div class="profile-info">
                 <div class="avatar">
                     {% if profile_user.first_name and profile_user.last_name %}
-                        {{ profile_user.first_name|first|upper }}{{ profile_user.last_name|first|upper }}
+                    {{ profile_user.first_name|first|upper }}{{ profile_user.last_name|first|upper }}
                     {% else %}
-                        {{ profile_user.username|slice:":2"|upper }}
+                    {{ profile_user.username|slice:":2"|upper }}
                     {% endif %}
                 </div>
                 <div class="profile-meta">
                     <h1>
                         {% if profile_user.first_name or profile_user.last_name %}
-                            {{ profile_user.first_name }} {{ profile_user.last_name }}
+                        {{ profile_user.first_name }} {{ profile_user.last_name }}
                         {% else %}
-                            {{ profile_user.username }}
+                        {{ profile_user.username }}
                         {% endif %}
                     </h1>
                     <div class="profile-details">
@@ -954,39 +954,36 @@
     </div>
 
     <script>
-        // Generate calendar grid with actual submission data
         function generateCalendar() {
             const grid = document.getElementById('calendarGrid');
             const today = new Date();
-            const startDate = new Date(today.getFullYear(), 0, 1); // Start from Jan 1st
+            const startDate = new Date(today.getFullYear(), 0, 1); // Jan 1
 
-            // Get submission data from template (you'll need to pass this from the view)
-            const submissionData = {{ submission_calendar|default: "{}" | safe
-        }};
+            const submissionData = JSON.parse('{{ submission_calendar|default:"{ }"|escapejs }}');
 
-        // Generate 365 days
-        for (let i = 0; i < 365; i++) {
-            const day = document.createElement('div');
-            day.className = 'calendar-day';
+            for (let i = 0; i < 365; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
 
-            const currentDate = new Date(startDate);
-            currentDate.setDate(startDate.getDate() + i);
-            const dateStr = currentDate.toISOString().split('T')[0];
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                const dateStr = currentDate.toISOString().split('T')[0];
 
-            // Get submission count for this date
-            const submissions = submissionData[dateStr] || 0;
-            let level = 0;
-            if (submissions > 0) level = 1;
-            if (submissions > 2) level = 2;
-            if (submissions > 4) level = 3;
-            if (submissions > 6) level = 4;
+                const submissions = submissionData[dateStr] || 0;
+                let level = 0;
+                if (submissions > 0) level = 1;
+                if (submissions > 2) level = 2;
+                if (submissions > 4) level = 3;
+                if (submissions > 6) level = 4;
 
-            day.classList.add(`level-${level}`);
-            day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
+                day.classList.add(`level-${level}`);
+                day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
 
-            grid.appendChild(day);
+                grid.appendChild(day);
+            }
         }
-        }
+
+        document.addEventListener('DOMContentLoaded', generateCalendar);
 
         // Initialize calendar when page loads
         document.addEventListener('DOMContentLoaded', generateCalendar);
