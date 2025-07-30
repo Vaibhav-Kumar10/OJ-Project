@@ -698,7 +698,7 @@
             }
 
             .navbar-nav {
-                display: none;
+                display: flex;
             }
 
             .hero {
@@ -832,7 +832,7 @@
     <nav class="navbar">
         <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" id="navbarNav">
             <li>
                 <a href="{% url 'core:home' %} " class="nav-link active">Home</a>
             </li>
@@ -1013,11 +1013,11 @@
                 <div class="problem-stats">
                     <div class="problem-stat">
                         <span>💡</span>
-                        <span>{{ problem.tags|default('Algorithm') }}</span>
+                        <span>{{ problem.tags|default:"Algorithm" }}</span>
                     </div>
                     <div class="problem-stat">
                         <span>🏆</span>
-                        <span>{{ problem.score_awarded|default(100) }} points</span>
+                        <span>{{ problem.score_awarded|default:"100" }} points</span>
                     </div>
                 </div>
             </a>
