@@ -1,3 +1,5 @@
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -882,7 +884,7 @@
                     <td class="score">{{ problem.score }}</td>
                     <td class="tags">
                         {% if problem.tags %}
-                        {% for tag in problem.tags|split:',' %}
+                        {% for tag in problem.tags|split:"," %}
                         <span class="tag-pill">{{ tag|trim }}</span>
                         {% endfor %}
                         {% endif %}
