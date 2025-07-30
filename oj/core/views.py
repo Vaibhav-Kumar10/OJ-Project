@@ -23,7 +23,7 @@ def home_view(request):
             .select_related("problem")
             .order_by("-score_awarded")[:4]
         )
-        
+
         # Get recent submissions for the authenticated user
         recent_submissions = (
             Submission.objects.filter(user=request.user)
@@ -57,6 +57,9 @@ def problem_view(request, id):
     user_submissions = Submission.objects.filter(
         user=request.user, problem=problem
     ).order_by("-submitted_at")
+
+    problem.tag_list = problem.tags.split() if problem.tags else []
+
     context = {
         "problem": problem,
         "submissions": user_submissions,
@@ -188,8 +191,18 @@ def profile_view(request, username=None):
     }
 
     badges = [
-        {"icon": "🎯", "title": "First Solve", "description": "Solve your first problem", "condition": user_score.problems_solved > 0},
-        {"icon": "💡", "title": "Problem Solver", "description": "Solve 10+ problems", "condition": user_score.problems_solved >= 10},
+        {
+            "icon": "🎯",
+            "title": "First Solve",
+            "description": "Solve your first problem",
+            "condition": user_score.problems_solved > 0,
+        },
+        {
+            "icon": "💡",
+            "title": "Problem Solver",
+            "description": "Solve 10+ problems",
+            "condition": user_score.problems_solved >= 10,
+        },
     ]
     context["badges"] = badges
 
