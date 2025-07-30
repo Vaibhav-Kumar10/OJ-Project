@@ -750,14 +750,12 @@
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 </a>
             </div>
-            {% if user.is_authenticated %}
-            {% if user == profile_user %}
-            <a href="#" class="btn btn-secondary">Settings</a>
-            {% endif %}
+
             <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
             {% else %}
             <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
             <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
             {% endif %}
         </div>
     </nav>
@@ -877,47 +875,13 @@
                 Badges & Achievements
             </h2>
             <div class="badges-grid">
-                <!-- First Solve Badge -->
-                <div class="badge {% if user_score.problems_solved > 0 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">🎯</span>
-                    <div class="badge-title">First Solve</div>
-                    <div class="badge-description">Solve your first problem</div>
+                {% for badge in badges %}
+                <div class="badge {% if badge.condition %}earned{% else %}locked{% endif %}">
+                    <span class="badge-icon">{{ badge.icon }}</span>
+                    <div class="badge-title">{{ badge.title }}</div>
+                    <div class="badge-description">{{ badge.description }}</div>
                 </div>
-
-                <!-- Problem Solver Badge -->
-                <div class="badge {% if user_score.problems_solved >= 10 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">💡</span>
-                    <div class="badge-title">Problem Solver</div>
-                    <div class="badge-description">Solve 10+ problems</div>
-                </div>
-
-                <!-- Dedicated Coder Badge -->
-                <div class="badge {% if user_score.problems_solved >= 50 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">⚡</span>
-                    <div class="badge-title">Dedicated Coder</div>
-                    <div class="badge-description">Solve 50+ problems</div>
-                </div>
-
-                <!-- Master Solver Badge -->
-                <div class="badge {% if user_score.problems_solved >= 100 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">🏆</span>
-                    <div class="badge-title">Master Solver</div>
-                    <div class="badge-description">Solve 100+ problems</div>
-                </div>
-
-                <!-- High Scorer Badge -->
-                <div class="badge {% if user_score.score >= 1000 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">💎</span>
-                    <div class="badge-title">High Scorer</div>
-                    <div class="badge-description">Earn 1000+ points</div>
-                </div>
-
-                <!-- Streak Master Badge -->
-                <div class="badge {% if current_streak >= 7 %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">🔥</span>
-                    <div class="badge-title">Streak Master</div>
-                    <div class="badge-description">Maintain a 7-day streak</div>
-                </div>
+                {% endfor %}
             </div>
         </div>
 

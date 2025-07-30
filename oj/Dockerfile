@@ -15,7 +15,7 @@ WORKDIR /app
 COPY . /app
 
 # Upgrade pip and install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip
+# RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir \
     django \
     markdown \

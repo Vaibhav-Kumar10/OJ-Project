@@ -5,29 +5,30 @@ from contests.models import ProblemCompletion, UserScore
 from google import genai
 import markdown
 import os
-
-
 from django.contrib.auth.models import User
-from django.db.models import Count, Q
+from django.db.models import Count
 from datetime import datetime, timedelta
-from collections import defaultdict
 import json
-
 from django.contrib.auth import get_user_model
-
-
-# import google.generativeai as genai
 
 
 # ----------------- Home Page ----------------- #
 def home_view(request):
     featured_problems = []
+    recent_submissions = []
 
     if request.user.is_authenticated:
         featured_problems = (
             ProblemCompletion.objects.filter(user=request.user, is_complete=True)
             .select_related("problem")
             .order_by("-score_awarded")[:4]
+        )
+        
+        # Get recent submissions for the authenticated user
+        recent_submissions = (
+            Submission.objects.filter(user=request.user)
+            .select_related("problem")
+            .order_by("-submitted_at")[:5]  # Get last 5 submissions
         )
 
     scores = UserScore.objects.select_related("user").order_by(
@@ -36,6 +37,7 @@ def home_view(request):
 
     context = {
         "featured_problems": featured_problems,
+        "recent_submissions": recent_submissions,
         "scores": scores,
     }
 
@@ -184,6 +186,12 @@ def profile_view(request, username=None):
         "submission_calendar": json.dumps(submission_calendar),
         "user_age": age,
     }
+
+    badges = [
+        {"icon": "🎯", "title": "First Solve", "description": "Solve your first problem", "condition": user_score.problems_solved > 0},
+        {"icon": "💡", "title": "Problem Solver", "description": "Solve 10+ problems", "condition": user_score.problems_solved >= 10},
+    ]
+    context["badges"] = badges
 
     return render(request, "core/profile.html", context)
 

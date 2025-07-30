@@ -744,13 +744,23 @@
 
 <body>
     <nav class="navbar">
-        <a href="#" class="navbar-brand">CodeForge</a>
-        <ul class="navbar-nav" id="navbarNav">
-            <li><a class="nav-link" href="{% url 'core:home' %}">Home</a></li>
-            <li><a class="nav-link active" href="#problems">Problems</a></li>
-            <li><a class="nav-link" href="#contests">Contests</a></li>
-            <li><a class="nav-link" href="{% url 'core:leaderboard' %}">Leaderboard</a></li>
+        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
+
+        <ul class="navbar-nav">
+            <li>
+                <a href="{% url 'core:home' %} " class="nav-link">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'core:problems' %}" class="nav-link active">Problems</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:contest' %}" class="nav-link">Contest</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
+            </li>
         </ul>
+
         <div class="navbar-actions">
             {% if user.is_authenticated %}
             <!-- Profile Button with Avatar -->
@@ -768,6 +778,7 @@
             <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
             <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
             <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            {% endif %}
         </div>
     </nav>
 
@@ -855,7 +866,7 @@
             </thead>
             <tbody>
                 {% for problem in problems %}
-                <tr class="table-row" onclick="navigateToProblem('{% url 'core:problem_detail' problem.id %}')">
+                <tr class="table-row" onclick="navigateToProblem('{% url \'core:problem_detail\' problem.id %}')">
                     <td class="problem-id">
                         <a href="{% url 'core:problem_detail' problem.id %}">#{{ problem.id|stringformat:"03d" }}</a>
                     </td>

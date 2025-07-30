@@ -582,14 +582,11 @@
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 </a>
             </div>
-            {% if user.is_authenticated %}
-            {% if user == profile_user %}
-            <a href="#" class="btn btn-secondary">Settings</a>
-            {% endif %}
             <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
             {% else %}
             <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
             <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
             {% endif %}
         </div>
     </nav>
@@ -720,6 +717,11 @@
             const sidebar = document.getElementById('submissionsSidebar');
             sidebar.classList.toggle('visible');
             sidebar.classList.toggle('hidden');
+        }
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navbarNav');
+            nav.classList.toggle('active');
         }
     </script>
 </body>

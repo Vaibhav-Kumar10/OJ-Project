@@ -16,7 +16,5 @@ class User(AbstractUser):
     dob = models.DateField(null=True, blank=True)
     mobile_no = models.CharField(max_length=15, blank=True, null=True)
 
-
-
-# def __str__(self):
-#     return self.username
+    def __str__(self):
+        return f"{self.user.username} - {self.score} pts"
