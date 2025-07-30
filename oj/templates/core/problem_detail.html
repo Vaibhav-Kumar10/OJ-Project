@@ -458,7 +458,11 @@
             }
 
             .navbar-nav {
-                display: none;
+                display: flex;
+            }
+
+            .navbar-nav.active {
+                display: block;
             }
 
             .main-split-view {
@@ -562,7 +566,7 @@
     <nav class="navbar">
         <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" id="navbarNav">
             <li><a href="{% url 'core:home' %}" class="nav-link active">Home</a></li>
             <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
             <li><a href="{% url 'contests:contest' %}" class="nav-link">Contest</a></li>
@@ -577,9 +581,9 @@
                 <a href="{% url 'core:profile' %}" class="profile-btn">
                     <div class="nav-avatar">
                         {% if user.first_name and user.last_name %}
-                            {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
                         {% else %}
-                            {{ user.username|slice:":2"|upper }}
+                        {{ user.username|slice:":2"|upper }}
                         {% endif %}
                     </div>
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
@@ -605,7 +609,7 @@
                     <div class="meta-item">Score: {{ problem.score }}</div>
                 </div>
                 <div class="tags-container">
-                    {% for tag in problem.tags.split %}
+                    {% for tag in problem.tag_list %}
                     <span class="tag">{{ tag }}</span>
                     {% endfor %}
                 </div>
