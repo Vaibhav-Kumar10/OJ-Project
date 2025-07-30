@@ -25,10 +25,10 @@
                     <a href="{% url 'core:problems' %}" class="link">All Problems</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
+                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
                 </li>
                 <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
+                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
                 </li>
             </ul>
         </div>
@@ -58,8 +58,8 @@
                 <div class="input-box">
                     <input type="password" class="input-field" placeholder="Password" id="password" name="password"
                         required autocomplete="current-password">
+                    <button type="button" onclick="togglePassword()" class="show-password">👁️</button>
                 </div>
-                <button type="button" onclick="togglePassword()" class="show-password">👁️</button>
                 <script>
                     function togglePassword() {
                         const password = document.getElementById('password');

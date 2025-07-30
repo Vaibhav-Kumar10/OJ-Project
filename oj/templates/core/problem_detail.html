@@ -567,12 +567,19 @@
         <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
         <ul class="navbar-nav" id="navbarNav">
-            <li><a href="{% url 'core:home' %}" class="nav-link active">Home</a></li>
-            <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
-            <li><a href="{% url 'contests:contest' %}" class="nav-link">Contest</a></li>
-            <li><a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a></li>
+            <li>
+                <a href="{% url 'core:home' %} " class="nav-link">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:contest' %}" class="nav-link">Contest</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
+            </li>
         </ul>
-
 
         <div class="navbar-actions">
             {% if user.is_authenticated %}
@@ -586,10 +593,11 @@
                         {{ user.username|slice:":2"|upper }}
                         {% endif %}
                     </div>
+
                     <span class="profile-name">{{ user.first_name|default:user.username }}</span>
                 </a>
             </div>
-            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
+            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
             {% else %}
             <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
             <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
@@ -597,6 +605,7 @@
             {% endif %}
         </div>
     </nav>
+
 
     <!-- Main Content -->
     <div class="main-split-view">

@@ -869,7 +869,7 @@
             </thead>
             <tbody>
                 {% for problem in problems %}
-                <tr class="table-row" onclick="navigateToProblem('{% url \'core:problem_detail\' problem.id %}')">
+                <tr class="table-row">
                     <td class="problem-id">
                         <a href="{% url 'core:problem_detail' problem.id %}">#{{ problem.id|stringformat:"03d" }}</a>
                     </td>
