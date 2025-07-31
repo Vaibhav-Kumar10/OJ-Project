@@ -4,13 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta name="description" content="View top performers and track your ranking on our coding platform.">
     <meta property="og:title" content="Leaderboard - OJ Platform" />
     <meta property="og:description" content="See who's leading the competition and find your position among coders." />
-
     <title>Leaderboard - OJ Platform</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
     <style>
+        :root {
+            /* Dark Theme Colors */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --primary: #ffa116;
+            --secondary: #00d9ff;
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --border: #3a3a5c;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+
+            /* Border Radius */
+            --radius: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,250 +63,434 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            z-index: 1;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
-        .nav {
+        .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            z-index: 100;
+            height: 64px;
         }
 
         .nav-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: var(--space-xl);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: rgba(255, 161, 22, 0.1);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .btn {
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: #e6910a;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: var(--space-sm);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: var(--space-3xl) 0 var(--space-2xl);
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 161, 22, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .nav-menu ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .nav-menu .link {
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
         }
 
-        .nav-menu .link:hover,
-        .nav-menu .link.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
-        .nav-button {
-            display: flex;
-            gap: 1rem;
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: var(--space-xs);
         }
 
-        .btn {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
         }
 
-        .btn:not(.white-btn) {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        /* Leaderboard Table */
+        .leaderboard-section {
+            padding: var(--space-2xl) 0;
         }
 
-        .btn:not(.white-btn):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        .leaderboard-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
-        .white-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+        .leaderboard-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .white-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+        .leaderboard-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
-        .description {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
-            margin-right: 1rem;
+        .filters {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
         }
 
-        .hero {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem 2rem;
-            text-align: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero .subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .leaderboard-container {
-            position: relative;
-            z-index: 10;
-            padding: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+        .filter-select {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.875rem;
         }
 
         .leaderboard-table {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        th,
-        td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        th {
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
+        .leaderboard-table th {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.875rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
         }
 
-        td {
-            color: rgba(255, 255, 255, 0.9);
+        .leaderboard-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid rgba(58, 58, 92, 0.3);
         }
 
+        .leaderboard-table tr:hover {
+            background: rgba(255, 161, 22, 0.05);
+        }
+
+        .leaderboard-table tr.highlight-user {
+            background: rgba(255, 161, 22, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Rank styling */
         .rank {
-            font-weight: bold;
-            font-size: 1.2rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
         }
 
-        .rank.gold {
+        .rank-1 {
             color: #ffd700;
         }
 
-        .rank.silver {
+        .rank-2 {
             color: #c0c0c0;
         }
 
-        .rank.bronze {
+        .rank-3 {
             color: #cd7f32;
+        }
+
+        .trophy-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* User info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
 
         .username {
             font-weight: 600;
-            color: white;
+            color: var(--text-primary);
         }
 
+        /* Points and stats */
         .points {
-            font-weight: bold;
-            color: #4ecdc4;
+            font-weight: 700;
+            color: var(--secondary);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .problems-solved {
-            color: #2ecc71;
+            color: var(--success);
+            font-weight: 600;
         }
 
-        .footer {
+        .accuracy {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Empty state */
+        .empty-state {
             text-align: center;
-            padding: 2rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: var(--space-3xl);
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: var(--space-lg);
+            color: var(--text-muted);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .leaderboard-header {
+                flex-direction: column;
+                gap: var(--space-md);
+                align-items: stretch;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+
+            .leaderboard-table {
+                font-size: 0.875rem;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: var(--space-sm) var(--space-md);
+            }
+
+            .user-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-xs);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: var(--space-3xl);
         }
 
         .footer-links {
-            list-style: none;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+            list-style: none;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             text-decoration: none;
+            transition: color 0.2s ease;
         }
 
         .footer-links a:hover {
-            color: white;
+            color: var(--text-primary);
         }
 
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
 
             to {
@@ -270,137 +499,284 @@
             }
         }
 
-        /* Responsive Design */
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+
+        /* Profile Button Styles */
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+        }
+
+        .profile-btn:hover {
+            background: var(--border-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #000;
+            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
+        }
+
+        .profile-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Mobile responsive */
         @media (max-width: 768px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
+            .profile-name {
+                display: none;
+                /* Hide name on mobile, show only avatar */
             }
 
-            .nav-menu ul {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .nav-button {
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.1rem;
-            }
-
-            .leaderboard-container {
-                padding: 1rem;
-            }
-
-            .leaderboard-table {
-                padding: 1rem;
-            }
-
-            table {
-                font-size: 0.9rem;
-            }
-
-            th,
-            td {
-                padding: 0.7rem 0.5rem;
+            .profile-btn {
+                padding: var(--space-sm);
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="{% url 'core:home' %}" class="nav-logo">
+                    <i data-lucide="code"></i>
+                    OJ Platform
+                </a>
 
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %}" class="link">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link active">Leaderboard</a>
-                </li>
-            </ul>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'core:home' %}" class="nav-link">Home</a></li>
+                    <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
+                    <li><a href="{% url 'contests:contest' %}" class="nav-link">Contests</a></li>
+                    <li><a href="{% url 'contests:leaderboard' %}" class="nav-link active">Leaderboard</a></li>
+                </ul>
+
+
+                <div class="navbar-actions">
+                    {% if user.is_authenticated %}
+                    <!-- Profile Button with Avatar -->
+                    <div class="profile-dropdown">
+                        <a href="{% url 'core:profile' %}" class="profile-btn">
+                            <div class="nav-avatar">
+                                {% if user.first_name and user.last_name %}
+                                {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                                {% else %}
+                                {{ user.username|slice:":2"|upper }}
+                                {% endif %}
+                            </div>
+                            <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                    </div>
+                    <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
+                    {% else %}
+                    <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
+                    <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
+                    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="nav-button">
-            {% if user.is_authenticated %}
-            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
-            {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
-            {% endif %}
-        </div>
-    </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>🏆 Leaderboard</h1>
-        <p class="subtitle">
-            See who's leading the competition and track your progress among the top coders.
-        </p>
-    </section>
-
-    <!-- Leaderboard Table -->
-    <section class="leaderboard-container">
-        <div class="leaderboard-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Points</th>
-                        <th>Problems Solved</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if scores %}
-                    {% for entry in scores %}
-                    <tr
-                        class="{% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %} {% if entry.user == request.user %}highlight-user{% endif %}">
-                        <td class="rank">{{ forloop.counter }}</td>
-                        <td class="username">{{ entry.user.username }}</td>
-                        <td class="points">{{ entry.score }}</td>
-                        <td class="problems-solved">{{ entry.problems_solved }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center;">No submissions yet. Be the first to get on the
-                            board!</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+        <div class="container">
+            <h1>🏆 Leaderboard</h1>
+            <p>Track your progress and see who's leading the competition among our coding community.</p>
         </div>
     </section>
 
+    <!-- Stats Section -->
+    <section class="container">
+        <div class="stats-grid fade-in">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_users or 0 }}</div>
+                <div class="stat-label">Total Coders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_submissions or 0 }}</div>
+                <div class="stat-label">Submissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ active_today or 0 }}</div>
+                <div class="stat-label">Active Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ problems_solved or 0 }}</div>
+                <div class="stat-label">Problems Solved</div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section">
+        <div class="container">
+            <div class="leaderboard-card fade-in">
+                <div class="leaderboard-header">
+                    <h2 class="leaderboard-title">
+                        <i data-lucide="trophy"></i>
+                        Top Performers
+                    </h2>
+                    <div class="filters">
+                        <select class="filter-select">
+                            <option>All Time</option>
+                            <option>This Month</option>
+                            <option>This Week</option>
+                        </select>
+                        <select class="filter-select">
+                            <option>All Users</option>
+                            <option>Friends</option>
+                        </select>
+                    </div>
+                </div>
 
+                {% if scores and scores|length > 0 %}
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Points</th>
+                            <th>Problems Solved</th>
+                            <th>Accuracy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in scores %}
+                        <tr class="{% if entry.user == request.user %}highlight-user{% endif %}">
+                            <td>
+                                <div
+                                    class="rank {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">
+                                    {% if forloop.counter <= 3 %} <i data-lucide="trophy" class="trophy-icon"></i>
+                                        {% endif %}
+                                        {{ forloop.counter }}
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ entry.user.username[0]|upper }}
+                                    </div>
+                                    <div>
+                                        <div class="username">{{ entry.user.username }}</div>
+                                        {% if entry.user.profile and entry.user.profile.location %}
+                                        <div class="accuracy">
+                                            {{ entry.user.profile.location|default:"" }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="points">{{ entry.score }}</td>
+                            <td class="problems-solved">{{ entry.problems_solved }}</td>
+                            <td class="accuracy">{{ entry.accuracy|floatformat:1 }}%</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <i data-lucide="users"></i>
+                    <h3>No submissions yet</h3>
+                    <p>Be the first to solve a problem and get on the leaderboard!</p>
+                    <a href="{% url 'core:problems' %}" class="btn btn-primary" style="margin-top: var(--space-lg);">
+                        Start Coding
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer class="footer">
-        <p>© 2025 OJ Platform. All rights reserved.</p>
-        <ul class="footer-links">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
+        <div class="container">
+            <p>© 2025 OJ Platform. Built for competitive programmers.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">API Documentation</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
     </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Mobile menu functionality (if needed)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+
+        if (mobileMenuBtn && navMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navbarNav');
+            nav.classList.toggle('active');
+        }
+    </script>
 </body>
 
 </html>

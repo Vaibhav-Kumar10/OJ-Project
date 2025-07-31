@@ -1,5 +1,5 @@
 """
-URL configuration for oj project.
+URL configuration for compiler_service project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -20,8 +20,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.urls", namespace="core")),
-    path("auth/", include("user_auth.urls", namespace="user_auth")),
-    path("contests/", include("contests.urls", namespace="contests")),
-    path("compiler/", include("compiler.urls", namespace="compiler")),
+    path("api/", include("compiler.urls")),
 ]

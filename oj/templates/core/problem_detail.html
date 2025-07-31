@@ -646,9 +646,10 @@
                 <div class="form-group">
                     <label for="language">Language:</label>
                     <select name="language" id="language" class="form-select" required>
-                        <option value="py">Python</option>
-                        <option value="cpp">C++</option>
-                        <option value="java">Java</option>
+                        <option value="py" {% if language=="py" %}selected{% endif %}>Python</option>
+                        <option value="cpp" {% if language=="cpp" %}selected{% endif %}>C++</option>
+                        <option value="java" {% if language=="java" %}selected{% endif %}>Java</option>
+
                     </select>
                 </div>
 
@@ -685,7 +686,18 @@
             <div class="content-card">
                 <h3>Output:</h3>
                 <pre
-                    id="outputBox">{% if mode == "run" and output %}{{ output }}{% elif mode == "run" %}Your output will appear here...{% elif mode == "submit" %}{% if messages %}{% for message in messages %}{{ message }}{% endfor %}{% endif %}{% endif %}</pre>
+                    id="outputBox">
+                    {% if mode == "run" and output %}
+                        {{ output }}
+                    {% elif mode == "run" %}
+                        Your output will appear here...
+                    {% elif mode == "submit" %}
+                        {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                        {% endif %}
+                    {% endif %}</pre>
             </div>
 
             {% if ai_review %}

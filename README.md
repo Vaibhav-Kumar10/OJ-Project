@@ -70,3 +70,15 @@ OJ-PROJECT/
 ├── manage.py
 ├── Dockerfile
 ├── requirements.txt
+
+
+### ARCHITECTURE OVERVIEW
+
+User hits frontend (core/views.py)        
+   → calls compiler views via path("compiler/...") [local]       
+       → uses compiler/evaluation.py or compiler/execution.py      
+           → which makes API call to compiler_service microservice        
+               → compiles / evaluates and returns output     
+           ← returns result to compiler app     
+       ← compiler view returns to core view context     
+← core view shows result to user    

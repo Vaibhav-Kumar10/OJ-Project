@@ -15,6 +15,6 @@ def submit_code(problem, code, language):
         except Exception as e:
             return f"Error: {e}"
 
-    if output.strip() != expected_output.strip():
-        return "WA"
+        if output != expected_output:
+            return "WA"
     return "AC"

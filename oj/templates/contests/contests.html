@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta name="description" content="Join competitive programming contests and compete with developers worldwide.">
-    <meta property="og:title" content="Contests - OJ Platform" />
+    <meta property="og:title" content="Contests - CodeForge" />
     <meta property="og:description"
         content="Participate in coding contests and challenge yourself against programmers globally." />
+    <title>Contests - CodeForge</title>
 
-    <title>Contests - OJ Platform</title>
     <style>
         * {
             margin: 0;
@@ -19,231 +18,286 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #ffffff;
+            line-height: 1.6;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
-            z-index: 1;
-        }
-
-        .nav {
+        /* Navigation Styles */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
+            background: #1a1a2e;
+            border-bottom: 1px solid #3a3a5c;
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
 
-        .nav-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffa116;
+            text-decoration: none;
         }
 
-        .nav-menu ul {
+        .navbar-nav {
             display: flex;
             list-style: none;
             gap: 2rem;
         }
 
-        .nav-menu .link {
+        .nav-link {
+            color: #b3b3b3;
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
             padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
-        .nav-menu .link:hover,
-        .nav-menu .link.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ffffff;
+            background: rgba(255, 161, 22, 0.1);
         }
 
-        .nav-button {
+        .navbar-actions {
             display: flex;
+            align-items: center;
             gap: 1rem;
         }
 
-        .btn {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 25px;
+        .profile-dropdown {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .profile-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ffa116, #ff6b6b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+        }
+
+        .profile-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
             text-decoration: none;
             display: inline-block;
-            text-align: center;
-        }
-
-        .btn:not(.white-btn) {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        }
-
-        .btn:not(.white-btn):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .white-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .white-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .description {
-            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.2s ease;
             font-size: 0.9rem;
-            margin-right: 1rem;
         }
 
-        .hero {
-            position: relative;
-            z-index: 10;
-            padding: 4rem 2rem 2rem;
-            text-align: center;
+        .btn-primary {
+            background: #ffa116;
+            color: #0f0f23;
+        }
+
+        .btn-primary:hover {
+            background: #ff8c00;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #b3b3b3;
+            border: 1px solid #3a3a5c;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: #6c6c6c;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(255, 161, 22, 0.1), rgba(0, 217, 255, 0.1));
+            border-radius: 12px;
+            margin: 2rem 0;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            color: white;
             margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            animation: fadeInUp 1s ease-out;
+            background: linear-gradient(135deg, #ffa116, #00d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .hero .subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 3rem;
+        .hero p {
+            font-size: 1.2rem;
+            color: #b3b3b3;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
-            animation: fadeInUp 1s ease-out 0.2s both;
+            margin: 0 auto 2rem;
         }
 
+        /* Contest Sections */
         .contest-section {
-            position: relative;
-            z-index: 10;
-            padding: 2rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin: 3rem 0;
         }
 
-        .contest-section h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: white;
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             margin-bottom: 2rem;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .section-badge {
+            background: rgba(255, 161, 22, 0.2);
+            color: #ffa116;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Contest Grid */
         .contests-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
         }
 
         .contest-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            background: #1a1a2e;
+            border: 1px solid #3a3a5c;
+            border-radius: 12px;
             padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
-            cursor: pointer;
-            animation: fadeInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contest-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffa116, #00d9ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .contest-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: #6c6c6c;
+        }
+
+        .contest-card:hover::before {
+            opacity: 1;
         }
 
         .contest-card.live {
-            border: 2px solid rgba(46, 204, 113, 0.5);
-            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+            border-color: #00c851;
+            box-shadow: 0 0 20px rgba(0, 200, 81, 0.2);
+        }
+
+        .contest-card.live::before {
+            background: #00c851;
+            opacity: 1;
         }
 
         .contest-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .contest-title {
             font-size: 1.4rem;
             font-weight: 700;
-            color: white;
+            color: #ffffff;
             margin-bottom: 0.5rem;
-            flex: 1;
         }
 
         .contest-status {
             padding: 0.4rem 0.8rem;
-            border-radius: 15px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             white-space: nowrap;
-            margin-left: 1rem;
         }
 
         .contest-status.live {
-            background: rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
+            background: rgba(0, 200, 81, 0.2);
+            color: #00c851;
             animation: pulse 2s infinite;
         }
 
         .contest-status.upcoming {
-            background: rgba(52, 152, 219, 0.3);
-            color: #3498db;
+            background: rgba(0, 217, 255, 0.2);
+            color: #00d9ff;
         }
 
         .contest-status.ended {
-            background: rgba(149, 165, 166, 0.3);
-            color: #95a5a6;
+            background: rgba(108, 108, 108, 0.2);
+            color: #6c6c6c;
         }
 
         .contest-details {
@@ -254,30 +308,32 @@
         }
 
         .contest-detail {
-            color: rgba(255, 255, 255, 0.8);
+            color: #b3b3b3;
             font-size: 0.9rem;
         }
 
         .contest-detail strong {
-            color: white;
+            color: #ffffff;
+            font-weight: 600;
         }
 
         .contest-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            border-top: 1px solid #3a3a5c;
+            border-bottom: 1px solid #3a3a5c;
+            margin: 1rem 0;
         }
 
         .contest-participants {
-            color: rgba(255, 255, 255, 0.7);
+            color: #b3b3b3;
             font-size: 0.9rem;
         }
 
         .contest-prize {
-            color: #f1c40f;
+            color: #ffa116;
             font-weight: 600;
             font-size: 0.9rem;
         }
@@ -289,106 +345,100 @@
         }
 
         .contest-btn {
-            padding: 0.6rem 1.5rem;
+            padding: 0.7rem 1.5rem;
             border: none;
-            border-radius: 20px;
-            font-weight: 600;
+            border-radius: 6px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             text-decoration: none;
             font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            text-align: center;
+            flex: 1;
         }
 
         .contest-btn-primary {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            background: #ffa116;
+            color: #0f0f23;
         }
 
         .contest-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background: #ff8c00;
+            transform: translateY(-1px);
         }
 
         .contest-btn-secondary {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #b3b3b3;
+            border: 1px solid #3a3a5c;
         }
 
         .contest-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: #6c6c6c;
         }
 
         .timer {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(255, 161, 22, 0.1);
+            border: 1px solid rgba(255, 161, 22, 0.3);
             padding: 0.8rem 1.2rem;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: white;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #ffa116;
             text-align: center;
             margin: 1rem 0;
         }
 
         .timer.ending-soon {
-            color: #e74c3c;
+            background: rgba(255, 68, 68, 0.1);
+            border-color: rgba(255, 68, 68, 0.3);
+            color: #ff4444;
             animation: pulse 1s infinite;
         }
 
+        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 3rem 2rem;
-            color: rgba(255, 255, 255, 0.7);
+            padding: 4rem 2rem;
+            color: #6c6c6c;
         }
 
         .empty-state h3 {
             font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: #b3b3b3;
             margin-bottom: 1rem;
         }
 
+        /* Footer */
         .footer {
             text-align: center;
-            padding: 2rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid #3a3a5c;
+            color: #6c6c6c;
         }
 
         .footer-links {
             list-style: none;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 2rem;
             margin-top: 1rem;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: #6c6c6c;
             text-decoration: none;
+            transition: color 0.2s ease;
         }
 
         .footer-links a:hover {
-            color: white;
+            color: #b3b3b3;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* Animations */
         @keyframes pulse {
 
             0%,
@@ -401,30 +451,58 @@
             }
         }
 
-        /* Responsive Design */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .contest-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
+            .navbar {
                 padding: 1rem;
             }
 
-            .nav-menu ul {
+            .navbar-nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #1a1a2e;
                 flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+                padding: 1rem;
+                border-top: 1px solid #3a3a5c;
             }
 
-            .nav-button {
-                justify-content: center;
+            .navbar-nav.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .container {
+                padding: 0 1rem;
             }
 
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
 
-            .hero .subtitle {
-                font-size: 1.1rem;
+            .hero p {
+                font-size: 1rem;
             }
 
             .contests-grid {
@@ -438,302 +516,317 @@
             .contest-actions {
                 flex-direction: column;
             }
+
+            .contest-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
 
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %}" class="link">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link active">Contest</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
-            </ul>
-        </div>
-        <div class="nav-button">
+        <ul class="navbar-nav" id="navbarNav">
+            <li>
+                <a href="{% url 'core:home' %} " class="nav-link">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:contest' %}" class="nav-link active">Contest</a>
+            </li>
+            <li>
+                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
+            </li>
+        </ul>
+
+        <div class="navbar-actions">
             {% if user.is_authenticated %}
-            <a href="{% url 'user_auth:logout' %}" class="btn" id="logoutBtn">Logout</a>
+            <!-- Profile Button with Avatar -->
+            <div class="profile-dropdown">
+                <a href="{% url 'core:profile' %}" class="profile-btn">
+                    <div class="nav-avatar">
+                        {% if user.first_name and user.last_name %}
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {% else %}
+                        {{ user.username|slice:":2"|upper }}
+                        {% endif %}
+                    </div>
+
+                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
+                </a>
+            </div>
+            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
             {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
             {% endif %}
         </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Competitive Programming Contests</h1>
+            <p>
+                Challenge yourself against programmers worldwide. Participate in exciting coding contests,
+                climb the leaderboard, and showcase your problem-solving skills.
+            </p>
+        </section>
+
+        <!-- Live Contests Section -->
+        <section class="contest-section">
+            <div class="section-header">
+                <h2 class="section-title">🔴 Live Contests</h2>
+                <span class="section-badge">{{ live_contests|length if live_contests else 0 }} Active</span>
+            </div>
+
+            {% if live_contests %}
+            <div class="contests-grid">
+                {% for contest in live_contests %}
+                <div class="contest-card live">
+                    <div class="contest-header">
+                        <div>
+                            <h3 class="contest-title">{{ contest.title }}</h3>
+                        </div>
+                        <span class="contest-status live">Live</span>
+                    </div>
+
+                    <div class="contest-details">
+                        <div class="contest-detail">
+                            <strong>Started:</strong> {{ contest.start_time|timeago }}
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Duration:</strong> {{ contest.duration_hours }} hours
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Problems:</strong> {{ contest.problems_count }}
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Difficulty:</strong> {{ contest.difficulty }}
+                        </div>
+                    </div>
+
+                    {% if contest.time_remaining %}
+                    <div class="timer {{ 'ending-soon' if contest.time_remaining < 3600 else '' }}">
+                        Time Remaining: {{ contest.time_remaining|format_duration }}
+                    </div>
+                    {% endif %}
+
+                    <div class="contest-meta">
+                        <span class="contest-participants">👥 {{ contest.participants_count }} participants</span>
+                        {% if contest.prize %}
+                        <span class="contest-prize">🏆 {{ contest.prize }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="contest-actions">
+                        {% if user.is_authenticated %}
+                        {% if contest.user_registered %}
+                        <a href="{{ url_for('contests:contest_problems', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-primary">Enter Contest</a>
+                        {% else %}
+                        <a href="{{ url_for('contests:register', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-primary">Join Contest</a>
+                        {% endif %}
+                        {% else %}
+                        <a href="{{ url_for('user_auth:login') }}" class="contest-btn contest-btn-primary">Login to
+                            Join</a>
+                        {% endif %}
+                        <a href="{{ url_for('contests:leaderboard', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-secondary">Leaderboard</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>No Live Contests</h3>
+                <p>Check back soon for exciting programming challenges!</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Upcoming Contests Section -->
+        <section class="contest-section">
+            <div class="section-header">
+                <h2 class="section-title">📅 Upcoming Contests</h2>
+                <span class="section-badge">{{ upcoming_contests|length if upcoming_contests else 0 }} Scheduled</span>
+            </div>
+
+            {% if upcoming_contests %}
+            <div class="contests-grid">
+                {% for contest in upcoming_contests %}
+                <div class="contest-card">
+                    <div class="contest-header">
+                        <div>
+                            <h3 class="contest-title">{{ contest.title }}</h3>
+                        </div>
+                        <span class="contest-status upcoming">Upcoming</span>
+                    </div>
+
+                    <div class="contest-details">
+                        <div class="contest-detail">
+                            <strong>Starts:</strong> {{ contest.start_time|datetime }}
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Duration:</strong> {{ contest.duration_hours }} hours
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Problems:</strong> {{ contest.problems_count }}
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Difficulty:</strong> {{ contest.difficulty }}
+                        </div>
+                    </div>
+
+                    {% if contest.description %}
+                    <p style="color: #b3b3b3; font-size: 0.9rem; margin: 1rem 0;">
+                        {{ contest.description|truncate(120) }}
+                    </p>
+                    {% endif %}
+
+                    <div class="contest-meta">
+                        <span class="contest-participants">👥 {{ contest.registered_count }} registered</span>
+                        {% if contest.prize %}
+                        <span class="contest-prize">🏆 {{ contest.prize }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="contest-actions">
+                        {% if user.is_authenticated %}
+                        {% if contest.user_registered %}
+                        <button class="contest-btn contest-btn-secondary" disabled>✓ Registered</button>
+                        {% else %}
+                        <a href="{{ url_for('contests:register', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-primary">Register</a>
+                        {% endif %}
+                        {% else %}
+                        <a href="{{ url_for('user_auth:login') }}" class="contest-btn contest-btn-primary">Login to
+                            Register</a>
+                        {% endif %}
+                        <a href="{{ url_for('contests:contest_detail', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-secondary">Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>No Upcoming Contests</h3>
+                <p>New contests are being planned. Stay tuned for announcements!</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Past Contests Section -->
+        <section class="contest-section">
+            <div class="section-header">
+                <h2 class="section-title">📊 Recent Contests</h2>
+                <span class="section-badge">Past Results</span>
+            </div>
+
+            {% if past_contests %}
+            <div class="contests-grid">
+                {% for contest in past_contests %}
+                <div class="contest-card">
+                    <div class="contest-header">
+                        <div>
+                            <h3 class="contest-title">{{ contest.title }}</h3>
+                        </div>
+                        <span class="contest-status ended">Ended</span>
+                    </div>
+
+                    <div class="contest-details">
+                        <div class="contest-detail">
+                            <strong>Ended:</strong> {{ contest.end_time|timeago }}
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Duration:</strong> {{ contest.duration_hours }} hours
+                        </div>
+                        <div class="contest-detail">
+                            <strong>Problems:</strong> {{ contest.problems_count }}
+                        </div>
+                        {% if contest.winner %}
+                        <div class="contest-detail">
+                            <strong>Winner:</strong> {{ contest.winner.username }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="contest-meta">
+                        <span class="contest-participants">👥 {{ contest.participants_count }} participants</span>
+                        {% if contest.prize %}
+                        <span class="contest-prize">🏆 {{ contest.prize }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="contest-actions">
+                        <a href="{{ url_for('contests:leaderboard', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-secondary">View Results</a>
+                        {% if contest.editorials_available %}
+                        <a href="{{ url_for('contests:editorials', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-secondary">Editorials</a>
+                        {% else %}
+                        <a href="{{ url_for('contests:contest_problems', contest_id=contest.id) }}"
+                            class="contest-btn contest-btn-secondary">Practice</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>No Past Contests</h3>
+                <p>Contest history will appear here after competitions conclude.</p>
+            </div>
+            {% endif %}
+        </section>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Competitive Programming Contests</h1>
-        <p class="subtitle">
-            Challenge yourself against programmers worldwide. Participate in exciting coding contests,
-            climb the leaderboard, and showcase your problem-solving skills.
-        </p>
-    </section>
-
-    <!-- Live Contests Section -->
-    <section class="contest-section">
-        <h2>🔴 Live Contests</h2>
-        <div class="contests-grid">
-            <!-- Live Contest Example -->
-            <div class="contest-card live">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Weekly Challenge #42</h3>
-                        <span class="contest-status live">Live</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Started:</strong> 2 hours ago
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 3 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 5
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Difficulty:</strong> Medium-Hard
-                    </div>
-                </div>
-                <!-- <div class="timer ending-soon">
-                    Time Remaining: 58:42
-                </div>
-                <div class="contest-meta">
-                    <span class="contest-participants">👥 1,247 participants</span>
-                    <span class="contest-prize">🏆 Prize Pool: $500</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-primary">Join Contest</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">View Problems</a>
-                </div>
-            </div>
-
-            <div class="contest-card live">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Algorithm Sprint</h3>
-                        <span class="contest-status live">Live</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Started:</strong> 45 minutes ago
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 2 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 4
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Difficulty:</strong> Easy-Medium
-                    </div>
-                </div>
-                <!-- <div class="timer">
-                    Time Remaining: 1:15:30
-                </div>
-                <div class="contest-meta">
-                    <span class="contest-participants">👥 892 participants</span>
-                    <span class="contest-prize">🏆 Rating Points</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-primary">Join Contest</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Leaderboard</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Upcoming Contests Section -->
-    <section class="contest-section">
-        <h2>📅 Upcoming Contests</h2>
-        <div class="contests-grid">
-            <div class="contest-card">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Monthly Championship</h3>
-                        <span class="contest-status upcoming">Upcoming</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Starts:</strong> Tomorrow 6:00 PM
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 4 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 6
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Difficulty:</strong> All Levels
-                    </div>
-                </div>
-                <!-- <div class="contest-meta">
-                    <span class="contest-participants">👥 2,156 registered</span>
-                    <span class="contest-prize">🏆 Prize Pool: $2,000</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-primary">Register</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Set Reminder</a>
-                </div>
-            </div>
-
-            <div class="contest-card">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Beginner's Cup</h3>
-                        <span class="contest-status upcoming">Upcoming</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Starts:</strong> Date, Time
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 2 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 4
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Difficulty:</strong> Easy
-                    </div>
-                </div>
-                <!-- <div class="contest-meta">
-                    <span class="contest-participants">👥 1,023 registered</span>
-                    <span class="contest-prize">🏆 Certificates & Badges</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-primary">Register</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Details</a>
-                </div>
-            </div>
-
-            <div class="contest-card">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Data Structure Mastery</h3>
-                        <span class="contest-status upcoming">Upcoming</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Starts:</strong> Date, Time
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 3 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 5
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Difficulty:</strong> Hard
-                    </div>
-                </div>
-                <!-- <div class="contest-meta">
-                    <span class="contest-participants">👥 567 registered</span>
-                    <span class="contest-prize">🏆 Prize Pool: $1,200</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-primary">Register</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Requirements</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Past Contests Section -->
-    <section class="contest-section">
-        <h2>📊 Recent Contests</h2>
-        <div class="contests-grid">
-            <div class="contest-card">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">New Year Challenge 2025</h3>
-                        <span class="contest-status ended">Ended</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Ended:</strong> 3 days ago
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 5 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 7
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Winner:</strong> CodeMaster_42
-                    </div>
-                </div>
-                <!-- <div class="contest-meta">
-                    <span class="contest-participants">👥 3,421 participants</span>
-                    <span class="contest-prize">🏆 Prize Pool: $5,000</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-secondary">View Results</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Editorials</a>
-                </div>
-            </div>
-
-            <div class="contest-card">
-                <div class="contest-header">
-                    <div>
-                        <h3 class="contest-title">Graph Theory Special</h3>
-                        <span class="contest-status ended">Ended</span>
-                    </div>
-                </div>
-                <div class="contest-details">
-                    <div class="contest-detail">
-                        <strong>Ended:</strong> 1 week ago
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Duration:</strong> 3 hours
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Problems:</strong> 5
-                    </div>
-                    <div class="contest-detail">
-                        <strong>Winner:</strong> AlgoWizard
-                    </div>
-                </div>
-                <!-- <div class="contest-meta">
-                    <span class="contest-participants">👥 1,876 participants</span>
-                    <span class="contest-prize">🏆 Prize Pool: $800</span>
-                </div> -->
-                <div class="contest-actions">
-                    <a href="#" class="contest-btn contest-btn-secondary">View Results</a>
-                    <a href="#" class="contest-btn contest-btn-secondary">Practice</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <footer class="footer">
-        <p>© 2025 OJ Platform. All rights reserved.</p>
+        <p>© 2025 CodeForge. All rights reserved.</p>
         <ul class="footer-links">
             <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms</a></li>
+            <li><a href="#">Terms of Service</a></li>
             <li><a href="#">Contact</a></li>
+            <li><a href="#">FAQ</a></li>
         </ul>
     </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navbarNav');
+            nav.classList.toggle('active');
+        }
+
+        // Update timers every second for live contests
+        function updateTimers() {
+            const timers = document.querySelectorAll('.timer');
+            timers.forEach(timer => {
+                // This would need to be implemented with actual contest end times
+                // For now, it's just a placeholder for the functionality
+            });
+        }
+
+        // Update timers every 30 seconds
+        setInterval(updateTimers, 30000);
+
+        // Add animation delay for contest cards
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.contest-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
 </body>
 
 </html>
