@@ -30,11 +30,11 @@ SECRET_KEY = "mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://my-oj-project.onrender.com',
-# ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://my-oj-project.onrender.com',
+]
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['13.201.85.212']
 
 AUTH_USER_MODEL = "user_auth.User"
 LOGIN_URL = "/auth/login/"
