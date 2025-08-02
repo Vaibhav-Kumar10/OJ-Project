@@ -9,7 +9,7 @@ def leaderboard_view(request):
         .annotate(
             total_submissions=Count("user__submission", distinct=True),
             accuracy=ExpressionWrapper(
-                100.0 * F("problems_solved") / (F("user__submission__count") + 0.001),
+                100.0 * F("problems_solved") / (F("user__submission") + 0.001),
                 output_field=FloatField(),
             ),
         )
