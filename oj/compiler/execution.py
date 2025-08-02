@@ -1,7 +1,7 @@
 import requests
 import os
 
-COMPILER_URL = os.environ.get()
+COMPILER_URL = os.environ.get("COMPILER_URL")
 
 
 def execute_code(language, code, input_data):
