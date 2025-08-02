@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import leaderboard_view #,contests_view
+from .views import leaderboard_view, contests_view
 
 app_name = "contests"
 
