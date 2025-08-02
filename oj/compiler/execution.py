@@ -1,7 +1,7 @@
 import requests
+import os
 
-
-COMPILER_URL = "http://compiler-service:8000/api"
+COMPILER_URL = os.environ.get()
 
 
 def execute_code(language, code, input_data):
