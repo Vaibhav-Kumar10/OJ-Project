@@ -18,3 +18,7 @@ def leaderboard_view(request):
 
     context = {"scores": scores}
     return render(request, "contests/leaderboard.html", context=context)
+
+
+def contests_view(request):
+    return render(request, "contests/contests.html")
