@@ -14,5 +14,7 @@ urlpatterns = [
     path("problem/<int:id>/", problem_view, name="problem_detail"),
     path("ai_review/", get_ai_review, name="ai_review"),
     path("profile/", profile_view, name="profile"),  # Current user's profile
-    path("profile/<str:username>/", profile_view, name="user_profile"),  # Other user's profile
+    path(
+        "profile/<str:username>/", profile_view, name="user_profile"
+    ),  # Other user's profile
 ]

@@ -1,104 +1,601 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Sign In - Online Judge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Dark theme (default) */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --surface: #1e1e3f;
+            --primary: #ffa116;
+            --secondary: #00d9ff;
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --border: #3a3a5c;
+            --border-light: #4a4a6a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #ffa116 0%, #ff8c00 100%);
+            --gradient-secondary: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-elevated: #ffffff;
+            --surface: #ffffff;
+            --primary: #1976d2;
+            --secondary: #dc004e;
+            --success: #28a745;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-muted: #999999;
+            --border: #dee2e6;
+            --border-light: #e9ecef;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            --gradient-secondary: linear-gradient(135deg, #dc004e 0%, #c51162 100%);
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-menu .link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-menu .link:hover,
+        .nav-menu .link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-menu .link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 1px;
+        }
+
+        .nav-button {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 100px;
+        }
+
+        .btn:not(.white-btn) {
+            background: var(--primary);
+            color: var(--bg-primary);
+            border: none;
+            box-shadow: 0 4px 12px rgba(255, 161, 22, 0.3);
+
+        }
+
+        .btn:not(.white-btn):hover {
+            background: #e6940f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 161, 22, 0.4);
+
+        }
+
+        .white-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border);
+            border: 1px solid var(--border);
+
+        }
+
+        .white-btn:hover {
+            background: var(--bg-elevated);
+            border-color: var(--primary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            transition: var(--transition);
+            margin-right: 16px;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+        }
+
+        .theme-toggle:hover {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+                        transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .main-container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255, 161, 22, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .form-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .form-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.4), 0 15px 15px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 161, 22, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .password-toggle:hover {
+            color: var(--text-primary);
+            background: var(--border);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-wrapper label {
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .forgot-link:hover {
+            color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), #ff8c00);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 24px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(255, 161, 22, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-footer p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .signup-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .signup-link:hover {
+            color: var(--primary);
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--error);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 16px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .form-container {
+                padding: 32px 24px;
+                margin: 16px;
+                border-radius: 12px;
+            }
+
+            .form-header h1 {
+                font-size: 28px;
+            }
+
+            .main-container {
+                padding: 16px;
+            }
+        }
+
+        /* Loading Animation */
+        .submit-btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--bg-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .btn:focus,
+        .form-input:focus,
+        .password-toggle:focus,
+        .theme-toggle:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
-        </div>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="{% url 'core:home' %}" class="nav-logo">OJ</a>
 
-        <!-- Nav Bar -->
         <div class="nav-menu">
             <ul>
-                <li>
-                    <a href="{% url 'core:home' %} " class="link active">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
+                <li><a href="{% url 'core:home' %}" class="link active">Home</a></li>
+                <li><a href="{% url 'core:problems' %}" class="link">Problems</a></li>
+                <li><a href="{% url 'contests:contest' %}" class="link">Contests</a></li>
+                <li><a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a></li>
             </ul>
         </div>
 
         <div class="nav-button">
-            <a href="{% url 'user_auth:login' %}" class="btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn white-btn" id="signupBtn">Sign Up</a>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <span id="theme-icon">🌙</span>
+            </button>
+            <a href="{% url 'user_auth:login' %}" class="btn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn white-btn">Sign Up</a>
         </div>
-    </div>
+    </nav>
 
-    <!-- Form -->
-    <div class="form-box">
-        <div class="login-container" id="Login">
-            <div class="top">
-                <header>Login</header>
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to continue your coding journey</p>
             </div>
 
-            <form action="{% url 'user_auth:login' %}" method="POST">
+            <form action="{% url 'user_auth:login' %}" method="POST" id="loginForm">
                 {% csrf_token %}
-                <!-- Username box-->
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required
-                        autocomplete="username">
-                </div>
 
-                <!-- Password entry box -->
-                <div class="input-box">
-                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
-                        required autocomplete="current-password">
-                    <button type="button" onclick="togglePassword()" class="show-password">👁️</button>
-                </div>
-                <script>
-                    function togglePassword() {
-                        const password = document.getElementById('password');
-                        password.type = password.type === 'password' ? 'text' : 'password';
-                    }
-                </script>
-
-                <!-- Submit box -->
-                <div class="input-box">
-                    <input type="submit" class="submit" id="login" value="Login">
-                </div>
-
-                <div class="two-col">
-                    <div class="one">
-                        <input type="checkbox" id="login-check" name="remember_me">
-                        <label for="login-check"> Remember Me</label>
-                    </div>
-                    <div class="two">
-                        <label><a href="#">Forgot password?</a></label>
-                    </div>
-                </div>
-
-                <!-- Sign Up box -->
-                <div class="input-box"><br>
-                    <a href="{% url 'user_auth:signup' %}">
-                        New User?<br>Sign Up
-                    </a>
-                </div>
-
+                <!-- Error Messages -->
                 {% if messages %}
                 {% for message in messages %}
-                <div class="form-error">{{ message }}</div>
+                <div class="error-message" role="alert">{{ message }}</div>
                 {% endfor %}
                 {% endif %}
 
-            </form>
-        </div>
-    </div>
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="uname" class="form-label">Username</label>
+                    <input type="text" id="uname" name="uname" class="form-input" placeholder="Enter your username"
+                        required autocomplete="username">
+                </div>
 
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" class="form-input"
+                            placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()"
+                            aria-label="Toggle password visibility">
+                            <span id="password-icon">👁️</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Form Options -->
+                <div class="form-options">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember_me" name="remember_me">
+                        <label for="remember_me">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Sign In
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="form-footer">
+                <p>Don't have an account?</p>
+                <a href="{% url 'user_auth:signup' %}" class="signup-link">Create account</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Password toggle functionality
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('password-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.textContent = '👁️';
+            }
+        }
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            body.setAttribute('data-theme', savedTheme);
+            themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+        });
+
+        // Form submission with loading state
+        document.getElementById('loginForm').addEventListener('submit', function () {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+
+        // Input field animations
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function () {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
 </body>
 
 </html>

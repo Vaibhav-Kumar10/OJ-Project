@@ -5,122 +5,680 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up Page</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Sign Up - Online Judge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ===== CSS VARIABLES & THEME SYSTEM ===== */
+        :root {
+            /* Dark theme (default) */
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-elevated: #262641;
+            --surface: #1e1e3f;
+            --primary: #ffa116;
+            --secondary: #00d9ff;
+            --success: #00c851;
+            --error: #ff4444;
+            --warning: #ffbb33;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6c6c6c;
+            --border: #3a3a5c;
+            --border-light: #4a4a6a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #ffa116 0%, #ff8c00 100%);
+            --gradient-secondary: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-elevated: #ffffff;
+            --surface: #ffffff;
+            --primary: #1976d2;
+            --secondary: #dc004e;
+            --success: #28a745;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --text-muted: #999999;
+            --border: #dee2e6;
+            --border-light: #e9ecef;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            --gradient-secondary: linear-gradient(135deg, #dc004e 0%, #c51162 100%);
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            /* line-height: 1.6; */
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .navbar {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-elevated);
+            transform: scale(1.05);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 100px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(255, 161, 22, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 161, 22, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--primary);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 24px 40px;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .signup-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signup-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .signup-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .signup-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 161, 22, 0.1);
+            background: var(--bg-elevated);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:invalid {
+            border-color: var(--error);
+        }
+
+        .form-input:valid {
+            border-color: var(--success);
+        }
+
+        /* ===== ERROR MESSAGES ===== */
+        .error-container {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .error-message {
+            background: var(--error);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.3);
+            animation: slideInDown 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SUBMIT BUTTON ===== */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(255, 161, 22, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 161, 22, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== LOGIN LINK ===== */
+        .login-link {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .login-link a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .signup-card {
+                padding: 32px 24px;
+                margin: 16px;
+                border-radius: 12px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .signup-header h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 90px 16px 20px;
+            }
+
+            .signup-card {
+                padding: 24px 20px;
+            }
+        }
+
+        /* ===== LOADING STATE ===== */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+    </style>
 </head>
 
-<body>
-    <div class="nav">
-        <div class="nav-logo">
-            OJ
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-logo">OJ</div>
+
+        <div class="nav-menu">
+            <a href="{% url 'core:home' %}" class="active">Home</a>
+            <a href="{% url 'core:problems' %}">Problems</a>
+            <a href="{% url 'contests:contest' %}">Contests</a>
+            <a href="{% url 'contests:leaderboard' %}">Leaderboard</a>
         </div>
 
-        {% if messages %}
+        <div class="nav-buttons">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                <span id="theme-icon">🌙</span>
+            </button>
+            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary" id="loginBtn">Sign In</a>
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary" id="signupBtn">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Error Messages -->
+    {% if messages %}
+    <div class="error-container">
         {% for message in messages %}
-        <div class="form-error">
+        <div class="error-message">
+            <span>⚠️</span>
             {{ message }}
         </div>
-
         {% endfor %}
-        {% endif %}
-
-
-        <!-- Nav Bar -->
-        <div class="nav-menu">
-            <ul>
-                <li>
-                    <a href="{% url 'core:home' %} " class="link active">Home</a>
-                </li>
-                <li>
-                    <a href="{% url 'core:problems' %}" class="link">All Problems</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:contest' %}" class="link">Contest</a>
-                </li>
-                <li>
-                    <a href="{% url 'contests:leaderboard' %}" class="link">Leaderboard</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="nav-button">
-            <a href="{% url 'user_auth:login' %}" class="btn white-btn" id="loginBtn">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn" id="signupBtn">Sign Up</a>
-        </div>
-
     </div>
+    {% endif %}
 
-    <!-- Form -->
-    <div class="form-box">
-        <div class="signUp-container" id="SignUp">
-            <div class="top">
-                <header>Sign Up</header>
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="signup-card">
+            <div class="signup-header">
+                <h1>Create Account</h1>
+                <p>Join thousands of coders and start your journey</p>
             </div>
-            <form action="{% url 'user_auth:signup' %}" method="POST">
+
+            <form action="{% url 'user_auth:signup' %}" method="POST" id="signupForm">
                 {% csrf_token %}
-                <!-- Name entry Box -->
-                <div class="two-forms">
-                    <!-- Fname box-->
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Firstname" id="fname" name="fname" required
-                            autocomplete="given-name">
-                    </div>
-                    <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Lastname" id="lname" name="lname" required
-                            autocomplete="family-name">
+
+                <!-- Name Fields -->
+                <div class="form-group">
+                    <div class="form-row">
+                        <div>
+                            <label for="fname" class="form-label">First Name</label>
+                            <input type="text" class="form-input" id="fname" name="fname"
+                                placeholder="Enter your first name" required autocomplete="given-name">
+                        </div>
+                        <div>
+                            <label for="lname" class="form-label">Last Name</label>
+                            <input type="text" class="form-input" id="lname" name="lname"
+                                placeholder="Enter your last name" required autocomplete="family-name">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Email entry Box -->
-                <div class="input-box">
-                    <input type="email" class="input-field" placeholder="Email" id="email" name="email" required
-                        autocomplete="email">
-                </div>
-                <!-- Uname entry Box -->
-                <div class="input-box">
-                    <input type="text" class="input-field" placeholder="Username" id="uname" name="uname" required
-                        autocomplete="username">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="email" name="email" placeholder="your.email@example.com"
+                        required autocomplete="email">
                 </div>
 
-                <!-- Mobile No. entry Box -->
-                <div class="input-box">
-                    <input type="tel" class="input-field" placeholder="Mobile No." id="mobileno" name="mobileno"
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="uname" class="form-label">Username</label>
+                    <input type="text" class="form-input" id="uname" name="uname" placeholder="Choose a unique username"
+                        required autocomplete="username">
+                </div>
+
+                <!-- Mobile Number -->
+                <div class="form-group">
+                    <label for="mobileno" class="form-label">Mobile Number (Optional)</label>
+                    <input type="tel" class="form-input" id="mobileno" name="mobileno" placeholder="+1 (555) 123-4567"
                         autocomplete="tel">
                 </div>
 
-                <!-- Date of Birth entry Box -->
-                <div class="input-box">
-                    <input type="date" class="input-field" placeholder="Date Of Birth" id="dob" name="dob" required
-                        autocomplete="bday">
+                <!-- Date of Birth -->
+                <div class="form-group">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-input" id="dob" name="dob" required autocomplete="bday">
                 </div>
 
-                <!-- Password entry box -->
-                <div class="input-box">
-                    <input type="password" class="input-field" placeholder="Password" id="password" name="password"
-                        required autocomplete="new-password">
-                </div>
-                <!-- Re enter Password entry box -->
-                <div class="input-box">
-                    <input type="password" class="input-field" placeholder="Re-password" id="repassword"
-                        name="repassword" required autocomplete="new-password">
-                </div>
-
-                <!-- Submit box -->
-                <div class="input-box">
-                    <input type="submit" class="submit" id="signup" value="Sign Up">
-                </div>
-
-                <!-- Login box -->
-                <div class="input-box"><br>
-                    <a href="{% url 'user_auth:login' %}">
-                        Already a User?<br>Sign In
-                    </a>
+                <!-- Password Fields -->
+                <div class="form-group">
+                    <div class="form-row">
+                        <div>
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-input" id="password" name="password"
+                                placeholder="Create a strong password" required autocomplete="new-password"
+                                minlength="8">
+                        </div>
+                        <div>
+                            <label for="repassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-input" id="repassword" name="repassword"
+                                placeholder="Confirm your password" required autocomplete="new-password">
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Create Account
+                </button>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    <p>Already have an account? <a href="{% url 'user_auth:login' %}">Sign in here</a></p>
+                </div>
             </form>
         </div>
     </div>
 
+    <script>
+        // ===== THEME TOGGLE FUNCTIONALITY =====
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            body.setAttribute('data-theme', savedTheme);
+            themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+        });
+
+        // ===== FORM VALIDATION =====
+        const form = document.getElementById('signupForm');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('repassword');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Password confirmation validation
+        function validatePasswords() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (password !== confirmPassword && confirmPassword !== '') {
+                confirmPasswordInput.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPasswordInput.setCustomValidity('');
+            }
+        }
+
+        passwordInput.addEventListener('input', validatePasswords);
+        confirmPasswordInput.addEventListener('input', validatePasswords);
+
+        // Form submission with loading state
+        form.addEventListener('submit', function (e) {
+            const isValid = form.checkValidity();
+
+            if (isValid) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Creating Account...';
+                submitBtn.classList.add('loading');
+            }
+        });
+
+        // Auto-hide error messages
+        document.addEventListener('DOMContentLoaded', function () {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function (message) {
+                setTimeout(function () {
+                    message.style.animation = 'slideOutUp 0.3s ease';
+                    setTimeout(function () {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function (e) {
+            // Ctrl/Cmd + / to toggle theme
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                toggleTheme();
+            }
+        });
+
+        // ===== SMOOTH ANIMATIONS =====
+        // Add entrance animation to the signup card
+        document.addEventListener('DOMContentLoaded', function () {
+            const signupCard = document.querySelector('.signup-card');
+            signupCard.style.opacity = '0';
+            signupCard.style.transform = 'translateY(20px)';
+
+            setTimeout(function () {
+                signupCard.style.transition = 'all 0.6s ease';
+                signupCard.style.opacity = '1';
+                signupCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>
