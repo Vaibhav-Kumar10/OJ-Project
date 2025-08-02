@@ -31,10 +31,10 @@ SECRET_KEY = "mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://my-oj-project.onrender.com',
+    "https://oj-project-w5uv.onrender.com",
 ]
 
-ALLOWED_HOSTS = ['13.201.85.212']
+ALLOWED_HOSTS = ["13.201.85.212", "oj-project-w5uv.onrender.com"]
 
 AUTH_USER_MODEL = "user_auth.User"
 LOGIN_URL = "/auth/login/"
@@ -58,8 +58,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -108,10 +108,8 @@ WSGI_APPLICATION = "oj.wsgi.application"
 # }
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"), conn_max_age=600, ssl_require=True
     )
 }
 
