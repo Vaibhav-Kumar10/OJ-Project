@@ -665,8 +665,9 @@
                             <td>
                                 <div class="user-info">
                                     <div class="user-avatar">
-                                        {{ entry.user.username|upper }}
+                                        {{ entry.user.username|slice:":1"|upper }}
                                     </div>
+
                                     <div>
                                         <div class="username">{{ entry.user.username }}</div>
                                         {% if entry.user.profile and entry.user.profile.location %}
