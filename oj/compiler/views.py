@@ -4,9 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .execution import execute_code
 from .evaluation import submit_code
-from core.models import Problem, Submission
 from contests.models import UserScore, ProblemCompletion
-
+from core.models import Problem, Submission
+from core.utils import is_similar
 
 @login_required
 def run_code_view(request):
@@ -47,37 +47,47 @@ def submit_code_view(request):
         problem_id = request.POST.get("problem_id")
         code = request.POST.get("code")
         language = request.POST.get("language")
-
         problem = Problem.objects.get(id=problem_id)
-        output = submit_code(problem, code, language)
 
-        if output == "AC":
-            verdict = "Accepted"
+        # Check for similarity with previous submissions (by other users)
+        past_submissions = Submission.objects.filter(problem=problem).exclude(user=user)
 
-            problem_status, _ = ProblemCompletion.objects.get_or_create(
-                user=user, problem=problem
-            )
-
-            if not problem_status.is_complete:
-
-                problem_status.is_complete = True
-                problem_status.score_awarded = problem.score
-                problem_status.save()
-
-                user_score, _ = UserScore.objects.get_or_create(user=user)
-                user_score.score += problem.score
-                user_score.problems_solved += 1
-                user_score.save()
-
-            messages.success(request, "Your solution was accepted!")
-
-        elif output == "WA":
-            verdict = "Wrong Answer"
-            messages.error(request, f"Submission failed with verdict {verdict}")
-
+        for sub in past_submissions:
+            if is_similar(code, sub.code):
+                messages.warning(
+                    request, "⚠️ Your code is too similar to another user's submission."
+                )
+                verdict = "Possible Plagiarism"
+                break
         else:
-            verdict = "Submission Failed"
-            messages.error(request, f"Submission failed with verdict {output}")
+            output = submit_code(problem, code, language)
+
+            if output == "AC":
+                verdict = "Accepted"
+
+                problem_status, _ = ProblemCompletion.objects.get_or_create(
+                    user=user, problem=problem
+                )
+
+                if not problem_status.is_complete:
+                    problem_status.is_complete = True
+                    problem_status.score_awarded = problem.score
+                    problem_status.save()
+
+                    user_score, _ = UserScore.objects.get_or_create(user=user)
+                    user_score.score += problem.score
+                    user_score.problems_solved += 1
+                    user_score.save()
+
+                messages.success(request, "Your solution was accepted!")
+
+            elif output == "WA":
+                verdict = "Wrong Answer"
+                messages.error(request, f"Submission failed with verdict {verdict}")
+
+            else:
+                verdict = "Submission Failed"
+                messages.error(request, f"Submission failed with verdict {output}")
 
         # Save submission
         Submission.objects.create(
