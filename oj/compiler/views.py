@@ -6,7 +6,7 @@ from .execution import execute_code
 from .evaluation import submit_code
 from contests.models import UserScore, ProblemCompletion
 from core.models import Problem, Submission
-from core.utils import is_similar
+from compiler.utils import is_similar
 
 @login_required
 def run_code_view(request):
