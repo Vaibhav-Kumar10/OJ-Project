@@ -28,7 +28,7 @@ def leaderboard_view(request):
             )
         )
         .filter(problems_solved__gt=0)  # only users who solved something
-        .order_by("-score", "-problems_solved")
+        .order_by("-accuracy", "-score", "-problems_solved")
     )
 
     context = {"scores": users_with_scores}

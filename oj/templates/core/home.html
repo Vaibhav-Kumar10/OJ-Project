@@ -1252,30 +1252,31 @@
                 Handpicked challenges to help you master essential algorithms and data structures
             </p>
         </div>
-
         {% if user.is_authenticated %}
         <div class="problems-grid">
-            {% for problem in featured_problems %}
-            <a href="{% url 'core:problem_detail' problem.id %}" class="problem-card">
+            {% for problem_completion in featured_problems %}
+            <a href="{% url 'core:problem_detail' problem_completion.problem.id %}" class="problem-card">
                 <div class="problem-header">
                     <h3 class="problem-title">
-                        {{ problem.title }}
-                        {% if problem.is_solved %}
+                        {{ problem_completion.problem.title }}
+                        {% if problem_completion.is_complete %}
                         <span class="problem-solved">✅</span>
                         {% endif %}
                     </h3>
-                    <span class="difficulty-badge difficulty-{{ problem.difficulty|lower }}">
-                        {{ problem.difficulty }}
+                    <span class="difficulty-badge difficulty-{{ problem_completion.problem.difficulty|lower }}">
+                        {{ problem_completion.problem.difficulty }}
                     </span>
                 </div>
                 <div class="problem-stats">
                     <div class="problem-stat">
                         <span>💡</span>
-                        <span>{{ problem.tags|default:"Algorithm" }}</span>
+                        <span>
+                            {{ problem_completion.problem.tags|default:"Algorithm" }}
+                        </span>
                     </div>
                     <div class="problem-stat">
                         <span>🏆</span>
-                        <span>{{ problem.score_awarded|default:"100" }} points</span>
+                        <span>{{ problem_completion.score_awarded|default:"100" }} points</span>
                     </div>
                 </div>
             </a>
