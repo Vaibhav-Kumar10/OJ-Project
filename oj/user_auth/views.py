@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
@@ -11,6 +10,8 @@ def signup_view(request):
     """
     Render the signup page of the OJ application.
     """
+    if request.user.is_authenticated:
+        return redirect("core:profile")
     if request.method == "POST":
         fname = request.POST.get("fname")
         lname = request.POST.get("lname")
@@ -61,6 +62,8 @@ def signup_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect("core:profile")
     if request.method == "POST":
         username = request.POST.get("uname")
         password = request.POST.get("password")
