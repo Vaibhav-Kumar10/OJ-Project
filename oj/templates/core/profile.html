@@ -596,6 +596,32 @@
             gap: var(--space-sm);
         }
 
+
+        #calendarGrid {
+            display: flex;
+            /* horizontal weeks */
+            gap: 3px;
+        }
+
+        /* 
+        .level-1 {
+            background-color: #c6e48b;
+        }
+
+        .level-2 {
+            background-color: #7bc96f;
+        }
+
+        .level-3 {
+            background-color: #239a3b;
+        }
+
+        .level-4 {
+            background-color: #196127;
+        }
+ */
+
+
         .calendar-container {
             position: relative;
         }
@@ -609,8 +635,15 @@
             font-weight: 500;
         }
 
+        .calendar-week {
+            display: flex;
+            flex-direction: column;
+            /* days stacked vertically */
+            gap: 3px;
+        }
+
         .calendar-grid {
-            display: grid;
+            display: flex;
             grid-template-columns: repeat(53, 1fr);
             gap: 3px;
             margin-bottom: var(--space-lg);
@@ -623,6 +656,7 @@
             background: var(--bg-elevated);
             transition: all 0.2s ease;
             cursor: pointer;
+            background-color: #ebedf0;
             position: relative;
         }
 
@@ -1588,29 +1622,43 @@
 
             const submissionData = JSON.parse(document.getElementById('calendar-data').textContent);
 
-            for (let i = 0; i < 365; i++) {
-                const day = document.createElement('div');
-                day.className = 'calendar-day';
+            let currentDate = new Date(startDate);
 
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i);
-                const dateStr = currentDate.toISOString().split('T')[0];
+            // Create up to 53 weeks (columns)
+            for (let week = 0; week < 53; week++) {
+                const weekColumn = document.createElement('div');
+                weekColumn.className = 'calendar-week';
 
-                const submissions = submissionData[dateStr] || 0;
-                let level = 0;
-                if (submissions > 0) level = 1;
-                if (submissions > 2) level = 2;
-                if (submissions > 4) level = 3;
-                if (submissions > 6) level = 4;
+                // Each week has 7 days (rows)
+                for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                    if (currentDate.getFullYear() !== today.getFullYear()) break;
 
-                day.classList.add(`level-${level}`);
-                day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
+                    const day = document.createElement('div');
+                    day.className = 'calendar-day';
 
-                grid.appendChild(day);
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    const submissions = submissionData[dateStr] || 0;
+
+                    let level = 0;
+                    if (submissions > 0) level = 1;
+                    if (submissions > 2) level = 2;
+                    if (submissions > 4) level = 3;
+                    if (submissions > 6) level = 4;
+                    day.classList.add(`level-${level}`);
+                    day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
+                    weekColumn.appendChild(day);
+                    // Go to next day
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                grid.appendChild(weekColumn);
             }
         }
-        // Initialize calendar when page loads
+
         document.addEventListener('DOMContentLoaded', generateCalendar);
+
+
+
+
 
         // Add hover effects to stat cards
         document.querySelectorAll('.stat-card').forEach(card => {
