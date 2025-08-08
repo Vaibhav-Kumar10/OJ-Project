@@ -158,9 +158,12 @@
             align-items: center;
             gap: var(--space-lg);
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-link {
+            display: inline-block;
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
@@ -169,8 +172,9 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            z-index: 1;
         }
-
+        
         .nav-link::before {
             content: '';
             position: absolute;
@@ -178,6 +182,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
+            z-index: 1;
             transition: left 0.5s ease;
         }
 
@@ -1089,7 +1094,7 @@
 
         <ul class="navbar-nav" id="navbarNav">
             <li>
-                <a href="{% url 'core:home' %} " class="nav-link active">Home</a>
+                <a href="{% url 'core:home' %}" class="nav-link active">Home</a>
             </li>
             <li>
                 <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
