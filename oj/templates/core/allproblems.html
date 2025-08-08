@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1064,13 +1065,15 @@
 
         <!-- Problems Table -->
         <table class="problems-table">
-            <tr class="table-head">
-                <th>ID</th>
-                <th>Title</th>
-                <th>Difficulty</th>
-                <th>Score</th>
-                <th>Tags</th>
-            </tr>
+            <thead>
+                <tr class="table-head">
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Difficulty</th>
+                    <th>Score</th>
+                    <th>Tags</th>
+                </tr>
+            </thead>
             <tbody>
                 {% for problem in problems %}
                 <tr class="table-row">
