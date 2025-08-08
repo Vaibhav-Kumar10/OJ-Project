@@ -571,7 +571,39 @@
         </div>
     </nav>
 
+    <div class="contest-section">
+        <h1 class="section-header">All Contests</h1>
+
+        <div class="tabs mb-6">
+            <button class="tab" onclick="switchTab('ongoing')">Ongoing</button>
+            <button class="tab" onclick="switchTab('upcoming')">Upcoming</button>
+            <button class="tab" onclick="switchTab('past')">Past</button>
+        </div>
+
+        <div id="ongoing" class="section-title">
+            <h2 class="">Ongoing Contests</h2>
+
+            <p class="contest-detail">No ongoing contests.</p>
+        </div>
+
+        <div id="upcoming" class="section-title">
+            <h2 class="">Upcoming Contests</h2>
+
+            <p class="contest-detail">No upcoming contests.</p>
+        </div>
+
+        <div id="past" class="section-title">
+            <h2 class="">Past Contests</h2>
+            <p class="contest-detail">No past contests.</p>
+        </div>
+    </div>
+
     <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.contest-tab').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
         function toggleMobileMenu() {
             const nav = document.getElementById('navbarNav');
             nav.classList.toggle('active');
