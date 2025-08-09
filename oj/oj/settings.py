@@ -34,7 +34,13 @@ CSRF_TRUSTED_ORIGINS = [
     "https://oj-project-w5uv.onrender.com",
 ]
 
-ALLOWED_HOSTS = ["13.201.85.212", "oj-project-w5uv.onrender.com"]
+ALLOWED_HOSTS = [
+    "13.201.85.212",
+    "oj-project-w5uv.onrender.com",
+    "*",
+    "https://codeforge-hnfg.onrender.com",
+    "https://my-ojproject.onrender.com",
+]
 
 AUTH_USER_MODEL = "user_auth.User"
 LOGIN_URL = "/auth/login/"
