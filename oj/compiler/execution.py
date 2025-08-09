@@ -1,7 +1,7 @@
 import requests
 import os
 
-COMPILER_URL = os.environ.get("COMPILER_URL")
+COMPILER_URL = "http://13.233.196.157:8000/api/run/"
 
 
 def execute_code(language, code, input_data):
