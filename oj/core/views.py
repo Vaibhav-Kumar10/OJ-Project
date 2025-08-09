@@ -119,6 +119,31 @@ def get_ai_review(request):
     return redirect("core:problems")
 
 
+def generate_submission_calendar(user):
+    """Generate calendar data for submissions"""
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=365)
+
+    # Get all submissions in the last year
+    submissions = (
+        Submission.objects.filter(
+            user=user,
+            submitted_at__date__gte=start_date,
+            submitted_at__date__lte=end_date,
+        )
+        .values("submitted_at__date")
+        .annotate(count=Count("id"))
+    )
+
+    # Convert to dictionary for easy lookup
+    calendar_data = {}
+    for submission in submissions:
+        date_str = submission["submitted_at__date"].strftime("%Y-%m-%d")
+        calendar_data[date_str] = submission["count"]
+
+    return calendar_data
+
+
 # Get your custom User model
 User = get_user_model()
 
@@ -170,6 +195,10 @@ def profile_view(request, username=None):
 
     # Generate submission calendar data
     submission_calendar = generate_submission_calendar(profile_user)
+
+    submission_calendar = {
+        str(date): count for date, count in submission_calendar.items()
+    }
 
     # Calculate age from date of birth
     age = None
@@ -228,28 +257,3 @@ def calculate_streak(user):
             break
 
     return streak
-
-
-def generate_submission_calendar(user):
-    """Generate calendar data for submissions"""
-    end_date = datetime.now().date()
-    start_date = end_date - timedelta(days=365)
-
-    # Get all submissions in the last year
-    submissions = (
-        Submission.objects.filter(
-            user=user,
-            submitted_at__date__gte=start_date,
-            submitted_at__date__lte=end_date,
-        )
-        .values("submitted_at__date")
-        .annotate(count=Count("id"))
-    )
-
-    # Convert to dictionary for easy lookup
-    calendar_data = {}
-    for submission in submissions:
-        date_str = submission["submitted_at__date"].strftime("%Y-%m-%d")
-        calendar_data[date_str] = submission["count"]
-
-    return calendar_data
