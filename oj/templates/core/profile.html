@@ -1620,44 +1620,70 @@
         function generateCalendar() {
             const grid = document.getElementById('calendarGrid');
             const today = new Date();
-            const startDate = new Date(today.getFullYear(), 0, 1); // Jan 1
 
+            // Clear existing content
+            grid.innerHTML = '';
+
+            // Get submission data
             const submissionData = JSON.parse(document.getElementById('calendar-data').textContent);
 
-            let currentDate = new Date(startDate);
+            // Calculate date range (last 365 days ending today)
+            const endDate = new Date(today);
+            const startDate = new Date(today);
+            startDate.setDate(startDate.getDate() - 364); // 365 days total including today
 
-            // Create up to 53 weeks (columns)
-            for (let week = 0; week < 53; week++) {
+            // Find the Sunday before startDate to align with week grid
+            const firstSunday = new Date(startDate);
+            const dayOfWeek = firstSunday.getDay();
+            firstSunday.setDate(firstSunday.getDate() - dayOfWeek);
+
+            // Calculate total weeks needed
+            const totalDays = Math.ceil((endDate - firstSunday) / (1000 * 60 * 60 * 24)) + 1;
+            const totalWeeks = Math.ceil(totalDays / 7);
+
+            // Generate calendar grid
+            let currentDate = new Date(firstSunday);
+
+            for (let week = 0; week < totalWeeks; week++) {
                 const weekColumn = document.createElement('div');
                 weekColumn.className = 'calendar-week';
 
-                // Each week has 7 days (rows)
-                for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-                    if (currentDate.getFullYear() !== today.getFullYear()) break;
+                for (let day = 0; day < 7; day++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
 
-                    const day = document.createElement('div');
-                    day.className = 'calendar-day';
+                    // Check if this date is within our data range
+                    const isInRange = currentDate >= startDate && currentDate <= endDate;
 
-                    const dateStr = currentDate.toISOString().split('T')[0];
-                    const submissions = submissionData[dateStr] || 0;
+                    if (isInRange) {
+                        const dateStr = currentDate.toISOString().split('T')[0];
+                        const submissions = submissionData[dateStr] || 0;
 
-                    let level = 0;
-                    if (submissions > 0) level = 1;
-                    if (submissions > 2) level = 2;
-                    if (submissions > 4) level = 3;
-                    if (submissions > 6) level = 4;
-                    day.classList.add(`level-${level}`);
-                    day.title = `${currentDate.toDateString()}: ${submissions} submissions`;
-                    weekColumn.appendChild(day);
-                    // Go to next day
+                        // Determine activity level based on submissions
+                        let level = 0;
+                        if (submissions > 0) level = 1;
+                        if (submissions >= 3) level = 2;
+                        if (submissions >= 5) level = 3;
+                        if (submissions >= 7) level = 4;
+
+                        dayElement.classList.add(`level-${level}`);
+                        dayElement.title = `${currentDate.toDateString()}: ${submissions} submission${submissions !== 1 ? 's' : ''}`;
+                    } else {
+                        // Days outside our range should be invisible/muted
+                        dayElement.style.opacity = '0.3';
+                        dayElement.title = currentDate.toDateString();
+                    }
+
+                    weekColumn.appendChild(dayElement);
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
+
                 grid.appendChild(weekColumn);
             }
         }
 
+        // Initialize calendar when DOM is ready
         document.addEventListener('DOMContentLoaded', generateCalendar);
-
 
 
 
