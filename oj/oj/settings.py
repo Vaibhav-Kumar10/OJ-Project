@@ -35,7 +35,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 ALLOWED_HOSTS = [
-    "13.201.85.212",
+    "13.233.196.157",
     "oj-project-w5uv.onrender.com"
 ]
 
