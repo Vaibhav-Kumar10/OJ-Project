@@ -599,56 +599,23 @@
         }
 
 
+        /* Calendar CSS */
+
         #calendarGrid {
             display: flex;
-            /* horizontal weeks */
             gap: 3px;
-        }
-
-        /* 
-        .level-1 {
-            background-color: #c6e48b;
-        }
-
-        .level-2 {
-            background-color: #7bc96f;
-        }
-
-        .level-3 {
-            background-color: #239a3b;
-        }
-
-        .level-4 {
-            background-color: #196127;
-        }
- */
-
-
-        .calendar-container {
-            position: relative;
-        }
-
-        .calendar-months {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-md);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
+            overflow-x: auto;
+            /* Allow horizontal scrolling if needed */
+            padding-bottom: 8px;
+            /* Space for scrollbar */
         }
 
         .calendar-week {
             display: flex;
             flex-direction: column;
-            /* days stacked vertically */
             gap: 3px;
-        }
-
-        .calendar-grid {
-            display: flex;
-            grid-template-columns: repeat(53, 1fr);
-            gap: 3px;
-            margin-bottom: var(--space-lg);
+            min-width: 12px;
+            /* Prevent column compression */
         }
 
         .calendar-day {
@@ -658,8 +625,9 @@
             background: var(--bg-elevated);
             transition: all 0.2s ease;
             cursor: pointer;
-            background-color: #ebedf0;
             position: relative;
+            flex-shrink: 0;
+            /* Prevent day squares from shrinking */
         }
 
         .calendar-day:hover {
@@ -668,50 +636,87 @@
             box-shadow: var(--shadow-md);
         }
 
+        /* Activity levels */
         .calendar-day.level-0 {
             background: var(--bg-elevated);
+            border: 1px solid var(--border);
         }
 
         .calendar-day.level-1 {
             background: rgba(0, 217, 255, 0.3);
+            border: 1px solid rgba(0, 217, 255, 0.4);
         }
 
         .calendar-day.level-2 {
             background: rgba(0, 217, 255, 0.5);
+            border: 1px solid rgba(0, 217, 255, 0.6);
         }
 
         .calendar-day.level-3 {
             background: rgba(0, 217, 255, 0.7);
+            border: 1px solid rgba(0, 217, 255, 0.8);
         }
 
         .calendar-day.level-4 {
             background: var(--accent-secondary);
+            border: 1px solid var(--accent-secondary);
             box-shadow: 0 0 6px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Light theme adjustments */
+        [data-theme="light"] .calendar-day.level-0 {
+            background: #ebedf0;
+            border: 1px solid #d1d5db;
         }
 
         [data-theme="light"] .calendar-day.level-1 {
             background: rgba(25, 118, 210, 0.3);
+            border: 1px solid rgba(25, 118, 210, 0.4);
         }
 
         [data-theme="light"] .calendar-day.level-2 {
             background: rgba(25, 118, 210, 0.5);
+            border: 1px solid rgba(25, 118, 210, 0.6);
         }
 
         [data-theme="light"] .calendar-day.level-3 {
             background: rgba(25, 118, 210, 0.7);
+            border: 1px solid rgba(25, 118, 210, 0.8);
         }
 
         [data-theme="light"] .calendar-day.level-4 {
             background: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
             box-shadow: 0 0 6px rgba(25, 118, 210, 0.5);
         }
 
+        /* Calendar container */
+        .calendar-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .calendar-months {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0 2px;
+            /* Align with calendar grid */
+        }
+
+        /* Legend styling */
         .calendar-legend {
             display: flex;
             align-items: center;
             gap: var(--space-sm);
             font-size: 0.75rem;
             color: var(--text-muted);
+            margin-top: var(--space-md);
+            justify-content: flex-end;
+            /* Align to right like GitHub */
         }
 
         .legend-scale {
@@ -723,6 +728,48 @@
             width: 10px;
             height: 10px;
             border-radius: 1px;
+            border: 1px solid var(--border);
+        }
+
+        .legend-day.level-0 {
+            background: var(--bg-elevated);
+        }
+
+        .legend-day.level-1 {
+            background: rgba(0, 217, 255, 0.3);
+        }
+
+        .legend-day.level-2 {
+            background: rgba(0, 217, 255, 0.5);
+        }
+
+        .legend-day.level-3 {
+            background: rgba(0, 217, 255, 0.7);
+        }
+
+        .legend-day.level-4 {
+            background: var(--accent-secondary);
+        }
+
+        /* Light theme legend */
+        [data-theme="light"] .legend-day.level-0 {
+            background: #ebedf0;
+        }
+
+        [data-theme="light"] .legend-day.level-1 {
+            background: rgba(25, 118, 210, 0.3);
+        }
+
+        [data-theme="light"] .legend-day.level-2 {
+            background: rgba(25, 118, 210, 0.5);
+        }
+
+        [data-theme="light"] .legend-day.level-3 {
+            background: rgba(25, 118, 210, 0.7);
+        }
+
+        [data-theme="light"] .legend-day.level-4 {
+            background: var(--accent-primary);
         }
 
         /* Badges Section */
@@ -1214,8 +1261,31 @@
                 font-size: 2rem;
             }
 
-            .calendar-grid {
+            /* .calendar-grid {
                 grid-template-columns: repeat(26, 1fr);
+            } */
+
+            .calendar-months {
+                font-size: 0.75rem;
+                justify-content: space-around;
+            }
+
+            .calendar-day {
+                width: 10px;
+                height: 10px;
+            }
+
+            .legend-day {
+                width: 8px;
+                height: 8px;
+            }
+
+            #calendarGrid {
+                gap: 2px;
+            }
+
+            .calendar-week {
+                gap: 2px;
             }
 
             .badges-grid {
@@ -1241,12 +1311,17 @@
             }
 
             .calendar-months {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
 
             .calendar-day {
-                width: 10px;
-                height: 10px;
+                width: 8px;
+                height: 8px;
+            }
+
+            .calendar-legend {
+                font-size: 0.7rem;
+                gap: var(--space-xs);
             }
 
             .profile-header {
