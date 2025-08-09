@@ -15,6 +15,10 @@ def submit_code(problem, code, language):
         except Exception as e:
             return f"Error: {e}"
 
-        if output != expected_output:
+        # Normalize whitespace: split into tokens and compare
+        normalized_output = " ".join(output.strip().split())
+        normalized_expected = " ".join(expected_output.strip().split())
+
+        if normalized_output != normalized_expected:
             return "WA"
     return "AC"

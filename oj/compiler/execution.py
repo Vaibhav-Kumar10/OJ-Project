@@ -7,10 +7,11 @@ COMPILER_URL = "http://13.233.196.157:8000/api/run/"
 def execute_code(language, code, input_data):
     try:
         response = requests.post(
-            COMPILER_URL,  # Use service name in Docker or actual URL
+            COMPILER_URL,
             json={"language": language, "code": code, "input_data": input_data},
-            timeout=10,
+            timeout=60,  # increased from 10
         )
+
         if response.status_code == 200:
             return response.json().get("output", "")
         return f"Error: {response.text}"
