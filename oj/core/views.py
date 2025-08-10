@@ -69,13 +69,12 @@ def problem_view(request, id):
     language = request.GET.get("language", "python")
 
     # Only load boilerplate if no code is provided
-    code = request.GET.get("code", BOILERPLATES.get(language, ""))
+    code = BOILERPLATES.get(language, "")
     context = {
         "problem": problem,
         "submissions": user_submissions,
         "code": code,
         "language": language,
-        "mode": "run",
     }
     return render(request, "core/problem_detail.html", context=context)
 
