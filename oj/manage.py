@@ -2,7 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-# Add this near the top
 from dotenv import load_dotenv
 load_dotenv()
 

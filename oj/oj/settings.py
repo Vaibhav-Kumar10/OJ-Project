@@ -32,11 +32,16 @@ DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
     "https://oj-project-w5uv.onrender.com",
+    "https://codeforge-hnfg.onrender.com",
+    "https://my-ojproject.onrender.com",
 ]
 
 ALLOWED_HOSTS = [
     "13.233.196.157",
-    "oj-project-w5uv.onrender.com"
+    "oj-project-w5uv.onrender.com",
+    "codeforge-hnfg.onrender.com",
+    "my-ojproject.onrender.com",
+    "*",
 ]
 
 AUTH_USER_MODEL = "user_auth.User"
@@ -151,7 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -161,8 +166,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR/"staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
