@@ -60,9 +60,22 @@ def problem_view(request, id):
 
     problem.tag_list = problem.tags.split() if problem.tags else []
 
+    BOILERPLATES = {
+        "python": "def solve():\n    # Write your code here\n\nif _name_ == '_main_':\n    solve()",
+        "cpp": "#include <bits/stdc++.h>\nusing namespace std;\nint main() {\n    // Write your code here\n    return 0;\n}",
+        "java": "public class Main {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}",
+    }
+
+    language = request.GET.get("language", "python")
+
+    # Only load boilerplate if no code is provided
+    code = request.GET.get("code", BOILERPLATES.get(language, ""))
     context = {
         "problem": problem,
         "submissions": user_submissions,
+        "code": code,
+        "language": language,
+        "mode": "run",
     }
     return render(request, "core/problem_detail.html", context=context)
 
