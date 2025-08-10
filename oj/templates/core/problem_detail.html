@@ -459,6 +459,36 @@
             font-size: 0.875rem;
             line-height: 1.5;
             transition: var(--transition);
+            overflow-y: auto;
+            /* allow vertical scroll */
+            overflow-x: auto;
+            /* allow horizontal scroll if needed */
+            max-height: 400px;
+            /* limit height */
+            white-space: pre-wrap;
+            /* wrap long lines */
+            word-wrap: break-word;
+        }
+
+        .code-block {
+            background: var(--bg-primary);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            transition: var(--transition);
+            overflow-y: auto;
+            /* allow vertical scroll */
+            overflow-x: auto;
+            /* allow horizontal scroll if needed */
+            max-height: 400px;
+            /* limit height */
+            white-space: pre-wrap;
+            /* wrap long lines */
+            word-wrap: break-word;
         }
 
         .content-card pre:hover {
@@ -1010,7 +1040,7 @@
             {% if ai_review %}
             <div class="content-card">
                 <h3>AI Review:</h3>
-                <pre>{{ ai_review|safe }}</pre>
+                <pre class="'code-block">{{ ai_review|safe }}</pre>
             </div>
             {% endif %}
 
