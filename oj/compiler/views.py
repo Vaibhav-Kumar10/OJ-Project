@@ -12,7 +12,7 @@ from compiler.utils import is_similar
 def run_code_view(request):
     if request.method == "POST":
         code = request.POST.get("code")
-        language = request.GET.get("language", "python")
+        language = request.GET.get("language")
         input_data = request.POST.get("input_data", "")
         problem_id = request.POST.get("problem_id")
 
@@ -46,7 +46,7 @@ def submit_code_view(request):
         user = request.user
         problem_id = request.POST.get("problem_id")
         code = request.POST.get("code")
-        language = request.GET.get("language", "python")
+        language = request.GET.get("language")
         problem = Problem.objects.get(id=problem_id)
 
         # Check for similarity with previous submissions (by other users)

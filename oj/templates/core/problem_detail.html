@@ -979,15 +979,9 @@
                 <div class="form-group">
                     <label for="language">Language:</label>
                     <select name="language" id="language" class="form-select" required>
-                        <!-- 
                         <option value="python">Python</option>
                         <option value="cpp">C++</option>
-                        <option value="java">Java</option> 
-                        -->
-                        <option value="python" {% if language|default:"python"=="python" %}selected{% endif %}>Python
-                        </option>
-                        <option value="cpp" {% if language|default:"python"=="cpp" %}selected{% endif %}>C++</option>
-                        <option value="java" {% if language|default:"python"=="java" %}selected{% endif %}>Java</option>
+                        <option value="java">Java</option>
                     </select>
                 </div>
 
