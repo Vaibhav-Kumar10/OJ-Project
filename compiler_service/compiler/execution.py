@@ -2,6 +2,7 @@ import subprocess
 import tempfile
 import os
 import re
+import signal
 
 
 def execute_code(language, code, input_data):
@@ -55,10 +56,12 @@ def execute_code(language, code, input_data):
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 timeout=5,
+                preexec_fn=os.setsid,  # run in its own process group
             )
             return (exec_proc.stdout.decode() or exec_proc.stderr.decode()).strip()
-
+        
     except subprocess.TimeoutExpired:
+        os.killpg(os.getpgid(exec_proc.pid), signal.SIGTERM)
         return "Error: Code execution timed out"
     except Exception as e:
         return f"Error: {str(e)}"
