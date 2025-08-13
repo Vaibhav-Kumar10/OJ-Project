@@ -3,7 +3,7 @@ FROM python:3.10-slim
 # Install system dependencies for compilation
 RUN apt-get update && apt-get install -y \
     build-essential \
-    openjdk-17-jdk \
+    default-jdk \
     g++ \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -16,7 +16,7 @@ COPY . /app
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip
-RUN pip install django gunicorn requests
+RUN pip install --no-cache-dir django gunicorn requests
 
 # Expose app port
 EXPOSE 8000
