@@ -31,12 +31,17 @@ SECRET_KEY = "mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://oj-project-w5uv.onrender.com"
+    "https://oj-project-w5uv.onrender.com",
+    "https://codeforge-hnfg.onrender.com",
+    "https://my-ojproject.onrender.com",
 ]
 
 ALLOWED_HOSTS = [
     "13.233.196.157",
-    "oj-project-w5uv.onrender.com"
+    "oj-project-w5uv.onrender.com",
+    "codeforge-hnfg.onrender.com",
+    "my-ojproject.onrender.com",
+    "*",
 ]
 
 AUTH_USER_MODEL = "user_auth.User"
