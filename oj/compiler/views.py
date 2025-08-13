@@ -47,7 +47,7 @@ def submit_code_view(request):
         user = request.user
         problem_id = request.POST.get("problem_id")
         code = request.POST.get("code")
-        language = request.GET.get("language")
+        language = request.POST.get("language")
         problem = Problem.objects.get(id=problem_id)
 
         # Check for similarity with previous submissions (by other users)
