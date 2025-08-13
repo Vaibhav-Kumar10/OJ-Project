@@ -8,11 +8,12 @@ from contests.models import UserScore, ProblemCompletion
 from core.models import Problem, Submission
 from compiler.utils import is_similar
 
+
 @login_required
 def run_code_view(request):
     if request.method == "POST":
         code = request.POST.get("code")
-        language = request.GET.get("language")
+        language = request.POST.get("language")
         input_data = request.POST.get("input_data", "")
         problem_id = request.POST.get("problem_id")
 
