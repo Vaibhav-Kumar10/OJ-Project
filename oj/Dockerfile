@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
@@ -7,9 +7,8 @@ WORKDIR /app
 COPY . /app
 
 # Upgrade pip and install Python dependencies
-# RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir \
-    django \
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir django \
     markdown \
     python-dotenv \
     google-genai \
