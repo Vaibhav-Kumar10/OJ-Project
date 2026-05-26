@@ -1,1352 +1,151 @@
-{% load custom_filters %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeForge - Online Judge Platform</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            /* Dark Theme Colors (Default) */
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #1a1a2e;
-            --bg-elevated: #262641;
-            --bg-card: rgba(26, 26, 46, 0.8);
-            --accent-primary: #ffa116;
-            --accent-secondary: #00d9ff;
-            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
-            --success: #00c851;
-            --error: #ff4444;
-            --warning: #ffbb33;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #6c6c6c;
-            --border: #3a3a5c;
-            --border-hover: #4a4a6c;
-
-            /* Glass morphism */
-            --glass-bg: rgba(26, 26, 46, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.1);
-
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
-            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
-
-            /* Spacing */
-            --space-xs: 4px;
-            --space-sm: 8px;
-            --space-md: 16px;
-            --space-lg: 24px;
-            --space-xl: 32px;
-            --space-2xl: 48px;
-            --space-3xl: 64px;
-
-            /* Radius */
-            --radius: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-
-            /* Transitions */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="light"] {
-            /* Light Theme Colors */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-elevated: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --accent-primary: #1976d2;
-            --accent-secondary: #dc004e;
-            --accent-gradient: linear-gradient(135deg, #1976d2 0%, #dc004e 100%);
-            --success: #2e7d32;
-            --error: #d32f2f;
-            --warning: #f57c00;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --text-muted: #9ca3af;
-            --border: #e5e7eb;
-            --border-hover: #d1d5db;
-
-            /* Glass morphism for light */
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(0, 0, 0, 0.1);
-
-            /* Light theme shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
-            --shadow-glow: 0 0 20px rgba(25, 118, 210, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] body {
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(25, 118, 210, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(220, 0, 78, 0.03) 0%, transparent 50%);
-        }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-md) var(--space-lg);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .navbar {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            text-decoration: none;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-brand::before {
-            content: "⚡";
-            font-size: 2rem;
-            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
-            -webkit-text-fill-color: var(--accent-primary);
-        }
-
-        [data-theme="light"] .navbar-brand::before {
-            filter: drop-shadow(0 0 8px rgba(25, 118, 210, 0.5));
-        }
-
-        .navbar-nav {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            display: inline-block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--text-primary);
-            background: var(--bg-elevated);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: var(--bg-elevated);
-            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
-        }
-
-        [data-theme="light"] .nav-link.active {
-            box-shadow: inset 0 1px 0 rgba(25, 118, 210, 0.2);
-        }
-
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-lg);
-            border: none;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.875rem;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        [data-theme="light"] .btn-primary {
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-secondary {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            color: var(--text-primary);
-            background: var(--border-hover);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: var(--space-3xl) var(--space-lg);
-            text-align: center;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-            position: relative;
-            overflow: hidden;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 25% 25%, rgba(255, 161, 22, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(0, 200, 81, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-            animation: backgroundShift 20s ease-in-out infinite;
-        }
-
-        [data-theme="light"] .hero::before {
-            background:
-                radial-gradient(circle at 25% 25%, rgba(25, 118, 210, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(220, 0, 78, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(46, 125, 50, 0.05) 0%, transparent 70%);
-        }
-
-        @keyframes backgroundShift {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .hero-welcome {
-            font-size: 1.25rem;
-            color: var(--accent-secondary);
-            margin-bottom: var(--space-md);
-            font-weight: 600;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.2s forwards;
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 6vw, 5rem);
-            font-weight: 900;
-            margin-bottom: var(--space-lg);
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.4s forwards;
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xl);
-            font-weight: 500;
-            line-height: 1.4;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.6s forwards;
-        }
-
-        .user-stats {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-xl);
-            margin-bottom: var(--space-xl);
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.8s forwards;
-        }
-
-        .user-stat {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            padding: var(--space-lg);
-            border-radius: var(--radius-xl);
-            text-align: center;
-            transition: var(--transition);
-            min-width: 140px;
-        }
-
-        .user-stat:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-primary);
-        }
-
-        .user-stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent-primary);
-            display: block;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .user-stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: var(--space-xs);
-            font-weight: 500;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: var(--space-lg);
-            justify-content: center;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 1s forwards;
-        }
-
-        .btn-hero {
-            padding: var(--space-lg) var(--space-2xl);
-            font-size: 1.125rem;
-            border-radius: var(--radius-xl);
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-
-        /* Featured Problems Section */
-        .section {
-            padding: var(--space-3xl) var(--space-lg);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--space-3xl);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: var(--space-md);
-            color: var(--text-primary);
-        }
-
-        .section-subtitle {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .problems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: var(--space-xl);
-            max-width: 1200px;
-            margin: 0 auto var(--space-2xl);
-        }
-
-        .problem-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .problem-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .problem-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        [data-theme="light"] .problem-card::after {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-        }
-
-        .problem-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .problem-card:hover::before {
-            opacity: 1;
-        }
-
-        .problem-card:hover::after {
-            left: 100%;
-        }
-
-        .problem-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: var(--space-lg);
-            gap: var(--space-md);
-        }
-
-        .problem-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.3;
-            flex: 1;
-        }
-
-        .problem-solved {
-            color: var(--success);
-            font-size: 1.25rem;
-            margin-left: var(--space-sm);
-        }
-
-        .difficulty-badge {
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .difficulty-easy {
-            background: rgba(0, 200, 81, 0.2);
-            color: var(--success);
-            border: 1px solid rgba(0, 200, 81, 0.3);
-        }
-
-        .difficulty-medium {
-            background: rgba(255, 187, 51, 0.2);
-            color: var(--warning);
-            border: 1px solid rgba(255, 187, 51, 0.3);
-        }
-
-        .difficulty-hard {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--error);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-        }
-
-        .problem-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: var(--space-lg);
-            border-top: 1px solid var(--border);
-        }
-
-        .problem-stat {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        /* Activity Section */
-        .activity-section {
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border);
-        }
-
-        .activity-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: var(--space-xl);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .activity-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            transition: var(--transition);
-        }
-
-        .activity-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .activity-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-lg);
-        }
-
-        .activity-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .view-all-link {
-            color: var(--accent-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: color 0.2s ease;
-        }
-
-        .view-all-link:hover {
-            color: var(--accent-primary);
-        }
-
-        .submission-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            padding: var(--space-md);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-sm);
-            background: var(--bg-elevated);
-            transition: all 0.2s ease;
-        }
-
-        .submission-item:hover {
-            background: var(--border);
-            transform: translateX(4px);
-        }
-
-        .submission-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .status-ac {
-            background: var(--success);
-            box-shadow: 0 0 8px rgba(0, 200, 81, 0.4);
-        }
-
-        .status-wa {
-            background: var(--error);
-            box-shadow: 0 0 8px rgba(255, 68, 68, 0.4);
-        }
-
-        .status-tle {
-            background: var(--warning);
-            box-shadow: 0 0 8px rgba(255, 187, 51, 0.4);
-        }
-
-        .submission-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .submission-problem {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .submission-time {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-top: 2px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-xl);
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-2xl) var(--space-lg);
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-primary);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-md);
-        }
-
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--space-sm);
-        }
-
-        .feature-desc {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Login prompt styling */
-        .login-prompt {
-            text-align: center;
-            padding: var(--space-2xl);
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            margin: var(--space-xl) 0;
-        }
-
-        .login-prompt p {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-        }
-
-        .login-prompt a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .login-prompt a:hover {
-            color: var(--accent-secondary);
-        }
-
-        /* Profile Button Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .profile-btn:hover {
-            background: var(--border-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #000;
-            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-        }
-
-        [data-theme="light"] .nav-avatar {
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            padding: var(--space-xl) var(--space-md);
-            text-align: center;
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border);
-            margin-top: var(--space-3xl);
-        }
-
-        .footer hr {
-            border: none;
-            height: 1px;
-            background-color: var(--border);
-            margin-bottom: var(--space-lg);
-        }
-
-        .footer p {
-            margin: 0 0 var(--space-md);
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            flex-wrap: wrap;
-        }
-
-        .footer-links li a {
-            color: var(--accent-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-        }
-
-        .footer-links li a:hover {
-            color: var(--accent-primary);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .activity-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: var(--space-md);
-            }
-
-            .hero {
-                padding: var(--space-2xl) var(--space-md);
-                min-height: 70vh;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .user-stats {
-                flex-direction: column;
-                gap: var(--space-md);
-            }
-
-            .problems-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section {
-                padding: var(--space-2xl) var(--space-md);
-            }
-
-            .problem-card {
-                padding: var(--space-lg);
-            }
-
-            .problem-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--space-sm);
-            }
-
-            .problem-stats {
-                flex-direction: column;
-                gap: var(--space-sm);
-                align-items: flex-start;
-            }
-        }
-
-        /* Login prompt styling */
-        .login-prompt {
-            text-align: center;
-            padding: var(--space-2xl);
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            margin: var(--space-xl) 0;
-        }
-
-        .login-prompt p {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-lg);
-        }
-
-        .login-prompt a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .login-prompt a:hover {
-            color: var(--accent-secondary);
-        }
-
-        /* Profile Button Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .profile-btn:hover {
-            background: var(--border-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #000;
-            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .profile-name {
-                display: none;
-                /* Hide name on mobile, show only avatar */
-            }
-
-            .profile-btn {
-                padding: var(--space-sm);
-            }
-        }
-
-
-        /* FOOTER */
-        .footer {
-            background-color: var(--surface);
-            color: var(--text-secondary);
-            padding: 32px 16px;
-            text-align: center;
-            font-size: 14px;
-            border-top: 1px solid var(--border);
-            margin-top: 64px;
-            animation: fadeInUp 0.5s ease-in-out;
-        }
-
-        .footer hr {
-            border: none;
-            height: 1px;
-            background-color: var(--border);
-            margin-bottom: 24px;
-        }
-
-        .footer p {
-            margin: 0 0 16px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links li a {
-            color: var(--secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-        }
-
-        .footer-links li a:hover {
-            color: var(--primary);
-        }
-
-        /* Subtle animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
-
-        <ul class="navbar-nav" id="navbarNav">
-            <li>
-                <a href="{% url 'core:home' %}" class="nav-link active">Home</a>
-            </li>
-            <li>
-                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:contest' %}" class="nav-link">Contest</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
-            </li>
-        </ul>
-
-        <div class="navbar-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                <span id="theme-icon">🌙</span>
-            </button>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}CodeForge - Online Judge Platform{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+{% endblock %}
+
+{% block content %}
+{# ── Hero Section ── #}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-welcome">
             {% if user.is_authenticated %}
-            <!-- Profile Button with Avatar -->
-            <div class="profile-dropdown">
-                <a href="{% url 'core:profile' %}" class="profile-btn">
-                    <div class="nav-avatar">
-                        {% if user.first_name and user.last_name %}
-                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                        {% else %}
-                        {{ user.username|slice:":2"|upper }}
-                        {% endif %}
-                    </div>
-
-                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
-                </a>
-            </div>
-            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
+            Welcome back, {{ user.username }}!
             {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
-            <!-- <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button> -->
+            Welcome to OJ
             {% endif %}
         </div>
-    </nav>
+        <h1>Code, Compete, Conquer</h1>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-welcome">
-                {% if user.is_authenticated %}
-                Welcome back, {{ user.username }}!
-                {% else %}
-                Welcome to OJ
-                {% endif %}
+        <p class="hero-subtitle">
+            Master algorithms and data structures with our comprehensive online judge platform
+        </p>
+
+        <div class="user-stats">
+            <div class="user-stat">
+                <span class="user-stat-number">120+</span>
+                <div class="user-stat-label">Problems</div>
             </div>
-            <h1>Code, Compete, Conquer</h1>
-
-            <p class="hero-subtitle">
-                Master algorithms and data structures with our comprehensive online judge platform
-            </p>
-
-            <div class="user-stats">
-                <div class="user-stat">
-                    <span class="user-stat-number">1,2+</span>
-                    <div class="user-stat-label">Problems</div>
-                </div>
-                <div class="user-stat">
-                    <span class="user-stat-number">50+</span>
-                    <div class="user-stat-label">Active Users</div>
-                </div>
-                <div class="user-stat">
-                    <span class="user-stat-number">20+</span>
-                    <div class="user-stat-label">Submissions</div>
-                </div>
-                <div class="user-stat">
-                    <span class="user-stat-number">5+</span>
-                    <div class="user-stat-label">Contests</div>
-                </div>
+            <div class="user-stat">
+                <span class="user-stat-number">50+</span>
+                <div class="user-stat-label">Active Users</div>
             </div>
-
-            <div class="hero-actions">
-                <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">Start Coding</a>
-                {% if user.is_authenticated %}
-                <a href="{% url 'core:profile' %}" class="btn btn-secondary btn-hero">View Profile</a>
-                {% else %}
-                <a href="{% url 'user_auth:signup' %}" class="btn btn-secondary btn-hero">Join Now</a>
-                {% endif %}
+            <div class="user-stat">
+                <span class="user-stat-number">20+</span>
+                <div class="user-stat-label">Submissions</div>
+            </div>
+            <div class="user-stat">
+                <span class="user-stat-number">5+</span>
+                <div class="user-stat-label">Contests</div>
             </div>
         </div>
-    </section>
 
+        <div class="hero-actions">
+            <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">Start Coding</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'core:profile' %}" class="btn btn-secondary btn-hero">View Profile</a>
+            {% else %}
+            <a href="{% url 'user_auth:signup' %}" class="btn btn-secondary btn-hero">Join Now</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
-    <!-- Features Section -->
-    <section class="section features">
-        <div class="section-header">
-            <h2 class="section-title">Why Choose Our Platform?</h2>
-            <p class="section-subtitle">
-                Designed to help developers code smarter, faster, and better.
+{# ── Features Section ── #}
+<section class="section features">
+    <div class="section-header">
+        <h2 class="section-title">Why Choose Our Platform?</h2>
+        <p class="section-subtitle">
+            Designed to help developers code smarter, faster, and better.
+        </p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">Instant Evaluation</h3>
+            <p class="feature-desc">
+                Get real-time feedback on your code submissions with our advanced automated testing system.
+                Support for multiple programming languages including Python, Java, C++, and more.
             </p>
         </div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🚀</div>
-                <h3 class="feature-title">Instant Evaluation</h3>
-                <p class="feature-desc">
-                    Get real-time feedback on your code submissions with our advanced automated testing system.
-                    Support for multiple programming languages including Python, Java, C++, and more.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3 class="feature-title">Competitive Contests</h3>
-                <p class="feature-desc">
-                    Participate in weekly coding contests and climb the leaderboard. Challenge yourself against
-                    programmers worldwide and showcase your problem-solving skills.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3 class="feature-title">Comprehensive Library</h3>
-                <p class="feature-desc">
-                    Access a vast collection of problems covering algorithms, data structures, dynamic programming,
-                    graph theory, and more. Organized by difficulty and topic for structured learning.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">💡</div>
-                <h3 class="feature-title">Learning Resources</h3>
-                <p class="feature-desc">
-                    Detailed explanations, hints, and editorial solutions help you understand concepts and
-                    improve your problem-solving approach. Learn from the community and expert solutions.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3 class="feature-title">Progress Tracking</h3>
-                <p class="feature-desc">
-                    Monitor your coding journey with detailed statistics, performance analytics, and personalized
-                    recommendations. Track your growth and identify areas for improvement.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3 class="feature-title">Secure Environment</h3>
-                <p class="feature-desc">
-                    Code in a safe, sandboxed environment with robust security measures. Our platform ensures
-                    fair evaluation and protects against malicious code execution.
-                </p>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Featured Problems Section -->
-    <section class="section">
-        <div class="section-header">
-            <h2 class="section-title">Featured Problems</h2>
-            <p class="section-subtitle">
-                Handpicked challenges to help you master essential algorithms and data structures
+        <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <h3 class="feature-title">Competitive Contests</h3>
+            <p class="feature-desc">
+                Participate in weekly coding contests and climb the leaderboard. Challenge yourself against
+                programmers worldwide and showcase your problem-solving skills.
             </p>
         </div>
-        {% if user.is_authenticated %}
-        <div class="problems-grid">
-            {% for problem_completion in featured_problems %}
-            <a href="{% url 'core:problem_detail' problem_completion.problem.id %}" class="problem-card">
-                <div class="problem-header">
-                    <h3 class="problem-title">
-                        {{ problem_completion.problem.title }}
-                        {% if problem_completion.is_complete %}
-                        <span class="problem-solved">✅</span>
-                        {% endif %}
-                    </h3>
-                    <span class="difficulty-badge difficulty-{{ problem_completion.problem.difficulty|lower }}">
-                        {{ problem_completion.problem.difficulty }}
-                    </span>
-                </div>
-                <div class="problem-stats">
-                    <div class="problem-stat">
-                        <span>💡</span>
-                        <span>
-                            {{ problem_completion.problem.tags|default:"Algorithm" }}
-                        </span>
-                    </div>
-                    <div class="problem-stat">
-                        <span>🏆</span>
-                        <span>{{ problem_completion.score_awarded|default:"100" }} points</span>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
+
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3 class="feature-title">Comprehensive Library</h3>
+            <p class="feature-desc">
+                Access a vast collection of problems covering algorithms, data structures, dynamic programming,
+                graph theory, and more. Organized by difficulty and topic for structured learning.
+            </p>
         </div>
-        {% else %}
-        <div class="login-prompt">
-            <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems and start your
-                coding journey!</p>
-            <a href="{% url 'user_auth:login' %}" class="btn" style="background-color:cornsilk;">Sign In to Continue</a>
+
+        <div class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3 class="feature-title">Learning Resources</h3>
+            <p class="feature-desc">
+                Detailed explanations, hints, and editorial solutions help you understand concepts and
+                improve your problem-solving approach. Learn from the community and expert solutions.
+            </p>
         </div>
-        {% endif %}
 
-        <div style="text-align: center; margin-top: var(--space-2xl);">
-            <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">View All Problems</a>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Progress Tracking</h3>
+            <p class="feature-desc">
+                Monitor your coding journey with detailed statistics, performance analytics, and personalized
+                recommendations. Track your growth and identify areas for improvement.
+            </p>
         </div>
-    </section>
 
-    <footer class="footer">
-        <p>© 2025 OJ Platform. All rights reserved.</p>
-        <ul class="footer-links">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </footer>
-    <script>
-        // Apply saved theme on page load
-        document.addEventListener("DOMContentLoaded", function () {
-            const savedTheme = localStorage.getItem("theme");
-            const body = document.body;
-            const themeIcon = document.getElementById("theme-icon");
+        <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3 class="feature-title">Secure Environment</h3>
+            <p class="feature-desc">
+                Code in a safe, sandboxed environment with robust security measures. Our platform ensures
+                fair evaluation and protects against malicious code execution.
+            </p>
+        </div>
+    </div>
+</section>
 
-            if (savedTheme) {
-                body.setAttribute("data-theme", savedTheme);
-                themeIcon.textContent = savedTheme === "dark" ? "🌙" : "☀";
-            }
-        });
+{# ── Featured Problems Section ── #}
+<section class="section">
+    <div class="section-header">
+        <h2 class="section-title">Featured Problems</h2>
+        <p class="section-subtitle">
+            Handpicked challenges to help you master essential algorithms and data structures
+        </p>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="problems-grid">
+        {% for problem_completion in featured_problems %}
+        {% include "components/problem_card.html" with problem=problem_completion.problem
+        is_complete=problem_completion.is_complete score_awarded=problem_completion.score_awarded %}
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="login-prompt">
+        <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems and start your
+            coding journey!</p>
+        <a href="{% url 'user_auth:login' %}" class="btn" style="background-color:cornsilk; color: #0a0a0f;">Sign In to
+            Continue</a>
+    </div>
+    {% endif %}
 
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('theme-icon');
-            const currentTheme = body.getAttribute('data-theme');
-
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                themeIcon.textContent = '☀';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const nav = document.getElementById('navbarNav');
-            nav.classList.toggle('active');
-        }
-    </script>
-
-
-</body>
-
-</html>
+    <div style="text-align: center; margin-top: var(--space-2xl);">
+        <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">View All Problems</a>
+    </div>
+</section>
+{% endblock %}

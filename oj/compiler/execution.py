@@ -1,15 +1,14 @@
 import requests
-import os
-
-COMPILER_URL = "http://43.205.110.2:8000/api/run/"
+from django.conf import settings
 
 
 def execute_code(language, code, input_data):
+    compiler_url = f"{settings.COMPILER_SERVICE_URL}/api/run/"
     try:
         response = requests.post(
-            COMPILER_URL,
+            compiler_url,
             json={"language": language, "code": code, "input_data": input_data},
-            timeout=60,  # increased from 10
+            timeout=30,
         )
 
         if response.status_code == 200:

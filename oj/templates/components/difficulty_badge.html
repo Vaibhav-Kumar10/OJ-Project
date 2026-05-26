@@ -1,0 +1,13 @@
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{# components/difficulty_badge.html                                             #}
+{#                                                                               #}
+{# Renders a single difficulty pill badge. Shared across home, allproblems,    #}
+{# and problem_detail. Renders inline (no wrapping tag).                        #}
+{#                                                                               #}
+{# REQUIRED context variable:                                                   #}
+{#   difficulty  — string: "Easy" | "Medium" | "Hard"  (case-insensitive)      #}
+{# ─────────────────────────────────────────────────────────────────────────── #}
+<span class="difficulty-badge difficulty-{{ difficulty|lower }}"
+      aria-label="Difficulty: {{ difficulty }}">
+    {{ difficulty }}
+</span>

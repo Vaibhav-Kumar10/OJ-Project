@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres:15-alpine
+    container_name: oj_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ojdb}
+      POSTGRES_USER: ${POSTGRES_USER:-ojuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ojpassword}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # expose only if you want to connect locally via pgAdmin
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ojuser}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oj_web
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn oj.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+volumes:
+  postgres_data:

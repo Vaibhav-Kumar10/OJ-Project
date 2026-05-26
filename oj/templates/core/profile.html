@@ -1,1807 +1,292 @@
-{% load custom_filters %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CodeForge | {{ profile_user.username }}'s Profile</title>
-    <style>
-        /* CSS Variables - Design System */
-        :root {
-            /* Dark Theme Colors (Default) */
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #1a1a2e;
-            --bg-elevated: #262641;
-            --bg-card: rgba(26, 26, 46, 0.8);
-            --accent-primary: #ffa116;
-            --accent-secondary: #00d9ff;
-            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
-            --success: #00c851;
-            --error: #ff4444;
-            --warning: #ffbb33;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #6c6c6c;
-            --border: #3a3a5c;
-            --border-hover: #4a4a6c;
-
-            /* Glass morphism */
-            --glass-bg: rgba(26, 26, 46, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.1);
-
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
-            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
-
-            /* Spacing */
-            --space-xs: 4px;
-            --space-sm: 8px;
-            --space-md: 16px;
-            --space-lg: 24px;
-            --space-xl: 32px;
-            --space-2xl: 48px;
-            --space-3xl: 64px;
-
-            /* Radius */
-            --radius: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-
-            /* Transitions */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-            /* Typography */
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
-        }
-
-        [data-theme="light"] {
-            /* Light Theme Colors */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-elevated: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --accent-primary: #1976d2;
-            --accent-secondary: #dc004e;
-            --accent-gradient: linear-gradient(135deg, #1976d2 0%, #dc004e 100%);
-            --success: #2e7d32;
-            --error: #d32f2f;
-            --warning: #f57c00;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --text-muted: #9ca3af;
-            --border: #e5e7eb;
-            --border-hover: #d1d5db;
-
-            /* Glass morphism for light */
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(0, 0, 0, 0.1);
-
-            /* Light theme shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
-            --shadow-glow: 0 0 20px rgba(25, 118, 210, 0.2);
-        }
-
-        /* Reset & Base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] body {
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(25, 118, 210, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(220, 0, 78, 0.03) 0%, transparent 50%);
-        }
-
-        /* Navigation */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-md) var(--space-lg);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .navbar {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            text-decoration: none;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-brand::before {
-            content: "⚡";
-            font-size: 2rem;
-            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
-            -webkit-text-fill-color: var(--accent-primary);
-        }
-
-        [data-theme="light"] .navbar-brand::before {
-            filter: drop-shadow(0 0 8px rgba(25, 118, 210, 0.5));
-        }
-
-        .navbar-nav {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            display: inline-block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--text-primary);
-            background: var(--bg-elevated);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: var(--bg-elevated);
-            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
-        }
-
-        [data-theme="light"] .nav-link.active {
-            box-shadow: inset 0 1px 0 rgba(25, 118, 210, 0.2);
-        }
-
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-lg);
-            border: none;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.875rem;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        [data-theme="light"] .btn-primary {
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-secondary {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            color: var(--text-primary);
-            background: var(--border-hover);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--space-2xl) var(--space-lg);
-        }
-
-        /* Profile Header */
-        .profile-header {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-2xl);
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .profile-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 161, 22, 0.1) 0%, rgba(0, 217, 255, 0.05) 100%);
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-        [data-theme="light"] .profile-header::before {
-            background: linear-gradient(135deg, rgba(25, 118, 210, 0.1) 0%, rgba(220, 0, 78, 0.05) 100%);
-        }
-
-        .profile-header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--accent-gradient);
-        }
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xl);
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 800;
-            color: #000;
-            box-shadow: var(--shadow-glow);
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        [data-theme="light"] .avatar {
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(25, 118, 210, 0.3);
-        }
-
-        .avatar:hover {
-            transform: scale(1.05);
-        }
-
-        .avatar::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            z-index: -1;
-            opacity: 0.3;
-            filter: blur(8px);
-        }
-
-        .profile-meta h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: var(--space-sm);
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .profile-details {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-sm);
-        }
-
-        .profile-detail {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .profile-detail .icon {
-            font-size: 1.2rem;
-        }
-
-        .streak-indicator {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            background: rgba(255, 161, 22, 0.1);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255, 161, 22, 0.2);
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .streak-indicator {
-            background: rgba(25, 118, 210, 0.1);
-            border: 1px solid rgba(25, 118, 210, 0.2);
-        }
-
-        .streak-indicator:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .streak-fire {
-            font-size: 1.5rem;
-            animation: flicker 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes flicker {
-            0% {
-                opacity: 0.8;
-                transform: scale(1);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1.05);
-            }
-        }
-
-        .streak-number {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            font-family: var(--font-mono);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-lg);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--accent-gradient);
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        [data-theme="light"] .stat-card::after {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-glow);
-            border-color: var(--accent-primary);
-        }
-
-        .stat-card:hover::after {
-            left: 100%;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: var(--space-sm);
-            font-family: var(--font-mono);
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .stat-card.easy .stat-number {
-            background: linear-gradient(135deg, #00c851, #00ff88);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card.easy::before {
-            background: linear-gradient(135deg, #00c851, #00ff88);
-        }
-
-        .stat-card.medium .stat-number {
-            background: linear-gradient(135deg, #ffbb33, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card.medium::before {
-            background: linear-gradient(135deg, #ffbb33, #ffd700);
-        }
-
-        .stat-card.hard .stat-number {
-            background: linear-gradient(135deg, #ff4444, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card.hard::before {
-            background: linear-gradient(135deg, #ff4444, #ff6b6b);
-        }
-
-        /* Activity Calendar */
-        .activity-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-2xl);
-            transition: var(--transition);
-        }
-
-        .activity-section:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: var(--space-xl);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-
-        /* Calendar CSS */
-
-        #calendarGrid {
-            display: flex;
-            gap: 3px;
-            overflow-x: auto;
-            /* Allow horizontal scrolling if needed */
-            padding-bottom: 8px;
-            /* Space for scrollbar */
-        }
-
-        .calendar-week {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            min-width: 12px;
-            /* Prevent column compression */
-        }
-
-        .calendar-day {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
-            background: var(--bg-elevated);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            flex-shrink: 0;
-            /* Prevent day squares from shrinking */
-        }
-
-        .calendar-day:hover {
-            transform: scale(1.2);
-            z-index: 1;
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Activity levels */
-        .calendar-day.level-0 {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .calendar-day.level-1 {
-            background: rgba(0, 217, 255, 0.3);
-            border: 1px solid rgba(0, 217, 255, 0.4);
-        }
-
-        .calendar-day.level-2 {
-            background: rgba(0, 217, 255, 0.5);
-            border: 1px solid rgba(0, 217, 255, 0.6);
-        }
-
-        .calendar-day.level-3 {
-            background: rgba(0, 217, 255, 0.7);
-            border: 1px solid rgba(0, 217, 255, 0.8);
-        }
-
-        .calendar-day.level-4 {
-            background: var(--accent-secondary);
-            border: 1px solid var(--accent-secondary);
-            box-shadow: 0 0 6px rgba(0, 217, 255, 0.5);
-        }
-
-        /* Light theme adjustments */
-        [data-theme="light"] .calendar-day.level-0 {
-            background: #ebedf0;
-            border: 1px solid #d1d5db;
-        }
-
-        [data-theme="light"] .calendar-day.level-1 {
-            background: rgba(25, 118, 210, 0.3);
-            border: 1px solid rgba(25, 118, 210, 0.4);
-        }
-
-        [data-theme="light"] .calendar-day.level-2 {
-            background: rgba(25, 118, 210, 0.5);
-            border: 1px solid rgba(25, 118, 210, 0.6);
-        }
-
-        [data-theme="light"] .calendar-day.level-3 {
-            background: rgba(25, 118, 210, 0.7);
-            border: 1px solid rgba(25, 118, 210, 0.8);
-        }
-
-        [data-theme="light"] .calendar-day.level-4 {
-            background: var(--accent-primary);
-            border: 1px solid var(--accent-primary);
-            box-shadow: 0 0 6px rgba(25, 118, 210, 0.5);
-        }
-
-        /* Calendar container */
-        .calendar-container {
-            position: relative;
-            width: 100%;
-        }
-
-        .calendar-months {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-md);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-            padding: 0 2px;
-            /* Align with calendar grid */
-        }
-
-        /* Legend styling */
-        .calendar-legend {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: var(--space-md);
-            justify-content: flex-end;
-            /* Align to right like GitHub */
-        }
-
-        .legend-scale {
-            display: flex;
-            gap: 2px;
-        }
-
-        .legend-day {
-            width: 10px;
-            height: 10px;
-            border-radius: 1px;
-            border: 1px solid var(--border);
-        }
-
-        .legend-day.level-0 {
-            background: var(--bg-elevated);
-        }
-
-        .legend-day.level-1 {
-            background: rgba(0, 217, 255, 0.3);
-        }
-
-        .legend-day.level-2 {
-            background: rgba(0, 217, 255, 0.5);
-        }
-
-        .legend-day.level-3 {
-            background: rgba(0, 217, 255, 0.7);
-        }
-
-        .legend-day.level-4 {
-            background: var(--accent-secondary);
-        }
-
-        /* Light theme legend */
-        [data-theme="light"] .legend-day.level-0 {
-            background: #ebedf0;
-        }
-
-        [data-theme="light"] .legend-day.level-1 {
-            background: rgba(25, 118, 210, 0.3);
-        }
-
-        [data-theme="light"] .legend-day.level-2 {
-            background: rgba(25, 118, 210, 0.5);
-        }
-
-        [data-theme="light"] .legend-day.level-3 {
-            background: rgba(25, 118, 210, 0.7);
-        }
-
-        [data-theme="light"] .legend-day.level-4 {
-            background: var(--accent-primary);
-        }
-
-        /* Badges Section */
-        .badges-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-2xl);
-            transition: var(--transition);
-        }
-
-        .badges-section:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-lg);
-        }
-
-        .badge {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .badge::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-            transition: left 0.6s ease;
-        }
-
-        [data-theme="light"] .badge::after {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-        }
-
-        .badge:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent-primary);
-        }
-
-        .badge:hover::after {
-            left: 100%;
-        }
-
-        .badge.earned {
-            background: linear-gradient(135deg, rgba(255, 161, 22, 0.1), rgba(0, 217, 255, 0.05));
-            border-color: var(--accent-primary);
-        }
-
-        [data-theme="light"] .badge.earned {
-            background: linear-gradient(135deg, rgba(25, 118, 210, 0.1), rgba(220, 0, 78, 0.05));
-        }
-
-        .badge.earned::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent-gradient);
-        }
-
-        .badge-icon {
-            font-size: 2.5rem;
-            margin-bottom: var(--space-sm);
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .badge:hover .badge-icon {
-            transform: scale(1.1);
-        }
-
-        .badge-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .badge-description {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.4;
-        }
-
-        .badge.locked {
-            opacity: 0.5;
-        }
-
-        .badge.locked .badge-icon {
-            filter: grayscale(1);
-        }
-
-        .badge.locked:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--border);
-        }
-
-        /* Recent Activity */
-        .recent-activity {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            transition: var(--transition);
-        }
-
-        .recent-activity:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-md);
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            padding: var(--space-md);
-            background: var(--bg-elevated);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .activity-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-            transition: left 0.5s ease;
-        }
-
-        [data-theme="light"] .activity-item::after {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-        }
-
-        .activity-item:hover {
-            transform: translateX(4px);
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        .activity-item:hover::after {
-            left: 100%;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .activity-icon.success {
-            background: rgba(0, 200, 81, 0.2);
-            color: var(--success);
-            border: 1px solid rgba(0, 200, 81, 0.3);
-        }
-
-        .activity-icon.error {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--error);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-        }
-
-        .activity-icon.warning {
-            background: rgba(255, 187, 51, 0.2);
-            color: var(--warning);
-            border: 1px solid rgba(255, 187, 51, 0.3);
-        }
-
-        .activity-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .activity-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .activity-meta {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .activity-time {
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-        }
-
-        /* Language Stats */
-        .language-stats {
-            display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-            flex-wrap: wrap;
-        }
-
-        .language-tag {
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            border: 1px solid var(--border);
-            font-weight: 500;
-            transition: var(--transition);
-            font-family: var(--font-mono);
-        }
-
-        .language-tag:hover {
-            background: var(--border-hover);
-            color: var(--text-primary);
-            transform: scale(1.05);
-        }
-
-        /* Profile Button Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .profile-btn:hover {
-            background: var(--border-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #000;
-            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-        }
-
-        [data-theme="light"] .nav-avatar {
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            color: var(--text-primary);
-            background: var(--border-hover);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* Enhanced Activity Item Animations */
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            padding: var(--space-md);
-            background: var(--bg-elevated);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .activity-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-            transition: left 0.5s ease;
-        }
-
-        [data-theme="light"] .activity-item::after {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-        }
-
-        .activity-item:hover {
-            transform: translateX(4px);
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        .activity-item:hover::after {
-            left: 100%;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .activity-icon.success {
-            background: rgba(0, 200, 81, 0.2);
-            color: var(--success);
-            border: 1px solid rgba(0, 200, 81, 0.3);
-        }
-
-        .activity-icon.error {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--error);
-            border: 1px solid rgba(255, 68, 68, 0.3);
-        }
-
-        .activity-icon.warning {
-            background: rgba(255, 187, 51, 0.2);
-            color: var(--warning);
-            border: 1px solid rgba(255, 187, 51, 0.3);
-        }
-
-        .activity-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .activity-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .activity-meta {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .activity-time {
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-        }
-
-        /* Enhanced Language Stats */
-        .language-stats {
-            display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-            flex-wrap: wrap;
-        }
-
-        .language-tag {
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            border: 1px solid var(--border);
-            font-weight: 500;
-            transition: var(--transition);
-            font-family: var(--font-mono);
-        }
-
-        .language-tag:hover {
-            background: var(--border-hover);
-            color: var(--text-primary);
-            transform: scale(1.05);
-        }
-
-        /* Enhanced Responsive Design */
-        @media (max-width: 768px) {
-            .navbar-nav {
-                display: none;
-            }
-
-            .container {
-                padding: var(--space-lg) var(--space-md);
-            }
-
-            .profile-info {
-                flex-direction: column;
-                text-align: center;
-                gap: var(--space-lg);
-            }
-
-            .avatar {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5rem;
-            }
-
-            .profile-meta h1 {
-                font-size: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: var(--space-md);
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            /* .calendar-grid {
-                grid-template-columns: repeat(26, 1fr);
-            } */
-
-            .calendar-months {
-                font-size: 0.75rem;
-                justify-content: space-around;
-            }
-
-            .calendar-day {
-                width: 10px;
-                height: 10px;
-            }
-
-            .legend-day {
-                width: 8px;
-                height: 8px;
-            }
-
-            #calendarGrid {
-                gap: 2px;
-            }
-
-            .calendar-week {
-                gap: 2px;
-            }
-
-            .badges-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .profile-name {
-                display: none;
-            }
-
-            .profile-btn {
-                padding: var(--space-sm);
-            }
-
-            .navbar-actions {
-                gap: var(--space-sm);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .calendar-months {
-                font-size: 0.7rem;
-            }
-
-            .calendar-day {
-                width: 8px;
-                height: 8px;
-            }
-
-            .calendar-legend {
-                font-size: 0.7rem;
-                gap: var(--space-xs);
-            }
-
-            .profile-header {
-                padding: var(--space-lg);
-            }
-
-            .activity-section,
-            .badges-section,
-            .recent-activity {
-                padding: var(--space-lg);
-            }
-
-            .section-title {
-                font-size: 1.25rem;
-            }
-
-            .badge-icon {
-                font-size: 2rem;
-            }
-
-            .activity-item {
-                padding: var(--space-sm);
-            }
-
-            .language-stats {
-                gap: var(--space-xs);
-            }
-
-            .language-tag {
-                font-size: 0.7rem;
-                padding: 2px var(--space-xs);
-            }
-        }
-
-        /* Additional Enhancements */
-        .profile-header:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Loading States */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.1), transparent);
-            animation: loading-shimmer 2s infinite;
-        }
-
-        @keyframes loading-shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        /* Accessibility Improvements */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-
-            .streak-fire {
-                animation: none;
-            }
-        }
-
-        /* Focus Styles */
-        .btn:focus,
-        .nav-link:focus,
-        .profile-btn:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* High Contrast Mode Support */
-        @media (prefers-contrast: high) {
-            :root {
-                --border: #ffffff;
-                --border-hover: #ffffff;
-                --text-secondary: #ffffff;
-                --text-muted: #cccccc;
-            }
-        }
-
-        /* Print Styles */
-        @media print {
-
-            .navbar,
-            .navbar-actions,
-            .theme-toggle {
-                display: none;
-            }
-
-            .profile-header,
-            .stat-card,
-            .activity-section,
-            .badges-section,
-            .recent-activity {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-
-            body {
-                background: white !important;
-                color: black !important;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
-
-        <ul class="navbar-nav">
-            <li><a href="{% url 'core:home' %}" class="nav-link">Home</a></li>
-            <li><a href="{% url 'core:problems' %}" class="nav-link">Problems</a></li>
-            <li><a href="{% url 'contests:contest' %}" class="nav-link">Contest</a></li>
-            <li><a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a></li>
-            <li><a href="#" class="nav-link active">Profile</a></li>
-        </ul>
-
-        <div class="navbar-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                <span id="theme-icon">🌙</span>
-            </button>
-            {% if user.is_authenticated %}
-            <!-- Profile Button with Avatar -->
-            <div class="profile-dropdown">
-                <a href="{% url 'core:profile' %}" class="profile-btn">
-                    <div class="nav-avatar">
-                        {% if user.first_name and user.last_name %}
-                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                        {% else %}
-                        {{ user.username|slice:":2"|upper }}
-                        {% endif %}
-                    </div>
-                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
-                </a>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile_user.username }}'s Profile | CodeForge{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: var(--space-2xl) var(--space-lg); max-width: 1200px; margin: 0 auto;">
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="profile-info">
+            <div class="avatar">
+                {% if profile_user.first_name and profile_user.last_name %}
+                {{ profile_user.first_name|first|upper }}{{ profile_user.last_name|first|upper }}
+                {% else %}
+                {{ profile_user.username|slice:":2"|upper }}
+                {% endif %}
             </div>
-
-            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary">Logout</a>
-            {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
-            <!-- <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button> -->
-            {% endif %}
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Profile Header -->
-        <div class="profile-header">
-            <div class="profile-info">
-                <div class="avatar">
-                    {% if profile_user.first_name and profile_user.last_name %}
-                    {{ profile_user.first_name|first|upper }}{{ profile_user.last_name|first|upper }}
+            <div class="profile-meta">
+                <h1>
+                    {% if profile_user.first_name or profile_user.last_name %}
+                    {{ profile_user.first_name }} {{ profile_user.last_name }}
                     {% else %}
-                    {{ profile_user.username|slice:":2"|upper }}
+                    {{ profile_user.username }}
                     {% endif %}
-                </div>
-                <div class="profile-meta">
-                    <h1>
-                        {% if profile_user.first_name or profile_user.last_name %}
-                        {{ profile_user.first_name }} {{ profile_user.last_name }}
-                        {% else %}
-                        {{ profile_user.username }}
-                        {% endif %}
-                    </h1>
-                    <div class="profile-details">
-                        <div class="profile-detail">
-                            <span class="icon">📅</span>
-                            <span>Member since: {{ profile_user.date_joined|date:"F Y" }}</span>
-                        </div>
-                        {% if profile_user.email and user == profile_user %}
-                        <div class="profile-detail">
-                            <span class="icon">✉️</span>
-                            <span>{{ profile_user.email }}</span>
-                        </div>
-                        {% endif %}
-                        {% if profile_user.dob and user == profile_user %}
-                        <div class="profile-detail">
-                            <span class="icon">🎂</span>
-                            <span>{{ user_age }} years old</span>
-                        </div>
-                        {% endif %}
-                        {% if profile_user.mobile_no and user == profile_user %}
-                        <div class="profile-detail">
-                            <span class="icon">📱</span>
-                            <span>{{ profile_user.mobile_no }}</span>
-                        </div>
-                        {% endif %}
-                        <div class="streak-indicator">
-                            <span class="streak-fire">🔥</span>
-                            <span class="streak-number">{{ current_streak|default:0 }}</span>
-                            <span>day streak</span>
-                        </div>
+                </h1>
+                <div class="profile-details">
+                    <div class="profile-detail">
+                        <span class="icon">📅</span>
+                        <span>Member since: {{ profile_user.date_joined|date:"F Y" }}</span>
+                    </div>
+                    {% if profile_user.email and user == profile_user %}
+                    <div class="profile-detail">
+                        <span class="icon">✉️</span>
+                        <span>{{ profile_user.email }}</span>
+                    </div>
+                    {% endif %}
+                    {% if profile_user.dob and user == profile_user %}
+                    <div class="profile-detail">
+                        <span class="icon">🎂</span>
+                        <span>{{ user_age }} years old</span>
+                    </div>
+                    {% endif %}
+                    {% if profile_user.mobile_no and user == profile_user %}
+                    <div class="profile-detail">
+                        <span class="icon">📱</span>
+                        <span>{{ profile_user.mobile_no }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="streak-indicator">
+                        <span class="streak-fire">🔥</span>
+                        <span class="streak-number">{{ current_streak|default:0 }}</span>
+                        <span>day streak</span>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">{{ user_score.problems_solved|default:0 }}</div>
-                <div class="stat-label">Problems Solved</div>
-            </div>
-            <div class="stat-card easy">
-                <div class="stat-number">{{ difficulty_stats.easy|default:0 }}</div>
-                <div class="stat-label">Easy</div>
-            </div>
-            <div class="stat-card medium">
-                <div class="stat-number">{{ difficulty_stats.medium|default:0 }}</div>
-                <div class="stat-label">Medium</div>
-            </div>
-            <div class="stat-card hard">
-                <div class="stat-number">{{ difficulty_stats.hard|default:0 }}</div>
-                <div class="stat-label">Hard</div>
-            </div>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ user_score.problems_solved|default:0 }}</div>
+            <div class="stat-label">Problems Solved</div>
         </div>
+        <div class="stat-card easy">
+            <div class="stat-number">{{ difficulty_stats.easy|default:0 }}</div>
+            <div class="stat-label">Easy</div>
+        </div>
+        <div class="stat-card medium">
+            <div class="stat-number">{{ difficulty_stats.medium|default:0 }}</div>
+            <div class="stat-label">Medium</div>
+        </div>
+        <div class="stat-card hard">
+            <div class="stat-number">{{ difficulty_stats.hard|default:0 }}</div>
+            <div class="stat-label">Hard</div>
+        </div>
+    </div>
 
-        <!-- Activity Calendar -->
-        <div class="activity-section">
-            <h2 class="section-title">
-                <span>📊</span>
-                Activity Calendar
-            </h2>
-            <div class="calendar-container">
-                <!-- Month Labels -->
-                <div class="calendar-months">
-                    <span>Jan</span>
-                    <span>Feb</span>
-                    <span>Mar</span>
-                    <span>Apr</span>
-                    <span>May</span>
-                    <span>Jun</span>
-                    <span>Jul</span>
-                    <span>Aug</span>
-                    <span>Sep</span>
-                    <span>Oct</span>
-                    <span>Nov</span>
-                    <span>Dec</span>
-                </div>
-                <!-- Calendar Grid -->
-                <div class="calendar-grid" id="calendarGrid"></div>
+    <!-- Activity Calendar -->
+    <div class="activity-section">
+        <h2 class="section-title">
+            <span>📊</span>
+            Activity Calendar
+        </h2>
+        <div class="calendar-container">
+            <!-- Month Labels -->
+            <div class="calendar-months">
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+            </div>
+            <!-- Calendar Grid -->
+            <div class="calendar-grid" id="calendarGrid"></div>
 
-                <!-- Hidden JSON data -->
-                <script id="calendar-data" type="application/json">
+            <!-- Hidden JSON data -->
+            <script id="calendar-data" type="application/json">
                     {{ submission_calendar|safe }}
                 </script>
 
-                <!-- Legend -->
-                <div class="calendar-legend">
-                    <span>Less</span>
-                    <div class="legend-scale">
-                        <div class="legend-day level-0"></div>
-                        <div class="legend-day level-1"></div>
-                        <div class="legend-day level-2"></div>
-                        <div class="legend-day level-3"></div>
-                        <div class="legend-day level-4"></div>
-                    </div>
-                    <span>More</span>
+            <!-- Legend -->
+            <div class="calendar-legend">
+                <span>Less</span>
+                <div class="legend-scale">
+                    <div class="legend-day level-0"></div>
+                    <div class="legend-day level-1"></div>
+                    <div class="legend-day level-2"></div>
+                    <div class="legend-day level-3"></div>
+                    <div class="legend-day level-4"></div>
                 </div>
+                <span>More</span>
             </div>
         </div>
-
-        <!-- Badges & Achievements -->
-        <div class="badges-section">
-            <h2 class="section-title">
-                <span>🏆</span>
-                Badges & Achievements
-            </h2>
-            <div class="badges-grid">
-                {% for badge in badges %}
-                <div class="badge {% if badge.condition %}earned{% else %}locked{% endif %}">
-                    <span class="badge-icon">{{ badge.icon }}</span>
-                    <div class="badge-title">{{ badge.title }}</div>
-                    <div class="badge-description">{{ badge.description }}</div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="recent-activity">
-            <h2 class="section-title">
-                <span>⚡</span>
-                Recent Activity
-            </h2>
-            <div class="activity-list">
-                {% if recent_submissions %}
-                {% for submission in recent_submissions %}
-                <div class="activity-item">
-                    <div
-                        class="activity-icon {% if submission.verdict == 'Accepted' %}success{% elif submission.verdict == 'Wrong Answer' %}error{% else %}warning{% endif %}">
-                        {% if submission.verdict == 'Accepted' %}
-                        ✓
-                        {% elif submission.verdict == 'Wrong Answer' %}
-                        ✗
-                        {%else %} ⏱
-                        {% endif %}
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">
-                            {% if submission.verdict == 'Accepted' %}
-                            Solved "{{ submission.problem.title }}"
-                            {% else %}
-                            Attempted "{{ submission.problem.title }}"
-                            {% endif %}
-                        </div>
-
-                        <div class="activity-meta">
-                            {{ submission.submitted_at|timesince }} ago • {{ submission.language|upper }} • {{
-                            submission.verdict }}
-                            {% if submission.verdict == 'Accepted' %}
-                            <span style="color: var(--success);">+{{ submission.problem.score }} pts</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: var(--bg-elevated); color: var(--text-muted);">📝
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-title">No recent activity</div>
-                        <div class="activity-meta">Start solving problems to see your activity here!</div>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Language Statistics -->
-        {% if language_stats %}
-        <div class="activity-section">
-            <h2 class="section-title">
-                <span>💻</span>
-                Language Statistics
-            </h2>
-            <div class="language-stats">
-                {% for lang, count in language_stats.items %}
-                <div class="language-tag">
-                    {{ lang|upper }}: {{ count }}
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
     </div>
 
-    <script>
-        function generateCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const submissionData = JSON.parse(document.getElementById('calendar-data').textContent);
+    <!-- Badges & Achievements -->
+    <div class="badges-section">
+        <h2 class="section-title">
+            <span>🏆</span>
+            Badges & Achievements
+        </h2>
+        <div class="badges-grid">
+            {% for badge in badges %}
+            <div class="badge {% if badge.condition %}earned{% else %}locked{% endif %}">
+                <span class="badge-icon">{{ badge.icon }}</span>
+                <div class="badge-title">{{ badge.title }}</div>
+                <div class="badge-description">{{ badge.description }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
-            const today = new Date();
-            const endDate = new Date(today);
-            const startDate = new Date(today);
-            startDate.setDate(startDate.getDate() - 364);
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+        <h2 class="section-title">
+            <span>⚡</span>
+            Recent Activity
+        </h2>
+        <div class="activity-list">
+            {% if recent_submissions %}
+            {% for submission in recent_submissions %}
+            <div class="activity-item">
+                <div
+                    class="activity-icon {% if submission.verdict == 'Accepted' %}success{% elif submission.verdict == 'Wrong Answer' %}error{% else %}warning{% endif %}">
+                    {% if submission.verdict == 'Accepted' %}
+                    ✓
+                    {% elif submission.verdict == 'Wrong Answer' %}
+                    ✗
+                    {% else %} ⏱
+                    {% endif %}
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">
+                        {% if submission.verdict == 'Accepted' %}
+                        Solved "{{ submission.problem.title }}"
+                        {% else %}
+                        Attempted "{{ submission.problem.title }}"
+                        {% endif %}
+                    </div>
 
-            // Align start to Sunday
-            const firstSunday = new Date(startDate);
-            firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
+                    <div class="activity-meta">
+                        {{ submission.submitted_at|timesince }} ago • {{ submission.language|upper }} • {{
+                        submission.verdict }}
+                        {% if submission.verdict == 'Accepted' %}
+                        <span style="color: var(--success);">+{{ submission.problem.score }} pts</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="activity-item">
+                <div class="activity-icon" style="background: var(--bg-elevated); color: var(--text-muted);">📝
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">No recent activity</div>
+                    <div class="activity-meta">Start solving problems to see your activity here!</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
-            const totalDays = Math.ceil((endDate - firstSunday) / (1000 * 60 * 60 * 24)) + 1;
-            const totalWeeks = Math.ceil(totalDays / 7);
+    <!-- Language Statistics -->
+    {% if language_stats %}
+    <div class="activity-section">
+        <h2 class="section-title">
+            <span>💻</span>
+            Language Statistics
+        </h2>
+        <div class="language-stats">
+            {% for lang, count in language_stats.items %}
+            <div class="language-tag">
+                {{ lang|upper }}: {{ count }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
 
-            let currentDate = new Date(firstSunday);
+{% block extra_js %}
+<script>
+    function generateCalendar() {
+        const grid = document.getElementById('calendarGrid');
+        const submissionData = JSON.parse(document.getElementById('calendar-data').textContent);
 
-            for (let week = 0; week < totalWeeks; week++) {
-                const weekColumn = document.createElement('div');
-                weekColumn.className = 'calendar-week';
+        const today = new Date();
+        const endDate = new Date(today);
+        const startDate = new Date(today);
+        startDate.setDate(startDate.getDate() - 364);
 
-                for (let day = 0; day < 7; day++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day';
+        // Align start to Sunday
+        const firstSunday = new Date(startDate);
+        firstSunday.setDate(firstSunday.getDate() - firstSunday.getDay());
 
-                    const isInRange = currentDate >= startDate && currentDate <= endDate;
-                    if (isInRange) {
-                        const dateStr = currentDate.toISOString().split('T')[0];
-                        const submissions = submissionData[dateStr] || 0;
+        const totalDays = Math.ceil((endDate - firstSunday) / (1000 * 60 * 60 * 24)) + 1;
+        const totalWeeks = Math.ceil(totalDays / 7);
 
-                        let level = 0;
-                        if (submissions > 0) level = 1;
-                        if (submissions >= 3) level = 2;
-                        if (submissions >= 5) level = 3;
-                        if (submissions >= 7) level = 4;
+        let currentDate = new Date(firstSunday);
 
-                        dayElement.classList.add(`level-${level}`);
-                        dayElement.title = `${currentDate.toDateString()}: ${submissions} submission${submissions !== 1 ? 's' : ''}`;
-                    } else {
-                        dayElement.style.opacity = '0.3';
-                        dayElement.title = currentDate.toDateString();
-                    }
+        for (let week = 0; week < totalWeeks; week++) {
+            const weekColumn = document.createElement('div');
+            weekColumn.className = 'calendar-week';
 
-                    weekColumn.appendChild(dayElement);
-                    currentDate.setDate(currentDate.getDate() + 1);
+            for (let day = 0; day < 7; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+
+                const isInRange = currentDate >= startDate && currentDate <= endDate;
+                if (isInRange) {
+                    const dateStr = currentDate.toISOString().split('T')[0];
+                    const submissions = submissionData[dateStr] || 0;
+
+                    let level = 0;
+                    if (submissions > 0) level = 1;
+                    if (submissions >= 3) level = 2;
+                    if (submissions >= 5) level = 3;
+                    if (submissions >= 7) level = 4;
+
+                    dayElement.classList.add(`level-${level}`);
+                    dayElement.title = `${currentDate.toDateString()}: ${submissions} submission${submissions !== 1 ? 's' : ''}`;
+                } else {
+                    dayElement.style.opacity = '0.3';
+                    dayElement.title = currentDate.toDateString();
                 }
 
-                grid.appendChild(weekColumn);
+                weekColumn.appendChild(dayElement);
+                currentDate.setDate(currentDate.getDate() + 1);
             }
+
+            grid.appendChild(weekColumn);
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', generateCalendar);
+    document.addEventListener('DOMContentLoaded', generateCalendar);
 
-
-
-
-        // Add hover effects to stat cards
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', function () {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-
-            card.addEventListener('mouseleave', function () {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
+    // Add hover effects to stat cards
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
         });
 
-        // Badge click interactions
-        document.querySelectorAll('.badge').forEach(badge => {
-            badge.addEventListener('click', function () {
-                if (!this.classList.contains('locked')) {
-                    // Show badge details
-                    const title = this.querySelector('.badge-title').textContent;
-                    console.log('Badge earned:', title);
-                }
-            });
+        card.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0) scale(1)';
         });
+    });
 
-        // Apply saved theme on page load
-        document.addEventListener("DOMContentLoaded", function () {
-            const savedTheme = localStorage.getItem("theme");
-            const body = document.body;
-            const themeIcon = document.getElementById("theme-icon");
-
-            if (savedTheme) {
-                body.setAttribute("data-theme", savedTheme);
-                themeIcon.textContent = savedTheme === "dark" ? "🌙" : "☀";
+    // Badge click interactions
+    document.querySelectorAll('.badge').forEach(badge => {
+        badge.addEventListener('click', function () {
+            if (!this.classList.contains('locked')) {
+                const title = this.querySelector('.badge-title').textContent;
+                console.log('Badge earned:', title);
             }
         });
-
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('theme-icon');
-            const currentTheme = body.getAttribute('data-theme');
-
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                themeIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-    </script>
-</body>
-
-</html>
+    });
+</script>
+{% endblock %}

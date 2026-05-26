@@ -1,0 +1,408 @@
+/* =============================================================
+   CodeForge — Leaderboard Page Stylesheet
+   leaderboard.css | Leaderboard ranking table and user statistics.
+   ============================================================= */
+
+/* ─────────────────────────────────────────────────────────────
+   1. LAYOUT & STATS
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-container {
+    padding: var(--space-2xl);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.leaderboard-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.leaderboard-header h1 {
+    font-size: clamp(2.5rem, 5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: var(--space-md);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.leaderboard-header p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.4;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-2xl) 0;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    text-align: center;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
+    transition: left 0.6s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+}
+
+.stat-card:hover::after {
+    left: 100%;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-xs);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. LEADERBOARD CARD & HEADERS
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-section {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.leaderboard-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.leaderboard-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.leaderboard-header-section {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+}
+
+[data-theme="light"] .leaderboard-header-section {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.leaderboard-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-primary);
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.filters {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.filter-select {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.filter-select:hover {
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+}
+
+.filter-select:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. LEADERBOARD TABLE & ROWS
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+}
+
+.leaderboard-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: var(--space-lg) var(--space-xl);
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 80px;
+    z-index: 10;
+    backdrop-filter: blur(20px);
+}
+
+[data-theme="light"] .leaderboard-table th {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.leaderboard-table td {
+    padding: var(--space-lg) var(--space-xl);
+    border-bottom: 1px solid rgba(58, 58, 92, 0.2);
+    transition: var(--transition);
+}
+
+.leaderboard-table tr {
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.leaderboard-table tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: var(--accent-gradient);
+    transition: width 0.3s ease;
+    opacity: 0.1;
+}
+
+.leaderboard-table tr:hover::before {
+    width: 4px;
+}
+
+.leaderboard-table tr::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
+    transition: left 0.6s ease;
+}
+
+[data-theme="light"] .leaderboard-table tr::after {
+    background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
+}
+
+.leaderboard-table tr:hover::after {
+    left: 100%;
+}
+
+.leaderboard-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateX(8px);
+    box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .leaderboard-table tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.leaderboard-table tr.highlight-user {
+    background: rgba(255, 161, 22, 0.1);
+    border-left: 4px solid var(--accent-primary);
+    position: relative;
+}
+
+.leaderboard-table tr.highlight-user::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255, 161, 22, 0.05), transparent);
+    pointer-events: none;
+    width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. RANK & USER DESIGN
+   ───────────────────────────────────────────────────────────── */
+.rank {
+    font-weight: 800;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.rank-1 {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rank-2 {
+    color: #c0c0c0;
+    text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+}
+
+.rank-3 {
+    color: #cd7f32;
+    text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+}
+
+.trophy-icon {
+    width: 24px;
+    height: 24px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--accent-gradient);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
+    transition: var(--transition);
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-glow);
+}
+
+[data-theme="light"] .user-avatar {
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+}
+
+.username {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.user-location {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.points {
+    font-weight: 800;
+    color: var(--accent-secondary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+}
+
+.problems-solved {
+    color: var(--success);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.accuracy {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. RESPONSIVE MEDIA QUERIES
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .leaderboard-container {
+        padding: var(--space-xl) var(--space-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .leaderboard-container {
+        padding: var(--space-lg);
+    }
+
+    .leaderboard-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .leaderboard-header-section {
+        flex-direction: column;
+        gap: var(--space-md);
+        align-items: flex-start;
+    }
+
+    .leaderboard-table {
+        font-size: 0.875rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: var(--space-md);
+    }
+}

@@ -1,867 +1,102 @@
-{% load custom_filters %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Join competitive programming contests and compete with developers worldwide.">
-    <meta property="og:title" content="Contests - CodeForge" />
-    <meta property="og:description"
-        content="Participate in coding contests and challenge yourself against programmers globally." />
-    <title>Contests - CodeForge</title>
-    <style>
-        :root {
-            /* Dark Theme Colors (Default) */
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #1a1a2e;
-            --bg-elevated: #262641;
-            --bg-card: rgba(26, 26, 46, 0.8);
-            --accent-primary: #ffa116;
-            --accent-secondary: #00d9ff;
-            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
-            --success: #00c851;
-            --error: #ff4444;
-            --warning: #ffbb33;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #6c6c6c;
-            --border: #3a3a5c;
-            --border-hover: #4a4a6c;
-
-            /* Glass morphism */
-            --glass-bg: rgba(26, 26, 46, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.1);
-
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
-            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
-
-            /* Spacing */
-            --space-xs: 4px;
-            --space-sm: 8px;
-            --space-md: 16px;
-            --space-lg: 24px;
-            --space-xl: 32px;
-            --space-2xl: 48px;
-            --space-3xl: 64px;
-
-            /* Radius */
-            --radius: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-
-            /* Transitions */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        [data-theme="light"] {
-            /* Light Theme Colors */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-elevated: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --accent-primary: #1976d2;
-            --accent-secondary: #dc004e;
-            --accent-gradient: linear-gradient(135deg, #1976d2 0%, #dc004e 100%);
-            --success: #2e7d32;
-            --error: #d32f2f;
-            --warning: #f57c00;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --text-muted: #9ca3af;
-            --border: #e5e7eb;
-            --border-hover: #d1d5db;
-
-            /* Glass morphism for light */
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(0, 0, 0, 0.1);
-
-            /* Light theme shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
-            --shadow-glow: 0 0 20px rgba(25, 118, 210, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
-            transition: var(--transition);
-            min-height: 100vh;
-        }
-
-        [data-theme="light"] body {
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(25, 118, 210, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(220, 0, 78, 0.03) 0%, transparent 50%);
-        }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-md) var(--space-lg);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .navbar {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            text-decoration: none;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-brand::before {
-            content: "⚡";
-            font-size: 2rem;
-            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
-            -webkit-text-fill-color: var(--accent-primary);
-        }
-
-        [data-theme="light"] .navbar-brand::before {
-            filter: drop-shadow(0 0 8px rgba(25, 118, 210, 0.5));
-        }
-
-        .navbar-nav {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            display: inline-block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--text-primary);
-            background: var(--bg-elevated);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: var(--bg-elevated);
-            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
-        }
-
-        [data-theme="light"] .nav-link.active {
-            box-shadow: inset 0 1px 0 rgba(25, 118, 210, 0.2);
-        }
-
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-lg);
-            border: none;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.875rem;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        [data-theme="light"] .btn-primary {
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-secondary {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            color: var(--text-primary);
-            background: var(--border-hover);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* Profile Button Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .profile-btn:hover {
-            background: var(--border-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #000;
-            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-        }
-
-        [data-theme="light"] .nav-avatar {
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Main Content */
-        .contests-container {
-            padding: var(--space-2xl);
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .contests-header {
-            text-align: center;
-            margin-bottom: var(--space-3xl);
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .contests-header h1 {
-            font-size: clamp(2.5rem, 5vw, 3rem);
-            font-weight: 800;
-            margin-bottom: var(--space-md);
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-        }
-
-        .contests-header p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.4;
-        }
-
-        /* Tabs Section */
-        .tabs-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            margin-bottom: var(--space-2xl);
-            border: 1px solid var(--border);
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-        }
-
-        .tabs-section:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .tab {
-            padding: var(--space-md) var(--space-xl);
-            border: 2px solid var(--border);
-            border-radius: var(--radius-lg);
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            font-size: 0.875rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .tab:hover::before {
-            left: 100%;
-        }
-
-        .tab:hover,
-        .tab.active {
-            color: var(--text-primary);
-            border-color: var(--accent-primary);
-            background: rgba(255, 161, 22, 0.1);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        [data-theme="light"] .tab:hover,
-        [data-theme="light"] .tab.active {
-            background: rgba(25, 118, 210, 0.1);
-        }
-
-        .tab.active {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            border-color: transparent;
-            box-shadow: var(--shadow-glow);
-        }
-
-        [data-theme="light"] .tab.active {
-            color: #ffffff;
-        }
-
-        /* Contest Sections */
-        .contest-section {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-xl);
-            padding: var(--space-2xl);
-            margin-bottom: var(--space-2xl);
-            border: 1px solid var(--border);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-            display: none;
-        }
-
-        .contest-section.active {
-            display: block;
-        }
-
-        .contest-section:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-2xl);
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-align: center;
-        }
-
-        .section-badge {
-            background: rgba(255, 161, 22, 0.2);
-            color: var(--accent-primary);
-            padding: var(--space-xs) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 161, 22, 0.3);
-        }
-
-        [data-theme="light"] .section-badge {
-            background: rgba(25, 118, 210, 0.2);
-            color: var(--accent-primary);
-            border-color: rgba(25, 118, 210, 0.3);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: var(--space-3xl);
-            color: var(--text-muted);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: var(--space-lg);
-            opacity: 0.5;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-md);
-            font-weight: 600;
-        }
-
-        .empty-state p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        /* Mobile menu toggle */
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-primary);
-            border-radius: var(--radius-full);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-secondary);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            padding: var(--space-xl) var(--space-md);
-            text-align: center;
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border);
-            margin-top: var(--space-3xl);
-        }
-
-        .footer hr {
-            border: none;
-            height: 1px;
-            background-color: var(--border);
-            margin-bottom: var(--space-lg);
-        }
-
-        .footer p {
-            margin: 0 0 var(--space-md);
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            flex-wrap: wrap;
-        }
-
-        .footer-links li a {
-            color: var(--accent-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-        }
-
-        .footer-links li a:hover {
-            color: var(--accent-primary);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .contests-container {
-                padding: var(--space-xl) var(--space-lg);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .navbar {
-                padding: var(--space-md);
-            }
-
-            .navbar-nav {
-                display: none;
-            }
-
-            .contests-container {
-                padding: var(--space-lg);
-            }
-
-            .contests-header h1 {
-                font-size: 2.5rem;
-            }
-
-            .tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .tab {
-                width: 100%;
-                max-width: 200px;
-                text-align: center;
-            }
-
-            .section-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .profile-name {
-                display: none;
-            }
-
-            .profile-btn {
-                padding: var(--space-sm);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
-
-        <ul class="navbar-nav" id="navbarNav">
-            <li>
-                <a href="{% url 'core:home' %}" class="nav-link">Home</a>
-            </li>
-            <li>
-                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:contest' %}" class="nav-link active">Contest</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
-            </li>
-        </ul>
-
-        <div class="navbar-actions">
-            {% if user.is_authenticated %}
-            <!-- Profile Button with Avatar -->
-            <div class="profile-dropdown">
-                <a href="{% url 'core:profile' %}" class="profile-btn">
-                    <div class="nav-avatar">
-                        {% if user.first_name and user.last_name %}
-                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                        {% else %}
-                        {{ user.username|slice:":2"|upper }}
-                        {% endif %}
-                    </div>
-                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
-                </a>
-            </div>
-            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
-            {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
-            {% endif %}
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="contests-container">
-        <!-- Header -->
-        <div class="contests-header">
-            <h1>Competitive Programming Contests</h1>
-            <p>Challenge yourself and compete with developers from around the world in our coding contests</p>
-        </div>
-
-        <!-- Tabs Section -->
-        <div class="tabs-section">
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('ongoing')">
-                    Ongoing
-                    <span class="section-badge">0</span>
-                </button>
-                <button class="tab" onclick="switchTab('upcoming')">
-                    Upcoming
-                    <span class="section-badge">0</span>
-                </button>
-                <button class="tab" onclick="switchTab('past')">
-                    Past
-                    <span class="section-badge">0</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Ongoing Contests Section -->
-        <div id="ongoing" class="contest-section active">
-            <div class="section-header">
-                <h2 class="section-title">Ongoing Contests</h2>
-            </div>
-            <div class="empty-state">
-                <div class="empty-state-icon">🏆</div>
-                <h3>No Ongoing Contests</h3>
-                <p>There are currently no active contests. Check back soon for exciting new challenges!</p>
-            </div>
-        </div>
-
-        <!-- Upcoming Contests Section -->
-        <div id="upcoming" class="contest-section">
-            <div class="section-header">
-                <h2 class="section-title">Upcoming Contests</h2>
-            </div>
-            <div class="empty-state">
-                <div class="empty-state-icon">📅</div>
-                <h3>No Upcoming Contests</h3>
-                <p>No contests are scheduled at the moment. Stay tuned for announcements about future competitions!</p>
-            </div>
-        </div>
-
-        <!-- Past Contests Section -->
-        <div id="past" class="contest-section">
-            <div class="section-header">
-                <h2 class="section-title">Past Contests</h2>
-            </div>
-            <div class="empty-state">
-                <div class="empty-state-icon">🗂️</div>
-                <h3>No Past Contests</h3>
-                <p>Contest history will appear here once competitions have concluded. Be the first to participate!</p>
-            </div>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contests | CodeForge{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contests.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="contests-container">
+    <!-- Header -->
+    <div class="contests-header">
+        <h1>Competitive Programming Contests</h1>
+        <p>Challenge yourself and compete with developers from around the world in our coding contests</p>
+    </div>
+
+    <!-- Tabs Section -->
+    <div class="tabs-section">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('ongoing')">
+                Ongoing
+                <span class="section-badge">0</span>
+            </button>
+            <button class="tab" onclick="switchTab('upcoming')">
+                Upcoming
+                <span class="section-badge">0</span>
+            </button>
+            <button class="tab" onclick="switchTab('past')">
+                Past
+                <span class="section-badge">0</span>
+            </button>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <hr>
-        <p>&copy; 2024 CodeForge. All rights reserved.</p>
-        <ul class="footer-links">
-            <li><a href="#">About</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Support</a></li>
-        </ul>
-    </footer>
+    <!-- Ongoing Contests Section -->
+    <div id="ongoing" class="contest-section active">
+        <div class="section-header">
+            <h2 class="section-title">Ongoing Contests</h2>
+        </div>
+        <div class="empty-state">
+            <div class="empty-state-icon">🏆</div>
+            <h3>No Ongoing Contests</h3>
+            <p>There are currently no active contests. Check back soon for exciting new challenges!</p>
+        </div>
+    </div>
 
-    <script>
-        function switchTab(tabId) {
-            // Hide all contest sections
-            document.querySelectorAll('.contest-section').forEach(section => {
-                section.classList.remove('active');
-            });
+    <!-- Upcoming Contests Section -->
+    <div id="upcoming" class="contest-section">
+        <div class="section-header">
+            <h2 class="section-title">Upcoming Contests</h2>
+        </div>
+        <div class="empty-state">
+            <div class="empty-state-icon">📅</div>
+            <h3>No Upcoming Contests</h3>
+            <p>No contests are scheduled at the moment. Stay tuned for announcements about future competitions!</p>
+        </div>
+    </div>
 
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+    <!-- Past Contests Section -->
+    <div id="past" class="contest-section">
+        <div class="section-header">
+            <h2 class="section-title">Past Contests</h2>
+        </div>
+        <div class="empty-state">
+            <div class="empty-state-icon">🗂️</div>
+            <h3>No Past Contests</h3>
+            <p>Contest history will appear here once competitions have concluded. Be the first to participate!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-            // Show selected section
-            document.getElementById(tabId).classList.add('active');
-
-            // Add active class to clicked tab
-            event.target.classList.add('active');
-        }
-
-        function toggleMobileMenu() {
-            const nav = document.getElementById('navbarNav');
-            nav.classList.toggle('active');
-        }
-
-        // Add animation delay for contest sections
-        document.addEventListener('DOMContentLoaded', function () {
-            const sections = document.querySelectorAll('.contest-section');
-            sections.forEach((section, index) => {
-                section.style.animationDelay = `${(index + 1) * 0.2}s`;
-            });
+{% block extra_js %}
+<script>
+    function switchTab(tabId) {
+        // Hide all contest sections
+        document.querySelectorAll('.contest-section').forEach(section => {
+            section.classList.remove('active');
         });
-    </script>
-</body>
 
-</html>
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Show selected section
+        document.getElementById(tabId).classList.add('active');
+
+        // Add active class to clicked tab
+        event.target.classList.add('active');
+    }
+
+    // Add animation delay for contest sections
+    document.addEventListener('DOMContentLoaded', function () {
+        const sections = document.querySelectorAll('.contest-section');
+        sections.forEach((section, index) => {
+            section.style.animationDelay = `${(index + 1) * 0.2}s`;
+        });
+    });
+</script>
+{% endblock %}

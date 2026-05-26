@@ -1,0 +1,59 @@
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{# components/leaderboard_row.html                                              #}
+{#                                                                               #}
+{# A single <tr> in the leaderboard table. Used in leaderboard.html.           #}
+{# NOTE: forloop must be active in the parent template.                        #}
+{#                                                                               #}
+{# REQUIRED context variables:                                                  #}
+{#   entry               — UserScore model instance                             #}
+{#     .user             — User object                                          #}
+{#     .username         — str                                                  #}
+{#     .score            — int                                                  #}
+{#     .problems_solved  — int                                                  #}
+{#     .accuracy         — float                                                #}
+{#   forloop.counter     — int (rank number, provided automatically)            #}
+{# ─────────────────────────────────────────────────────────────────────────── #}
+<tr class="{% if entry.user == request.user %}highlight-user{% endif %}"
+    aria-label="Rank {{ forloop.counter }}: {{ entry.username }}">
+
+    {# ── Rank ── top 3 get gold/silver/bronze styling + trophy icon ── #}
+    <td>
+        <div class="rank {% if forloop.counter == 1 %}rank-1
+                         {% elif forloop.counter == 2 %}rank-2
+                         {% elif forloop.counter == 3 %}rank-3{% endif %}">
+            {% if forloop.counter <= 3 %}
+                <span aria-hidden="true">
+                    {% if forloop.counter == 1 %}🥇
+                    {% elif forloop.counter == 2 %}🥈
+                    {% else %}🥉{% endif %}
+                </span>
+            {% endif %}
+            {{ forloop.counter }}
+        </div>
+    </td>
+
+    {# ── User info: avatar + username ── #}
+    <td>
+        <div class="user-info">
+            <div class="user-avatar" aria-hidden="true">
+                {{ entry.username|slice:":1"|upper }}
+            </div>
+            <div>
+                <a href="{% url 'core:user_profile' entry.username %}"
+                   class="username"
+                   style="text-decoration:none; color: inherit;">
+                    {{ entry.username }}
+                </a>
+            </div>
+        </div>
+    </td>
+
+    {# ── Score ── #}
+    <td class="points font-mono">{{ entry.score }}</td>
+
+    {# ── Problems solved ── #}
+    <td class="problems-solved font-mono">{{ entry.problems_solved }}</td>
+
+    {# ── Accuracy ── #}
+    <td class="accuracy">{{ entry.accuracy|floatformat:1 }}%</td>
+</tr>

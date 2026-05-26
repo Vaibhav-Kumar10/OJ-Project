@@ -1,0 +1,49 @@
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{# components/problem_card.html                                                 #}
+{#                                                                               #}
+{# A glassmorphism card for a single problem. Used in the home page's          #}
+{# "Featured Problems" grid inside a {% for %} loop.                           #}
+{#                                                                               #}
+{# REQUIRED context variable passed via {% include ... with problem=... %}:    #}
+{#   problem      — Problem model instance                                      #}
+{#     .id        — int                                                         #}
+{#     .title     — str                                                         #}
+{#     .difficulty — str: "Easy" | "Medium" | "Hard"                           #}
+{#     .tags      — str (comma-separated, may be None)                         #}
+{#     .score     — int                                                         #}
+{#                                                                               #}
+{# OPTIONAL context variables:                                                  #}
+{#   is_complete   — bool  — shows ✅ checkmark if True                        #}
+{#   score_awarded — int   — overrides problem.score in the stat line          #}
+{# ─────────────────────────────────────────────────────────────────────────── #}
+<a href="{% url 'core:problem_detail' problem.id %}"
+   class="problem-card"
+   aria-label="Problem: {{ problem.title }}, {{ problem.difficulty }}">
+
+    {# ── Top row: title + difficulty badge ── #}
+    <div class="problem-header">
+        <h3 class="problem-title">
+            {{ problem.title }}
+            {% if is_complete %}
+                <span class="problem-solved" aria-label="Solved" title="You solved this!">✅</span>
+            {% endif %}
+        </h3>
+
+        {# Difficulty badge — re-uses the isolated badge component #}
+        {% with difficulty=problem.difficulty %}
+            {% include "components/difficulty_badge.html" %}
+        {% endwith %}
+    </div>
+
+    {# ── Bottom row: tags + score stats ── #}
+    <div class="problem-stats">
+        <div class="problem-stat">
+            <span aria-hidden="true">💡</span>
+            <span>{{ problem.tags|default:"Algorithm" }}</span>
+        </div>
+        <div class="problem-stat">
+            <span aria-hidden="true">🏆</span>
+            <span>{{ score_awarded|default:problem.score }} pts</span>
+        </div>
+    </div>
+</a>
