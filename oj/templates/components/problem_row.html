@@ -50,10 +50,17 @@
     <td class="tags">
         {% if problem.tags %}
             {% for tag in problem.tags|split:"," %}
-                <span class="tag-pill">{{ tag|trim }}</span>
+                <span class="tag-pill outline-badge">{{ tag|trim }}</span>
             {% endfor %}
         {% else %}
             <span class="text-muted">—</span>
         {% endif %}
+    </td>
+
+    {# ── Column 6: Action ── #}
+    <td class="action-cell">
+        <a href="{% url 'core:problem_detail' problem.id %}" class="action-btn circular" aria-label="Go to problem" onclick="event.stopPropagation()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
     </td>
 </tr>

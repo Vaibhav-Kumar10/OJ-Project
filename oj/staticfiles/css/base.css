@@ -332,9 +332,9 @@ body {
 .profile-btn {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--radius);
+    gap: 8px;
+    padding: 6px 14px 6px 6px;
+    border-radius: 10px;
     text-decoration: none;
     color: var(--text-primary);
     background: var(--bg-elevated);
@@ -347,22 +347,56 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.nav-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    font-weight: 600;
+    transition: var(--transition);
+}
+.nav-logout-btn:hover {
+    background: var(--border-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
 .nav-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-full);
-    background: var(--accent-gradient);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6 0%, #ec4899 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    color: #000;
+    color: #111111;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
 }
-[data-theme="light"] .nav-avatar {
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+
+[data-theme="light"] .profile-btn,
+body.mesh-background .profile-btn,
+body.home-mesh-background .profile-btn,
+[data-theme="light"] .nav-logout-btn,
+body.mesh-background .nav-logout-btn,
+body.home-mesh-background .nav-logout-btn {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #111111;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .profile-name,
+body.mesh-background .profile-name,
+body.home-mesh-background .profile-name {
+    color: #111111;
+    font-weight: 600;
 }
 
 .profile-name {
@@ -584,3 +618,66 @@ body {
         display: none; /* hamburger menu territory — hidden for now */
     }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   11. AUTH TOGGLE CAPSULE (Navbar Login/Register toggle)
+   ───────────────────────────────────────────────────────────── */
+.auth-toggle-capsule {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .auth-toggle-capsule,
+body.mesh-background .auth-toggle-capsule,
+body.home-mesh-background .auth-toggle-capsule {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.auth-toggle-btn {
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.4;
+    color: #b3b3b3;
+}
+
+.auth-toggle-btn:hover {
+    color: #ffffff;
+}
+
+.auth-toggle-btn.active {
+    background: #ffffff;
+    color: #0a0a0f;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .auth-toggle-btn,
+body.mesh-background .auth-toggle-btn,
+body.home-mesh-background .auth-toggle-btn {
+    color: #444444;
+}
+
+[data-theme="light"] .auth-toggle-btn:hover,
+body.mesh-background .auth-toggle-btn:hover,
+body.home-mesh-background .auth-toggle-btn:hover {
+    color: #111111;
+}
+
+[data-theme="light"] .auth-toggle-btn.active,
+body.mesh-background .auth-toggle-btn.active,
+body.home-mesh-background .auth-toggle-btn.active {
+    background: #111111;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+

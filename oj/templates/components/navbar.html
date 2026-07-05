@@ -15,74 +15,86 @@
         CodeForge
     </a>
 
-    {# ── Primary navigation links ── #}
-    <ul class="navbar-nav" id="navbarNav" role="list">
-        <li role="listitem">
-            <a href="{% url 'core:home' %}" class="nav-link {% if active_nav == 'home' %}active{% endif %}"
-                id="nav-home">
-                Home
-            </a>
-        </li>
-        <li role="listitem">
-            <a href="{% url 'core:problems' %}" class="nav-link {% if active_nav == 'problems' %}active{% endif %}"
-                id="nav-problems">
-                Problems
-            </a>
-        </li>
-        <li role="listitem">
-            <a href="{% url 'contests:contest' %}" class="nav-link {% if active_nav == 'contests' %}active{% endif %}"
-                id="nav-contests">
-                Contest
-            </a>
-        </li>
-        <li role="listitem">
-            <a href="{% url 'contests:leaderboard' %}"
-                class="nav-link {% if active_nav == 'leaderboard' %}active{% endif %}" id="nav-leaderboard">
-                Leaderboard
-            </a>
-        </li>
-    </ul>
+    {# ── Right side container to push everything to the right ── #}
+    <div class="navbar-right">
+        {# ── Primary navigation links ── #}
+        <ul class="navbar-nav" id="navbarNav" role="list">
+            <li role="listitem">
+                <a href="{% url 'core:home' %}" class="nav-link {% if active_nav == 'home' %}active{% endif %}"
+                    id="nav-home">
+                    Home
+                </a>
+            </li>
+            <li role="listitem">
+                <a href="{% url 'core:problems' %}" class="nav-link {% if active_nav == 'problems' %}active{% endif %}"
+                    id="nav-problems">
+                    Problems
+                </a>
+            </li>
+            <li role="listitem">
+                <a href="{% url 'contests:contest' %}" class="nav-link {% if active_nav == 'contests' %}active{% endif %}"
+                    id="nav-contests">
+                    Contest
+                </a>
+            </li>
+            <li role="listitem">
+                <a href="{% url 'contests:leaderboard' %}"
+                    class="nav-link {% if active_nav == 'leaderboard' %}active{% endif %}" id="nav-leaderboard">
+                    Leaderboard
+                </a>
+            </li>
+        </ul>
 
-    {# ── Right-side actions ── #}
-    <div class="navbar-actions">
+        {# ── Right-side actions ── #}
+        <div class="navbar-actions">
 
-        {# Theme toggle — calls toggleTheme() from static/js/theme.js #}
-        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme" id="themeToggleBtn">
-            <span id="theme-icon" aria-hidden="true">🌙</span>
-        </button>
-
-        {% if user.is_authenticated %}
-        {# Avatar button links to the current user's profile #}
-        <div class="profile-dropdown">
-            <a href="{% url 'core:profile' %}" class="profile-btn" id="profileBtn"
-                aria-label="View profile for {{ user.username }}">
-
-                <div class="nav-avatar" aria-hidden="true">
-                    {% if user.first_name and user.last_name %}
-                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                    {% else %}
-                    {{ user.username|slice:":2"|upper }}
-                    {% endif %}
-                </div>
-
-                <span class="profile-name">
-                    {{ user.first_name|default:user.username }}
-                </span>
+            {% if user.is_authenticated %}
+            {# Avatar button links to the current user's profile #}
+            <div class="profile-dropdown">
+                <a href="{% url 'core:profile' %}" class="profile-btn" id="profileBtn"
+                    aria-label="View profile for {{ user.username }}">
+                    <div class="nav-avatar" aria-hidden="true">
+                        {% if user.first_name and user.last_name %}
+                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                        {% else %}
+                        {{ user.username|slice:":2"|upper }}
+                        {% endif %}
+                    </div>
+                    <span class="profile-name">
+                        {{ user.first_name|default:user.username }}
+                    </span>
+                </a>
+            </div>
+            <a href="{% url 'user_auth:logout' %}" class="nav-logout-btn" id="logoutBtn">
+                Logout
             </a>
+            {% else %}
+            <div class="auth-toggle-capsule">
+                <a href="{% url 'user_auth:login' %}" class="auth-toggle-btn" id="signInBtn">
+                    Log In
+                </a>
+                <a href="{% url 'user_auth:signup' %}" class="auth-toggle-btn" id="getStartedBtn">
+                    Sign Up
+                </a>
+            </div>
+            <script>
+                (function() {
+                    const path = window.location.pathname;
+                    const signInBtn = document.getElementById('signInBtn');
+                    const getStartedBtn = document.getElementById('getStartedBtn');
+                    if (signInBtn && getStartedBtn) {
+                        signInBtn.classList.remove('active');
+                        getStartedBtn.classList.remove('active');
+                        if (path.includes('/signup')) {
+                            getStartedBtn.classList.add('active');
+                        } else {
+                            // Default to Log In for /, /login, or any other guest page
+                            signInBtn.classList.add('active');
+                        }
+                    }
+                })();
+            </script>
+            {% endif %}
         </div>
-
-        <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">
-            Logout
-        </a>
-
-        {% else %}
-        <a href="{% url 'user_auth:login' %}" class="btn btn-secondary" id="signInBtn">
-            Sign In
-        </a>
-        <a href="{% url 'user_auth:signup' %}" class="btn btn-primary" id="getStartedBtn">
-            Get Started
-        </a>
-        {% endif %}
-
     </div>
 </nav>

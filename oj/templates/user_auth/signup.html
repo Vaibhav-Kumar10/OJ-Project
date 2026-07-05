@@ -1,117 +1,112 @@
-{% extends "base.html" %}
+{% extends "user_auth/auth_base.html" %}
 {% load static %}
 
 {% block title %}Sign Up - CodeForge{% endblock %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
-{% endblock %}
-
-{% block content %}
-<!-- Error Messages -->
-{% if messages %}
-<div class="error-container"
-    style="position: fixed; top: 90px; left: 50%; transform: translateX(-50%); z-index: 1001; display: flex; flex-direction: column; gap: var(--space-sm); max-width: 400px; width: 90%;">
-    {% for message in messages %}
-    <div class="error-message">
-        <span>⚠️</span>
-        {{ message }}
-    </div>
-    {% endfor %}
+{% block auth_container %}
+<!-- Main Header -->
+<div class="auth-header-section" style="text-align: center;">
+    <h1 class="auth-display-title">Secure Your Spot</h1>
+    <p class="auth-subtitle">Join the CodeForge Community</p>
 </div>
-{% endif %}
 
-<!-- Main Content -->
-<main class="main-container">
-    <div class="signup-card"
-        style="background: var(--bg-card); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--space-2xl); width: 100%; max-width: 500px; box-shadow: var(--shadow-lg); position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease-out 0.1s forwards;">
-        <div class="signup-header" style="text-align: center; margin-bottom: 40px;">
-            <h1
-                style="font-size: 2rem; font-weight: 800; margin-bottom: var(--space-sm); background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2;">
-                Create Account</h1>
-            <p style="color: var(--text-secondary); font-size: 1rem; font-weight: 500;">Join thousands of coders and
-                start your journey</p>
+<!-- Signup Card -->
+<div class="auth-card-container">
+    <div class="auth-card">
+        <!-- Error Messages -->
+        {% if messages %}
+        <div class="error-container">
+            {% for message in messages %}
+            <div class="error-message" role="alert">
+                <span>⚠️</span>
+                {{ message }}
+            </div>
+            {% endfor %}
         </div>
+        {% endif %}
 
         <form action="{% url 'user_auth:signup' %}" method="POST" id="signupForm">
             {% csrf_token %}
 
             <!-- Name Fields -->
             <div class="form-group">
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                <div class="form-row">
                     <div>
                         <label for="fname" class="form-label">First Name</label>
                         <input type="text" class="form-input" id="fname" name="fname"
-                            placeholder="Enter your first name" required autocomplete="given-name">
+                            placeholder="First Name" required autocomplete="given-name">
                     </div>
                     <div>
                         <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" class="form-input" id="lname" name="lname" placeholder="Enter your last name"
-                            required autocomplete="family-name">
+                        <input type="text" class="form-input" id="lname" name="lname" 
+                            placeholder="Last Name" required autocomplete="family-name">
                     </div>
                 </div>
-            </div>
-
-            <!-- Email -->
-            <div class="form-group">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-input" id="email" name="email" placeholder="your.email@example.com"
-                    required autocomplete="email">
             </div>
 
             <!-- Username -->
             <div class="form-group">
                 <label for="uname" class="form-label">Username</label>
-                <input type="text" class="form-input" id="uname" name="uname" placeholder="Choose a unique username"
-                    required autocomplete="username">
+                <input type="text" class="form-input" id="uname" name="uname" 
+                    placeholder="Username" required autocomplete="username">
             </div>
 
-            <!-- Mobile Number -->
+            <!-- Email -->
             <div class="form-group">
-                <label for="mobileno" class="form-label">Mobile Number (Optional)</label>
-                <input type="tel" class="form-input" id="mobileno" name="mobileno" placeholder="+1 (555) 123-4567"
-                    autocomplete="tel">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-input" id="email" name="email" 
+                    placeholder="Email your address" required autocomplete="email">
             </div>
 
-            <!-- Date of Birth -->
+            <!-- Mobile Number & Date of Birth Row -->
             <div class="form-group">
-                <label for="dob" class="form-label">Date of Birth</label>
-                <input type="date" class="form-input" id="dob" name="dob" required autocomplete="bday">
+                <div class="form-row">
+                    <div>
+                        <label for="mobileno" class="form-label">Mobile Number (Optional)</label>
+                        <input type="tel" class="form-input" id="mobileno" name="mobileno" 
+                            placeholder="+1 (555) 123-4567" autocomplete="tel">
+                    </div>
+                    <div>
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-input" id="dob" name="dob" 
+                            required autocomplete="bday">
+                    </div>
+                </div>
             </div>
 
             <!-- Password Fields -->
             <div class="form-group">
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+                <div class="form-row">
                     <div>
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-input" id="password" name="password"
-                            placeholder="Create a strong password" required autocomplete="new-password" minlength="8">
+                            placeholder="Enter password" required autocomplete="new-password" minlength="8">
                     </div>
                     <div>
                         <label for="repassword" class="form-label">Confirm Password</label>
                         <input type="password" class="form-input" id="repassword" name="repassword"
-                            placeholder="Confirm your password" required autocomplete="new-password">
+                            placeholder="Confirm password" required autocomplete="new-password">
                     </div>
                 </div>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="submit-btn" id="submitBtn">
-                Create Account
+            <button type="submit" class="submit-btn" id="submitBtn" style="margin-bottom: 24px;">
+                Sign Up
             </button>
 
-            <!-- Login Link -->
-            <div class="login-link">
-                <p>Already have an account? <a href="{% url 'user_auth:login' %}">Sign in here</a></p>
-            </div>
+            <div class="auth-divider">or</div>
+
+            <!-- Login Secondary Button -->
+            <a href="{% url 'user_auth:login' %}" class="auth-btn-outline">Sign In to Your Account</a>
         </form>
     </div>
-</main>
+</div>
 {% endblock %}
 
-{% block extra_js %}
+{% block auth_extra_js %}
 <script>
-    // ===== FORM VALIDATION =====
+    // ===== FORM VALIDATION & INTERACTIVE LOGIC =====
     const form = document.getElementById('signupForm');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('repassword');
@@ -148,26 +143,14 @@
         const errorMessages = document.querySelectorAll('.error-message');
         errorMessages.forEach(function (message) {
             setTimeout(function () {
-                message.style.animation = 'slideOutUp 0.3s ease';
+                message.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-10px)';
                 setTimeout(function () {
                     message.remove();
                 }, 300);
             }, 5000);
         });
-    });
-
-    // ===== SMOOTH ANIMATIONS =====
-    // Add entrance animation to the signup card
-    document.addEventListener('DOMContentLoaded', function () {
-        const signupCard = document.querySelector('.signup-card');
-        signupCard.style.opacity = '0';
-        signupCard.style.transform = 'translateY(20px)';
-
-        setTimeout(function () {
-            signupCard.style.transition = 'all 0.6s ease';
-            signupCard.style.opacity = '1';
-            signupCard.style.transform = 'translateY(0)';
-        }, 100);
     });
 </script>
 {% endblock %}

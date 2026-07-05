@@ -1,123 +1,222 @@
 /* =============================================================
    CodeForge — Authentication Page Stylesheet
-   auth.css | Form layout, buttons, password toggle and error states.
+   auth.css | Unified styles for Login and Signup canvas, card,
+   inputs, buttons, typography, and layout transitions.
    ============================================================= */
 
 /* ─────────────────────────────────────────────────────────────
-   1. CONTAINER LAYOUT
+   0. MESH BACKGROUND & PALETTE OVERRIDES
+   Matches the Problems/Home page mesh palette.
    ───────────────────────────────────────────────────────────── */
-.main-container {
-    min-height: calc(100vh - 80px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-lg);
+body.mesh-background {
     background:
-        radial-gradient(circle at 25% 25%, rgba(255, 161, 22, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(0, 200, 81, 0.05) 0%, transparent 70%);
-    position: relative;
-    overflow: hidden;
+        radial-gradient(ellipse at 0% 0%,   #b8d9f4 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 80%, #f5bf5a 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 100%, #f0c97e 0%, transparent 40%),
+        #f0ebe1;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #111111;
+
+    /* Force Light Theme Colors for Auth Frame */
+    --bg-primary:    #f5efe6;
+    --bg-secondary:  #ede8df;
+    --bg-elevated:   #ffffff;
+    --bg-card:       rgba(255, 255, 255, 0.72);
+
+    --text-primary:   #111111;
+    --text-secondary: #444444;
+    --text-muted:     #888888;
+
+    --border:       #d6d0c7;
+    --border-hover: #bcb6ae;
+
+    --glass-bg:     rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(0, 0, 0, 0.08);
+
+    --accent-primary:   #111111;
+    --accent-secondary: #666666;
+    --accent-gradient:  linear-gradient(135deg, #111111 0%, #444444 100%);
+
+    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.06);
+    --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.09);
+    --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
-[data-theme="light"] .main-container {
-    background:
-        radial-gradient(circle at 25% 25%, rgba(25, 118, 210, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(220, 0, 78, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(46, 125, 50, 0.05) 0%, transparent 70%);
+/* Force plain black navbar brand on mesh background pages */
+body.mesh-background .navbar {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
-.main-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-        radial-gradient(circle at 25% 25%, rgba(255, 161, 22, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-    animation: backgroundShift 20s ease-in-out infinite;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   2. FORM BOX CARD
-   ───────────────────────────────────────────────────────────── */
-.form-container {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-2xl) var(--space-xl);
-    width: 100%;
-    max-width: 420px;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.form-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-    transition: left 0.6s ease;
-}
-
-[data-theme="light"] .form-container::before {
-    background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-}
-
-.form-container:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glow);
-    border-color: var(--accent-primary);
-}
-
-.form-container:hover::before {
-    left: 100%;
-}
-
-.form-header {
-    text-align: center;
-    margin-bottom: var(--space-xl);
-}
-
-.form-header h1 {
-    font-size: 2rem;
+body.mesh-background .navbar-brand {
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: #111111 !important;
+    color: #111111 !important;
+    font-size: 1.4rem;
     font-weight: 800;
-    margin-bottom: var(--space-sm);
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
+    letter-spacing: -0.02em;
 }
 
-.form-header p {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+body.mesh-background .navbar-brand::before {
+    content: none !important;
+}
+
+body.mesh-background .nav-link {
+    color: #333333;
     font-weight: 500;
 }
 
+body.mesh-background .nav-link:hover,
+body.mesh-background .nav-link.active {
+    color: #111111;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+body.mesh-background .navbar-actions {
+    border-left: 1px solid #cccccc;
+    padding-left: var(--space-lg);
+    margin-left: var(--space-sm);
+    gap: var(--space-md);
+}
+
 /* ─────────────────────────────────────────────────────────────
-   3. INPUTS & FIELDS
+   1. AUTH LAYOUT & CANVAS PANEL
+   ───────────────────────────────────────────────────────────── */
+.auth-layout {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+    animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-canvas {
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 28px;
+    padding: 60px 40px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Layout style variants */
+.auth-canvas--split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 80px 60px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. TYPOGRAPHY & DISPLAY HEADERS
+   ───────────────────────────────────────────────────────────── */
+.auth-display-title {
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #111111;
+    margin: 0 0 16px;
+    text-align: center;
+}
+
+.auth-canvas--split .auth-display-title {
+    text-align: left;
+    font-size: clamp(3rem, 6vw, 5rem);
+}
+
+.auth-subtitle {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: #555555;
+    font-weight: 500;
+    margin: 0 0 40px;
+    text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. UNIFIED AUTHENTICATION CARD
+   ───────────────────────────────────────────────────────────── */
+.auth-card-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.auth-canvas--split .auth-card-container {
+    justify-content: flex-start;
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.auth-card-header {
+    margin-bottom: 28px;
+    text-align: left;
+}
+
+.auth-card-title {
+    font-family: Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 0 0 8px;
+}
+
+.auth-card-subtitle {
+    font-size: 0.95rem;
+    color: #666666;
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. FORM ELEMENTS & INPUTS
    ───────────────────────────────────────────────────────────── */
 .form-group {
-    margin-bottom: var(--space-lg);
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
 .form-label {
     display: block;
-    margin-bottom: var(--space-sm);
+    margin-bottom: 8px;
     font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--text-primary);
+    font-size: 0.95rem;
+    color: #333333;
 }
 
 .input-wrapper {
@@ -126,198 +225,278 @@
 
 .form-input {
     width: 100%;
-    padding: var(--space-md) var(--space-lg);
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    color: var(--text-primary);
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d4cec5;
+    border-radius: 999px; /* Pill layout matching inputs in mockup */
+    color: #111111;
+    font-family: var(--font-sans);
     font-size: 0.95rem;
-    transition: var(--transition);
-    outline: none;
     font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    outline: none;
 }
 
 .form-input:focus {
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(255, 161, 22, 0.1);
-    background: var(--bg-card);
-    transform: translateY(-1px);
-}
-
-[data-theme="light"] .form-input:focus {
-    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    border-color: #6d28d9; /* Standardized focus state (brand purple) */
+    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+    background: #ffffff;
 }
 
 .form-input::placeholder {
-    color: var(--text-muted);
+    color: #aaaaaa;
     font-weight: 400;
 }
 
+/* Password Toggle Icon Button */
 .password-toggle {
     position: absolute;
-    right: var(--space-md);
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--text-muted);
+    color: #888888;
     cursor: pointer;
-    padding: var(--space-xs);
-    border-radius: var(--radius);
-    transition: var(--transition);
-    font-size: 1.1rem;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .password-toggle:hover {
-    color: var(--text-primary);
-    background: var(--glass-bg);
-    transform: translateY(-50%) scale(1.1);
+    color: #111111;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. FORM OPTIONS & CHECKBOXES
+   5. OPTIONS & CHECKBOXES
    ───────────────────────────────────────────────────────────── */
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-lg);
-    font-size: 0.875rem;
+    margin-bottom: 24px;
+    font-size: 0.92rem;
 }
 
 .checkbox-wrapper {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 8px;
 }
 
 .checkbox-wrapper input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--accent-primary);
-    border-radius: var(--radius);
+    accent-color: #6d28d9;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .checkbox-wrapper label {
-    color: var(--text-secondary);
+    color: #555555;
     cursor: pointer;
     font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.checkbox-wrapper:hover label {
-    color: var(--text-primary);
+    font-size: 0.92rem;
 }
 
 .forgot-link {
-    color: var(--accent-secondary);
-    text-decoration: none;
+    color: #555555;
+    text-decoration: underline;
     font-weight: 500;
-    transition: var(--transition);
+    transition: color 0.2s ease;
+    font-size: 0.92rem;
 }
 
 .forgot-link:hover {
-    color: var(--accent-primary);
-    transform: translateY(-1px);
+    color: #6d28d9;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   5. BUTTON & ERROR STATE
+   6. PRIMARY & SECONDARY ACTION BUTTONS
    ───────────────────────────────────────────────────────────── */
-.submit-btn {
+.submit-btn,
+.auth-btn-primary {
     width: 100%;
-    padding: var(--space-md);
-    background: var(--accent-gradient);
+    padding: 14px 28px;
+    background: #6d28d9; /* Standardized Deep Purple */
     color: #ffffff;
     border: none;
-    border-radius: var(--radius-lg);
-    font-weight: 700;
+    border-radius: 999px; /* Pill layout matching button in mockup */
+    font-family: var(--font-sans);
+    font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    transition: var(--transition);
-    margin-bottom: var(--space-lg);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
 }
 
-.submit-btn::before {
+.submit-btn:hover,
+.auth-btn-primary:hover {
+    background: #5b21b6; /* Slightly darker purple on hover */
+    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
+    transform: translateY(-1px);
+}
+
+.submit-btn:active,
+.auth-btn-primary:active {
+    transform: translateY(1px);
+}
+
+.submit-btn:disabled {
+    background: #9333ea;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Divider Line ("OR") */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #888888;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
     content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.auth-divider:not(:empty)::before {
+    margin-right: 12px;
+}
+
+.auth-divider:not(:empty)::after {
+    margin-left: 12px;
+}
+
+/* Secondary Action Button (Outline) */
+.auth-btn-outline {
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
+    padding: 12px 24px;
+    background: transparent;
+    color: #111111;
+    border: 1.5px solid #d4cec5;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
-.submit-btn:hover::before {
-    left: 100%;
+.auth-btn-outline:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: #111111;
+    transform: translateY(-1px);
 }
 
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
+.auth-btn-outline:active {
+    transform: translateY(1px);
 }
 
-.submit-btn:active {
-    transform: translateY(0);
+/* Footer & Navigation links */
+.form-footer,
+.login-link {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.9rem;
+    color: #666666;
+    font-weight: 500;
+}
+
+.form-footer a,
+.login-link a {
+    color: #6d28d9;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.form-footer a:hover,
+.login-link a:hover {
+    color: #5b21b6;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. ERRORS & MESSAGES
+   ───────────────────────────────────────────────────────────── */
+.error-container {
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .error-message {
-    background: rgba(255, 68, 68, 0.1);
-    color: var(--error);
-    padding: var(--space-md) var(--space-lg);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 68, 68, 0.2);
-    margin-bottom: var(--space-lg);
+    background: rgba(239, 68, 68, 0.1);
+    color: #b91c1c;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
     font-size: 0.875rem;
     font-weight: 500;
-    backdrop-filter: blur(10px);
-}
-
-.form-footer {
-    text-align: center;
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--border);
-}
-
-.form-footer p {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-bottom: var(--space-sm);
-    font-weight: 500;
-}
-
-.signup-link {
-    color: var(--accent-secondary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.signup-link:hover {
-    color: var(--accent-primary);
-    transform: translateY(-1px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.3s ease-out;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   6. RESPONSIVE BREAKPOINTS
+   8. RESPONSIVE BREAKPOINTS
    ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .auth-canvas--split {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 48px 32px;
+    }
+
+    .auth-canvas--split .auth-display-title {
+        text-align: center;
+    }
+
+    .auth-canvas--split .auth-card-container {
+        justify-content: center;
+    }
+}
+
 @media (max-width: 768px) {
-    .form-container {
-        padding: var(--space-xl) var(--space-lg);
-        margin: var(--space-md);
-        border-radius: var(--radius-lg);
+    .auth-layout {
+        padding: 20px 16px 60px;
     }
 
-    .form-header h1 {
-        font-size: 1.75rem;
+    .auth-canvas {
+        padding: 40px 24px;
+        border-radius: 20px;
     }
 
-    .main-container {
-        padding: var(--space-md);
+    .auth-card {
+        padding: 24px 20px;
+        border-radius: 16px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 }

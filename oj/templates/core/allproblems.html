@@ -6,32 +6,102 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/problems.css' %}" />
+<style>
+    /* Force plain black navbar brand on this page */
+    .navbar-brand {
+        background: none !important;
+        background-image: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: #111111 !important;
+        color: #111111 !important;
+    }
+    .navbar-brand::before {
+        content: none !important;
+        display: none !important;
+    }
+</style>
 {% endblock %}
 
+{% block body_attrs %}class="mesh-background"{% endblock %}
+
 {% block content %}
-<div class="problems-container">
-    <div class="problems-header">
-        <h1>All Problems</h1>
-        <p>Master your coding skills with our comprehensive problem collection. Filter, search, and solve your way
-            to excellence.</p>
+<div class="problems-page-container">
+    <div class="problems-canvas">
+        <div class="problems-layout">
+    <!-- Left Column: Header & Table -->
+    <div class="problems-main-column">
+        <div class="problems-header">
+            <h1 class="main-title">Master the Collection</h1>
+            <p class="subtitle">Showing {{ problems|length }} problems</p>
+        </div>
+
+        <div class="problems-stats">
+            <div class="sort-controls">
+                <span class="sort-label">Sort by:</span>
+                <select class="filter-select" style="width: auto;" onchange="sortProblems(this.value)">
+                    <option value="default">Default</option>
+                    <option value="difficulty">Difficulty</option>
+                    <option value="title">Title A-Z</option>
+                    <option value="score">Score</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="problems-table">
+            <thead>
+                <tr class="table-head">
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Difficulty</th>
+                    <th>Score</th>
+                    <th>Tags</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problem in problems %}
+                {% include "components/problem_row.html" with problem=problem %}
+                {% empty %}
+                <tr class="table-row">
+                    <td colspan="6" class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No problems available.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
-    <!-- Filters Section -->
-    <div class="filters-section">
-        <div class="filters-grid">
+    <!-- Right Column: Filters & Search Sidebar -->
+    <aside class="problems-sidebar">
+        <div class="filters-card">
+            <h2>Filter & Search</h2>
+
+            <div class="filter-group search-group">
+                <input type="text" id="search" class="filter-input search-input" placeholder="Search">
+                <button class="search-icon-btn" onclick="applyFilters()" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+
             <div class="filter-group">
-                <label for="difficulty">Difficulty</label>
-                <select id="difficulty" class="filter-select">
-                    <option value="">All Difficulties</option>
+                <select id="difficulty" class="filter-select minimal-select">
+                    <option value="">Difficulty</option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
             </div>
+
             <div class="filter-group">
-                <label for="category">Category</label>
-                <select id="category" class="filter-select">
-                    <option value="">All Categories</option>
+                <select id="category" class="filter-select minimal-select">
+                    <option value="">Category</option>
                     <option value="array">Array</option>
                     <option value="string">String</option>
                     <option value="tree">Tree</option>
@@ -43,67 +113,24 @@
                     <option value="math">Mathematics</option>
                 </select>
             </div>
+
             <div class="filter-group">
-                <label for="status">Status</label>
-                <select id="status" class="filter-select">
-                    <option value="">All Status</option>
+                <select id="status" class="filter-select minimal-select">
+                    <option value="">Status</option>
                     <option value="solved">Solved ✓</option>
                     <option value="attempted">Attempted ⚠</option>
                     <option value="unsolved">Unsolved ○</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label for="search">Search</label>
-                <input type="text" id="search" class="filter-input" placeholder="Search problems by title...">
+
+            <div class="filter-actions sidebar-actions">
+                <button class="filter-btn solid full-width" onclick="applyFilters()">Apply Filters</button>
+                <button class="filter-btn outline full-width" onclick="clearFilters()">Clear All</button>
             </div>
         </div>
-
-        <div class="filter-actions">
-            <button class="filter-btn primary" onclick="applyFilters()">Apply Filters</button>
-            <button class="filter-btn secondary" onclick="clearFilters()">Clear All</button>
-        </div>
-    </div>
-
-    <!-- Problems Stats -->
-    <div class="problems-stats">
-        <div class="problems-count">
-            Showing <span id="problemCount">{{ problems|length }}</span> problems
-        </div>
-        <div class="sort-controls">
-            <span class="sort-label">Sort by:</span>
-            <select class="filter-select" style="width: auto;" onchange="sortProblems(this.value)">
-                <option value="default">Default</option>
-                <option value="difficulty">Difficulty</option>
-                <option value="title">Title A-Z</option>
-                <option value="score">Score</option>
-            </select>
-        </div>
-    </div>
-
-    <!-- Problems Table -->
-    <table class="problems-table">
-        <thead>
-            <tr class="table-head">
-                <th>ID</th>
-                <th>Title</th>
-                <th>Difficulty</th>
-                <th>Score</th>
-                <th>Tags</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for problem in problems %}
-            {% include "components/problem_row.html" with problem=problem %}
-            {% empty %}
-            <tr class="table-row">
-                <td colspan="5" class="empty-state">
-                    <div class="empty-state-icon">📝</div>
-                    <p>No problems available.</p>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </aside>
+</div>
+</div>
 </div>
 {% endblock %}
 

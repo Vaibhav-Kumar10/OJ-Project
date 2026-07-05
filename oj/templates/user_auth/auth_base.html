@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{% block auth_extra_css %}{% endblock %}
+{% endblock %}
+
+{% block body_attrs %}class="mesh-background"{% endblock %}
+
+{% block content %}
+<div class="auth-layout">
+    <!-- Main Canvas Panel -->
+    <div class="auth-canvas">
+        {% block auth_container %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

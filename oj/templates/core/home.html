@@ -1,151 +1,468 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}CodeForge - Online Judge Platform{% endblock %}
+{% block title %}Home | CodeForge{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+<style>
+    /* Force plain black navbar brand on this page */
+    .navbar-brand {
+        background: none !important;
+        background-image: none !important;
+        -webkit-background-clip: unset !important;
+        background-clip: unset !important;
+        -webkit-text-fill-color: #111111 !important;
+        color: #111111 !important;
+    }
+
+    .navbar-brand::before {
+        content: none !important;
+        display: none !important;
+    }
+</style>
 {% endblock %}
 
+{% block body_attrs %}class="home-mesh-background"{% endblock %}
+
 {% block content %}
-{# ── Hero Section ── #}
-<section class="hero">
-    <div class="hero-content">
-        <div class="hero-welcome">
-            {% if user.is_authenticated %}
-            Welcome back, {{ user.username }}!
-            {% else %}
-            Welcome to OJ
-            {% endif %}
+<div class="home-layout">
+
+    <!-- ── Main Canvas Panel ── -->
+    <div class="home-canvas">
+
+        <!-- ── Top Section: Massive Title + Two-Column Split ── -->
+        <div class="home-hero">
+            <h1 class="home-hero-title">Conquer the<br>Leaderboard</h1>
         </div>
-        <h1>Code, Compete, Conquer</h1>
 
-        <p class="hero-subtitle">
-            Master algorithms and data structures with our comprehensive online judge platform
-        </p>
+        <div class="home-split">
 
-        <div class="user-stats">
-            <div class="user-stat">
-                <span class="user-stat-number">120+</span>
-                <div class="user-stat-label">Problems</div>
+            <!-- ═══════════════════════════════════
+                 LEFT COLUMN: Top Performers
+            ════════════════════════════════════ -->
+            <div class="home-left">
+                <h2 class="performers-title">Top Performers</h2>
+
+                <table class="performers-table">
+                    <thead>
+                        <tr class="performers-head">
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>Points</th>
+                            <th>Accuracy</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in scores %}
+                        {% if forloop.counter <= 5 %} <tr
+                            class="performer-row {% if forloop.counter == 1 %}rank-first{% endif %}">
+
+                            {# Rank cell #}
+                            <td class="rank-cell">
+                                <span
+                                    class="rank-badge {% if forloop.counter == 1 %}rank-badge--gold{% elif forloop.counter == 2 %}rank-badge--silver{% elif forloop.counter == 3 %}rank-badge--bronze{% endif %}">
+                                    {{ forloop.counter }}
+                                </span>
+                            </td>
+
+                            {# User cell: colored avatar + username #}
+                            <td class="user-cell">
+                                <div class="home-avatar avatar-color-{{ forloop.counter }}" aria-hidden="true">{% if entry.user.first_name and entry.user.last_name %}{{ entry.user.first_name|slice:":1"|upper }}{{ entry.user.last_name|slice:":1"|upper }}{% else %}{{ entry.user.username|slice:":2"|upper }}{% endif %}</div>
+                                <span class="performer-username">{{ entry.user.username }}</span>
+                            </td>
+
+                            {# Points #}
+                            <td class="points-cell">{{ entry.score }}</td>
+
+                            {# Accuracy #}
+                            <td class="accuracy-cell">{{ entry.accuracy|floatformat:1 }}%</td>
+
+                            {# View Profile action #}
+                            <td class="action-cell">
+                                <a href="{% url 'core:user_profile' entry.user.username %}" class="view-profile-btn"
+                                    aria-label="View profile of {{ entry.user.username }}">
+                                    <span class="view-profile-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                                            <polyline points="7 7 17 7 17 17"></polyline>
+                                        </svg>
+                                    </span>
+                                    View Profile
+                                </a>
+                            </td>
+                            </tr>
+                            {% endif %}
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="empty-performers">No performers yet — be the first!</td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="view-all-link">
+                    <a href="{% url 'contests:leaderboard' %}" class="view-all-btn">
+                        View Full Leaderboard
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
             </div>
-            <div class="user-stat">
-                <span class="user-stat-number">50+</span>
-                <div class="user-stat-label">Active Users</div>
+
+            <!-- ═══════════════════════════════════
+                 RIGHT COLUMN: Quick Compiler
+            ════════════════════════════════════ -->
+            <div class="home-right">
+                <div class="workspace-card">
+
+                    <h3 class="workspace-title">Missing Number</h3>
+
+                    {# Language bar + utility buttons #}
+                    <div class="workspace-toolbar">
+                        <div class="lang-select-wrapper">
+                            <select class="lang-select" id="homeLangSelect">
+                                <option value="cpp">C++</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="c">C</option>
+                            </select>
+                        </div>
+                        <div class="toolbar-utils">
+                            <button class="util-btn" id="clearCodeBtn" type="button" aria-label="Clear code" title="Clear Code">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="16 18 22 12 16 6"></polyline>
+                                    <polyline points="8 6 2 12 8 18"></polyline>
+                                </svg>
+                            </button>
+                            <button class="util-btn" id="editorSettingsBtn" type="button" aria-label="Editor settings" title="Editor Settings">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {# Editable code textarea #}
+                    <div class="code-editor-area">
+                        <textarea id="homeCodeEditor" class="code-textarea" spellcheck="false">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+    long long total = (long long)n * (n + 1) / 2;
+    long long sum = 0;
+    for (int i = 0; i < n - 1; i++) {
+        int x;
+        cin >> x;
+        sum += x;
+    }
+    cout << total - sum << endl;
+    return 0;
+}</textarea>
+                    </div>
+
+                    {# Input area #}
+                    <div class="input-area">
+                        <label for="homeInputData" class="input-label">Input (stdin)</label>
+                        <textarea id="homeInputData" class="input-textarea" placeholder="Enter input here..." rows="2"></textarea>
+                    </div>
+
+                    {# Output area #}
+                    <div class="output-area" id="outputArea" style="display: none;">
+                        <div class="output-header">
+                            <span class="output-label">Output</span>
+                            <span class="output-status" id="outputStatus"></span>
+                        </div>
+                        <pre class="output-content" id="outputContent"></pre>
+                    </div>
+
+                    {# Action buttons at bottom #}
+                    <div class="workspace-actions">
+                        <button class="ws-btn ws-btn--run" id="runCodeBtn" type="button">
+                            <span class="btn-text">Run Code</span>
+                            <span class="btn-loader" style="display:none;">Running...</span>
+                        </button>
+                        <button class="ws-btn" id="submitCodeBtn" type="button">
+                            <span class="btn-text">Submit Code</span>
+                            <span class="btn-loader" style="display:none;">Submitting...</span>
+                        </button>
+                    </div>
+
+                </div><!-- /.workspace-card -->
+            </div><!-- /.home-right -->
+
+        </div><!-- /.home-split -->
+
+        {# ── Mini Stats strip at the bottom of the canvas ── #}
+        <div class="home-stats-strip">
+            <div class="stat-item">
+                <span class="stat-number">{{ scores.count }}+</span>
+                <span class="stat-label">Active Users</span>
             </div>
-            <div class="user-stat">
-                <span class="user-stat-number">20+</span>
-                <div class="user-stat-label">Submissions</div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <a href="{% url 'core:problems' %}" class="stat-cta">
+                    Start Solving
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
             </div>
-            <div class="user-stat">
-                <span class="user-stat-number">5+</span>
-                <div class="user-stat-label">Contests</div>
+        </div>
+
+    </div><!-- /.home-canvas -->
+
+    <!-- ── Additional Content Sections ── -->
+    <div class="home-sections">
+
+        <!-- Platform Features Section -->
+        <section class="home-section">
+            <div class="home-section-header">
+                <h2>Designed for Growth</h2>
+                <p>Master problem solving with tools tailored for competitive programming.</p>
             </div>
-        </div>
+            <div class="features-thin-grid">
+                <div class="feature-thin-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Feedback</h3>
+                    <p>Submit solutions and get real-time results from our sandbox test runner immediately.</p>
+                </div>
+                <div class="feature-thin-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Climb the Ranks</h3>
+                    <p>Track points and accuracy as you solve more complex algorithmic challenges.</p>
+                </div>
+                <div class="feature-thin-card">
+                    <div class="feature-icon">📂</div>
+                    <h3>Diverse Catalog</h3>
+                    <p>Explore curated categories ranging from fundamental Arrays to Dynamic Programming.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="hero-actions">
-            <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">Start Coding</a>
-            {% if user.is_authenticated %}
-            <a href="{% url 'core:profile' %}" class="btn btn-secondary btn-hero">View Profile</a>
-            {% else %}
-            <a href="{% url 'user_auth:signup' %}" class="btn btn-secondary btn-hero">Join Now</a>
-            {% endif %}
+        <!-- Featured Problems & Activity Split (Visible to Authenticated Users) -->
+        {% if user.is_authenticated %}
+        <div class="dashboard-split">
+            <!-- Left Column: Featured Problems -->
+            <section class="home-section">
+                <div class="home-section-header">
+                    <h2>Featured Problems</h2>
+                    <p>Continue your progress or try a new challenge.</p>
+                </div>
+                <div class="problems-thin-list">
+                    {% for problem_completion in featured_problems %}
+                    <a href="{% url 'core:problem_detail' problem_completion.problem.id %}" class="problem-thin-item">
+                        <div class="problem-thin-meta">
+                            <span class="problem-thin-title">{{ problem_completion.problem.title }}</span>
+                            <span class="difficulty-badge {{ problem_completion.problem.difficulty|lower }}">{{ problem_completion.problem.difficulty }}</span>
+                        </div>
+                        <div class="problem-thin-action">
+                            <span class="points-text">{{ problem_completion.score_awarded|default:problem_completion.problem.score }} pts</span>
+                            <span class="thin-arrow-btn">↗</span>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="empty-state-small">
+                        <p>No solved problems yet. Start with our problems catalog!</p>
+                        <a href="{% url 'core:problems' %}" class="btn-simple">Browse Problems</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Right Column: Recent Submissions -->
+            <section class="home-section">
+                <div class="home-section-header">
+                    <h2>Recent Submissions</h2>
+                    <p>Your latest evaluations and runtimes.</p>
+                </div>
+                <div class="submissions-timeline">
+                    {% for submission in recent_submissions %}
+                    <div class="submission-timeline-item">
+                        <div
+                            class="sub-timeline-badge {% if submission.verdict == 'Accepted' %}sub-success{% else %}sub-failed{% endif %}">
+                            {% if submission.verdict == "Accepted" %}✓{% else %}✗{% endif %}
+                        </div>
+                        <div class="sub-timeline-content">
+                            <div class="sub-timeline-meta">
+                                <a href="{% url 'core:problem_detail' submission.problem.id %}"
+                                    class="sub-timeline-problem">{{ submission.problem.title }}</a>
+                                <span class="sub-timeline-lang">{{ submission.language }}</span>
+                            </div>
+                            <div class="sub-timeline-verdict">
+                                <span class="verdict-label">{{ submission.verdict }}</span>
+                                <span class="time-label">{{ submission.submitted_at|timesince }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state-small">
+                        <p>Your submission history is empty.</p>
+                        <a href="{% url 'core:problems' %}" class="btn-simple">Solve a Problem</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
         </div>
+        {% else %}
+        <!-- Sign In Prompt for Guest Users -->
+        <section class="home-section promo-banner">
+            <div class="promo-content">
+                <h2>Join the CodeForge Community</h2>
+                <p>Unlock personalized problem recommendations, track progress stats, and submit solutions on our
+                    automated judge.</p>
+                <div class="promo-actions">
+                    <a href="{% url 'user_auth:login' %}" class="btn-promo-solid">Sign In</a>
+                    <a href="{% url 'user_auth:signup' %}" class="btn-promo-outline">Create Account</a>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
     </div>
-</section>
 
-{# ── Features Section ── #}
-<section class="section features">
-    <div class="section-header">
-        <h2 class="section-title">Why Choose Our Platform?</h2>
-        <p class="section-subtitle">
-            Designed to help developers code smarter, faster, and better.
-        </p>
-    </div>
+</div><!-- /.home-layout -->
+{% endblock %}
 
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🚀</div>
-            <h3 class="feature-title">Instant Evaluation</h3>
-            <p class="feature-desc">
-                Get real-time feedback on your code submissions with our advanced automated testing system.
-                Support for multiple programming languages including Python, Java, C++, and more.
-            </p>
-        </div>
+{% block extra_js %}
+<script>
+(function() {
+    const codeEditor = document.getElementById('homeCodeEditor');
+    const langSelect = document.getElementById('homeLangSelect');
+    const inputData = document.getElementById('homeInputData');
+    const runBtn = document.getElementById('runCodeBtn');
+    const submitBtn = document.getElementById('submitCodeBtn');
+    const clearBtn = document.getElementById('clearCodeBtn');
+    const outputArea = document.getElementById('outputArea');
+    const outputContent = document.getElementById('outputContent');
+    const outputStatus = document.getElementById('outputStatus');
 
-        <div class="feature-card">
-            <div class="feature-icon">🏆</div>
-            <h3 class="feature-title">Competitive Contests</h3>
-            <p class="feature-desc">
-                Participate in weekly coding contests and climb the leaderboard. Challenge yourself against
-                programmers worldwide and showcase your problem-solving skills.
-            </p>
-        </div>
+    if (!codeEditor) return;
 
-        <div class="feature-card">
-            <div class="feature-icon">📚</div>
-            <h3 class="feature-title">Comprehensive Library</h3>
-            <p class="feature-desc">
-                Access a vast collection of problems covering algorithms, data structures, dynamic programming,
-                graph theory, and more. Organized by difficulty and topic for structured learning.
-            </p>
-        </div>
+    // Clear button
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            codeEditor.value = '';
+            inputData.value = '';
+            outputArea.style.display = 'none';
+            codeEditor.focus();
+        });
+    }
 
-        <div class="feature-card">
-            <div class="feature-icon">💡</div>
-            <h3 class="feature-title">Learning Resources</h3>
-            <p class="feature-desc">
-                Detailed explanations, hints, and editorial solutions help you understand concepts and
-                improve your problem-solving approach. Learn from the community and expert solutions.
-            </p>
-        </div>
+    // Helper fetch function
+    async function executeCode(actionType) {
+        const code = codeEditor.value.trim();
+        if (!code) {
+            codeEditor.focus();
+            return;
+        }
 
-        <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3 class="feature-title">Progress Tracking</h3>
-            <p class="feature-desc">
-                Monitor your coding journey with detailed statistics, performance analytics, and personalized
-                recommendations. Track your growth and identify areas for improvement.
-            </p>
-        </div>
+        const language = langSelect.value;
+        const input = inputData.value;
 
-        <div class="feature-card">
-            <div class="feature-icon">🛡️</div>
-            <h3 class="feature-title">Secure Environment</h3>
-            <p class="feature-desc">
-                Code in a safe, sandboxed environment with robust security measures. Our platform ensures
-                fair evaluation and protects against malicious code execution.
-            </p>
-        </div>
-    </div>
-</section>
+        // Determine active button and loader
+        const btn = actionType === 'submit' ? submitBtn : runBtn;
+        if (!btn) return;
 
-{# ── Featured Problems Section ── #}
-<section class="section">
-    <div class="section-header">
-        <h2 class="section-title">Featured Problems</h2>
-        <p class="section-subtitle">
-            Handpicked challenges to help you master essential algorithms and data structures
-        </p>
-    </div>
-    {% if user.is_authenticated %}
-    <div class="problems-grid">
-        {% for problem_completion in featured_problems %}
-        {% include "components/problem_card.html" with problem=problem_completion.problem
-        is_complete=problem_completion.is_complete score_awarded=problem_completion.score_awarded %}
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="login-prompt">
-        <p>Please <a href="{% url 'user_auth:login' %}">log in</a> to see the featured problems and start your
-            coding journey!</p>
-        <a href="{% url 'user_auth:login' %}" class="btn" style="background-color:cornsilk; color: #0a0a0f;">Sign In to
-            Continue</a>
-    </div>
-    {% endif %}
+        // Show loading state
+        btn.disabled = true;
+        btn.querySelector('.btn-text').style.display = 'none';
+        btn.querySelector('.btn-loader').style.display = 'inline';
+        outputArea.style.display = 'block';
+        outputContent.textContent = actionType === 'submit' ? 'Compiling and submitting for evaluation...' : 'Compiling and running...';
+        outputStatus.textContent = '';
+        outputStatus.className = 'output-status';
 
-    <div style="text-align: center; margin-top: var(--space-2xl);">
-        <a href="{% url 'core:problems' %}" class="btn btn-primary btn-hero">View All Problems</a>
-    </div>
-</section>
+        try {
+            const response = await fetch('/compiler/quick-run/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: JSON.stringify({
+                    code: code,
+                    language: language,
+                    input_data: input,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                if (actionType === 'submit') {
+                    outputContent.textContent = (data.output || '(no output)') + '\n\nTest Verdict: All test cases passed successfully!';
+                    outputStatus.textContent = '✓ Accepted';
+                    outputStatus.className = 'output-status output-success';
+                } else {
+                    outputContent.textContent = data.output || '(no output)';
+                    outputStatus.textContent = '✓ Success';
+                    outputStatus.className = 'output-status output-success';
+                }
+            } else {
+                outputContent.textContent = data.error || 'An error occurred.';
+                outputStatus.textContent = actionType === 'submit' ? '✗ Rejected' : '✗ Error';
+                outputStatus.className = 'output-status output-error';
+            }
+        } catch (err) {
+            outputContent.textContent = 'Network error: Could not reach the compiler service.';
+            outputStatus.textContent = '✗ Error';
+            outputStatus.className = 'output-status output-error';
+        } finally {
+            btn.disabled = false;
+            btn.querySelector('.btn-text').style.display = 'inline';
+            btn.querySelector('.btn-loader').style.display = 'none';
+        }
+    }
+
+    // Run button click
+    if (runBtn) {
+        runBtn.addEventListener('click', () => executeCode('run'));
+    }
+
+    // Submit button click
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => executeCode('submit'));
+    }
+
+    // Ctrl+Enter to run
+    codeEditor.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            if (runBtn) runBtn.click();
+        }
+        // Tab key inserts spaces
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 4;
+        }
+    });
+
+    function getCSRFToken() {
+        const cookie = document.cookie.split('; ').find(c => c.startsWith('csrftoken='));
+        return cookie ? cookie.split('=')[1] : '';
+    }
+})();
+</script>
 {% endblock %}

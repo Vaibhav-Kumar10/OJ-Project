@@ -76,9 +76,6 @@ services:
 
     read_only: false
 
-    tmpfs:
-      - /tmp
-
     environment:
       PYTHONUNBUFFERED: 1
 
