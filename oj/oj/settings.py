@@ -133,11 +133,7 @@ DATABASES = {
 # COMPILER_SERVICE_URL = os.environ.get("COMPILER_SERVICE_URL", "http://localhost:8001")
 COMPILER_SERVICE_URL = os.getenv(
     "COMPILER_SERVICE_URL",
-    (
-        "http://compiler:8001"
-        if os.path.exists("/.dockerenv")
-        else "http://127.0.0.1:8001"
-    ),
+    "http://65.2.83.24",
 )
 
 
