@@ -6,6 +6,7 @@ __pycache__/
 # Env
 .venv/
 oj/.env
+.env
 
 # UV
 uv.lock

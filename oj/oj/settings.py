@@ -28,21 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "mevbhrjkthfz)umnkh^csup#)3+_a@!j=nab__#k1j4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://oj-project-w5uv.onrender.com",
-    "https://codeforge-hnfg.onrender.com",
-    "https://my-ojproject.onrender.com",
 ]
 
-ALLOWED_HOSTS = [
-    "13.233.196.157",
-    "oj-project-w5uv.onrender.com",
-    "codeforge-hnfg.onrender.com",
-    "my-ojproject.onrender.com",
-    "*",
-]
+ALLOWED_HOSTS = ["13.233.196.157", "oj-project-w5uv.onrender.com"]
 
 AUTH_USER_MODEL = "user_auth.User"
 LOGIN_URL = "/auth/login/"
@@ -95,14 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "oj.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# postgresql://oj_database_user:oFB5FBNpiwCiUvGA1hRtXQ2xbAPuxb7o@dpg-d23r82muk2gs738rmg1g-a.oregon-postgres.render.com/oj_database
-
-# DATABASES = {}
-
-# DATABASES["default"] = dj_database_url.parse(os.getenv("DATABSE_URL"))
 
 # DATABASES = {
 #     "default": {
@@ -115,11 +99,22 @@ WSGI_APPLICATION = "oj.wsgi.application"
 #     }
 # }
 
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default=os.environ.get("DATABASE_URL"), conn_max_age=600, ssl_require=True
+#     )
+# }
+
+_ssl = os.environ.get("DB_SSL", "False") == "True"
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"), conn_max_age=600, ssl_require=True
+        default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
+        conn_max_age=600,
+        ssl_require=_ssl,
     )
 }
+
 
 # DATABASES = {
 #     "default": {
@@ -131,6 +126,20 @@ DATABASES = {
 #         "PORT": "5432",
 #     }
 # }
+
+# ------------------------------------------------------------------
+# COMPILER MICROSERVICE URL
+# ------------------------------------------------------------------
+# COMPILER_SERVICE_URL = os.environ.get("COMPILER_SERVICE_URL", "http://localhost:8001")
+COMPILER_SERVICE_URL = os.getenv(
+    "COMPILER_SERVICE_URL",
+    (
+        "http://compiler:8001"
+        if os.path.exists("/.dockerenv")
+        else "http://127.0.0.1:8001"
+    ),
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -156,7 +165,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "Asia/Kolkata"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -168,8 +177,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR/"staticfiles"
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
