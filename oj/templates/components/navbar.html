@@ -2,10 +2,7 @@
 {# components/navbar.html #}
 {# #}
 {# Included once from base.html via {% include "components/navbar.html" %}. #}
-{# Reads: `user` (Django auth context processor — always available globally). #}
-{# Reads: `active_nav` — optional string set by child pages to highlight the #}
-{# correct nav item. Values: "home" | "problems" | "contests" | #}
-{# "leaderboard". If not set, no item is highlighted. #}
+{# Reads: `request.resolver_match.url_name` for active route highlighting. #}
 {# ─────────────────────────────────────────────────────────────────────────── #}
 
 <nav class="navbar" role="navigation" aria-label="Main navigation">
@@ -20,26 +17,22 @@
         {# ── Primary navigation links ── #}
         <ul class="navbar-nav" id="navbarNav" role="list">
             <li role="listitem">
-                <a href="{% url 'core:home' %}" class="nav-link {% if active_nav == 'home' %}active{% endif %}"
-                    id="nav-home">
+                <a href="{% url 'core:home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" id="nav-home">
                     Home
                 </a>
             </li>
             <li role="listitem">
-                <a href="{% url 'core:problems' %}" class="nav-link {% if active_nav == 'problems' %}active{% endif %}"
-                    id="nav-problems">
+                <a href="{% url 'core:problems' %}" class="nav-link {% if request.resolver_match.url_name == 'problems' %}active{% endif %}" id="nav-problems">
                     Problems
                 </a>
             </li>
             <li role="listitem">
-                <a href="{% url 'contests:contest' %}" class="nav-link {% if active_nav == 'contests' %}active{% endif %}"
-                    id="nav-contests">
+                <a href="{% url 'contests:contest' %}" class="nav-link {% if request.resolver_match.url_name == 'contest' %}active{% endif %}" id="nav-contests">
                     Contest
                 </a>
             </li>
             <li role="listitem">
-                <a href="{% url 'contests:leaderboard' %}"
-                    class="nav-link {% if active_nav == 'leaderboard' %}active{% endif %}" id="nav-leaderboard">
+                <a href="{% url 'contests:leaderboard' %}" class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}" id="nav-leaderboard">
                     Leaderboard
                 </a>
             </li>
@@ -47,7 +40,6 @@
 
         {# ── Right-side actions ── #}
         <div class="navbar-actions">
-
             {% if user.is_authenticated %}
             {# Avatar button links to the current user's profile #}
             <div class="profile-dropdown">
@@ -60,9 +52,6 @@
                         {{ user.username|slice:":2"|upper }}
                         {% endif %}
                     </div>
-                    <span class="profile-name">
-                        {{ user.first_name|default:user.username }}
-                    </span>
                 </a>
             </div>
             <a href="{% url 'user_auth:logout' %}" class="nav-logout-btn" id="logoutBtn">
@@ -70,30 +59,13 @@
             </a>
             {% else %}
             <div class="auth-toggle-capsule">
-                <a href="{% url 'user_auth:login' %}" class="auth-toggle-btn" id="signInBtn">
+                <a href="{% url 'user_auth:login' %}" class="auth-toggle-btn {% if request.resolver_match.url_name != 'signup' %}active{% endif %}" id="signInBtn">
                     Log In
                 </a>
-                <a href="{% url 'user_auth:signup' %}" class="auth-toggle-btn" id="getStartedBtn">
+                <a href="{% url 'user_auth:signup' %}" class="auth-toggle-btn {% if request.resolver_match.url_name == 'signup' %}active{% endif %}" id="getStartedBtn">
                     Sign Up
                 </a>
             </div>
-            <script>
-                (function() {
-                    const path = window.location.pathname;
-                    const signInBtn = document.getElementById('signInBtn');
-                    const getStartedBtn = document.getElementById('getStartedBtn');
-                    if (signInBtn && getStartedBtn) {
-                        signInBtn.classList.remove('active');
-                        getStartedBtn.classList.remove('active');
-                        if (path.includes('/signup')) {
-                            getStartedBtn.classList.add('active');
-                        } else {
-                            // Default to Log In for /, /login, or any other guest page
-                            signInBtn.classList.add('active');
-                        }
-                    }
-                })();
-            </script>
             {% endif %}
         </div>
     </div>

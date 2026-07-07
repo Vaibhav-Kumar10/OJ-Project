@@ -174,7 +174,8 @@
                         {{ submission.submitted_at|timesince }} ago • {{ submission.language|upper }} • {{
                         submission.verdict }}
                         {% if submission.verdict == 'Accepted' %}
-                        <span style="color: var(--success);">+{{ submission.problem.score }} pts</span>
+                        <span style="color: var(--success); margin-left: 6px;">+{{ submission.problem.score }}
+                            pts</span>
                         {% endif %}
                     </div>
                 </div>
@@ -218,6 +219,11 @@
         const grid = document.getElementById('calendarGrid');
         const submissionData = JSON.parse(document.getElementById('calendar-data').textContent);
 
+        // Create Tooltip Element
+        const tooltip = document.createElement('div');
+        tooltip.className = 'calendar-tooltip';
+        document.body.appendChild(tooltip);
+
         const today = new Date();
         const endDate = new Date(today);
         const startDate = new Date(today);
@@ -235,12 +241,16 @@
         for (let week = 0; week < totalWeeks; week++) {
             const weekColumn = document.createElement('div');
             weekColumn.className = 'calendar-week';
+            // Staggered animation delay
+            weekColumn.style.animationDelay = `${week * 0.015}s`;
 
             for (let day = 0; day < 7; day++) {
                 const dayElement = document.createElement('div');
                 dayElement.className = 'calendar-day';
 
                 const isInRange = currentDate >= startDate && currentDate <= endDate;
+                let tooltipText = '';
+
                 if (isInRange) {
                     const dateStr = currentDate.toISOString().split('T')[0];
                     const submissions = submissionData[dateStr] || 0;
@@ -252,11 +262,30 @@
                     if (submissions >= 7) level = 4;
 
                     dayElement.classList.add(`level-${level}`);
-                    dayElement.title = `${currentDate.toDateString()}: ${submissions} submission${submissions !== 1 ? 's' : ''}`;
+                    tooltipText = `${submissions} submission${submissions !== 1 ? 's' : ''} on ${currentDate.toDateString()}`;
                 } else {
                     dayElement.style.opacity = '0.3';
-                    dayElement.title = currentDate.toDateString();
+                    tooltipText = currentDate.toDateString();
                 }
+
+                // Interactive Tooltip Events
+                dayElement.addEventListener('mouseenter', (e) => {
+                    tooltip.textContent = tooltipText;
+                    tooltip.classList.add('visible');
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left + rect.width / 2}px`;
+                    tooltip.style.top = `${rect.top}px`;
+                });
+
+                dayElement.addEventListener('mousemove', (e) => {
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = `${rect.left + rect.width / 2}px`;
+                    tooltip.style.top = `${rect.top}px`;
+                });
+
+                dayElement.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('visible');
+                });
 
                 weekColumn.appendChild(dayElement);
                 currentDate.setDate(currentDate.getDate() + 1);

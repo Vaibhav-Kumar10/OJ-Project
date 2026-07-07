@@ -8,83 +8,7 @@
    0. MESH BACKGROUND & PALETTE OVERRIDES
    Matches the Problems/Home page mesh palette.
    ───────────────────────────────────────────────────────────── */
-body.mesh-background {
-    background:
-        radial-gradient(ellipse at 0% 0%,   #b8d9f4 0%, transparent 50%),
-        radial-gradient(ellipse at 100% 80%, #f5bf5a 0%, transparent 50%),
-        radial-gradient(ellipse at 60% 100%, #f0c97e 0%, transparent 40%),
-        #f0ebe1;
-    background-attachment: fixed;
-    min-height: 100vh;
-    color: #111111;
-
-    /* Force Light Theme Colors for Auth Frame */
-    --bg-primary:    #f5efe6;
-    --bg-secondary:  #ede8df;
-    --bg-elevated:   #ffffff;
-    --bg-card:       rgba(255, 255, 255, 0.72);
-
-    --text-primary:   #111111;
-    --text-secondary: #444444;
-    --text-muted:     #888888;
-
-    --border:       #d6d0c7;
-    --border-hover: #bcb6ae;
-
-    --glass-bg:     rgba(255, 255, 255, 0.45);
-    --glass-border: rgba(0, 0, 0, 0.08);
-
-    --accent-primary:   #111111;
-    --accent-secondary: #666666;
-    --accent-gradient:  linear-gradient(135deg, #111111 0%, #444444 100%);
-
-    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.06);
-    --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.09);
-    --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.12);
-}
-
 /* Force plain black navbar brand on mesh background pages */
-body.mesh-background .navbar {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-}
-
-body.mesh-background .navbar-brand {
-    background: none !important;
-    -webkit-background-clip: unset !important;
-    background-clip: unset !important;
-    -webkit-text-fill-color: #111111 !important;
-    color: #111111 !important;
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-}
-
-body.mesh-background .navbar-brand::before {
-    content: none !important;
-}
-
-body.mesh-background .nav-link {
-    color: #333333;
-    font-weight: 500;
-}
-
-body.mesh-background .nav-link:hover,
-body.mesh-background .nav-link.active {
-    color: #111111;
-    background: rgba(0, 0, 0, 0.06);
-}
-
-body.mesh-background .navbar-actions {
-    border-left: 1px solid #cccccc;
-    padding-left: var(--space-lg);
-    margin-left: var(--space-sm);
-    gap: var(--space-md);
-}
-
 /* ─────────────────────────────────────────────────────────────
    1. AUTH LAYOUT & CANVAS PANEL
    ───────────────────────────────────────────────────────────── */
@@ -238,8 +162,8 @@ body.mesh-background .navbar-actions {
 }
 
 .form-input:focus {
-    border-color: #6d28d9; /* Standardized focus state (brand purple) */
-    box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+    border-color: #111111; /* Standardized focus state (brand purple) */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
     background: #ffffff;
 }
 
@@ -291,7 +215,7 @@ body.mesh-background .navbar-actions {
 .checkbox-wrapper input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: #6d28d9;
+    accent-color: #111111;
     cursor: pointer;
     border-radius: 4px;
 }
@@ -312,7 +236,7 @@ body.mesh-background .navbar-actions {
 }
 
 .forgot-link:hover {
-    color: #6d28d9;
+    color: #111111;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -322,7 +246,7 @@ body.mesh-background .navbar-actions {
 .auth-btn-primary {
     width: 100%;
     padding: 14px 28px;
-    background: #6d28d9; /* Standardized Deep Purple */
+    background: #111111; /* Standardized Deep Purple */
     color: #ffffff;
     border: none;
     border-radius: 999px; /* Pill layout matching button in mockup */
@@ -330,7 +254,7 @@ body.mesh-background .navbar-actions {
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     display: flex;
     align-items: center;
@@ -341,8 +265,8 @@ body.mesh-background .navbar-actions {
 
 .submit-btn:hover,
 .auth-btn-primary:hover {
-    background: #5b21b6; /* Slightly darker purple on hover */
-    box-shadow: 0 6px 16px rgba(109, 40, 217, 0.35);
+    background: #333333; /* Slightly darker purple on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     transform: translateY(-1px);
 }
 
@@ -352,7 +276,7 @@ body.mesh-background .navbar-actions {
 }
 
 .submit-btn:disabled {
-    background: #9333ea;
+    background: #666666;
     opacity: 0.6;
     cursor: not-allowed;
     box-shadow: none;
@@ -428,7 +352,7 @@ body.mesh-background .navbar-actions {
 
 .form-footer a,
 .login-link a {
-    color: #6d28d9;
+    color: #111111;
     text-decoration: underline;
     font-weight: 600;
     transition: color 0.2s ease;
@@ -436,7 +360,7 @@ body.mesh-background .navbar-actions {
 
 .form-footer a:hover,
 .login-link a:hover {
-    color: #5b21b6;
+    color: #333333;
 }
 
 /* ─────────────────────────────────────────────────────────────

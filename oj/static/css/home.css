@@ -25,38 +25,7 @@ body.home-mesh-background {
     --bg-card:        rgba(255, 255, 255, 0.80);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   1. NAVBAR — transparent, plain dark text (mirrors problems page)
-   ───────────────────────────────────────────────────────────── */
-body.home-mesh-background .navbar {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-}
 
-body.home-mesh-background .nav-link {
-    color: #333333;
-    font-weight: 500;
-}
-
-body.home-mesh-background .nav-link:hover,
-body.home-mesh-background .nav-link.active {
-    color: #111111;
-    background: rgba(0, 0, 0, 0.06);
-}
-
-body.home-mesh-background .navbar-actions {
-    border-left: 1px solid #cccccc;
-    padding-left: var(--space-lg);
-    margin-left: var(--space-sm);
-    gap: var(--space-md);
-}
-
-body.home-mesh-background .navbar-right {
-    gap: var(--space-xl);
-}
 
 /* ─────────────────────────────────────────────────────────────
    2. PAGE WRAPPER
@@ -233,11 +202,11 @@ body.home-mesh-background .navbar-right {
 }
 
 /* Unique color per rank via CSS classes */
-.avatar-color-1 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-.avatar-color-2 { background: linear-gradient(135deg, #8b5cf6, #c026d3); }
-.avatar-color-3 { background: linear-gradient(135deg, #10b981, #059669); }
-.avatar-color-4 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.avatar-color-5 { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.avatar-color-1 { background: #111111; }
+.avatar-color-2 { background: #111111; }
+.avatar-color-3 { background: #111111; }
+.avatar-color-4 { background: #111111; }
+.avatar-color-5 { background: #111111; }
 
 .performer-username {
     font-weight: 600;

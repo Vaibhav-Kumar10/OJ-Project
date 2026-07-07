@@ -34,56 +34,7 @@ body.leaderboard-mesh-bg {
     --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   1. NAVBAR — transparent, plain dark text (mirrors home/problems)
-   ───────────────────────────────────────────────────────────── */
-body.leaderboard-mesh-bg .navbar {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-}
 
-body.leaderboard-mesh-bg .navbar-brand {
-    background: none !important;
-    background-image: none !important;
-    -webkit-background-clip: unset !important;
-    background-clip: unset !important;
-    -webkit-text-fill-color: #111111 !important;
-    color: #111111 !important;
-    font-size: 1.4rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-}
-
-body.leaderboard-mesh-bg .navbar-brand::before {
-    content: none !important;
-    display: none !important;
-}
-
-body.leaderboard-mesh-bg .nav-link {
-    color: #333333;
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-body.leaderboard-mesh-bg .nav-link:hover,
-body.leaderboard-mesh-bg .nav-link.active {
-    color: #111111;
-    background: rgba(0, 0, 0, 0.06);
-}
-
-body.leaderboard-mesh-bg .navbar-actions {
-    border-left: 1px solid #cccccc;
-    padding-left: var(--space-lg);
-    margin-left: var(--space-sm);
-    gap: var(--space-md);
-}
-
-body.leaderboard-mesh-bg .navbar-right {
-    gap: var(--space-xl);
-}
 
 /* ─────────────────────────────────────────────────────────────
    2. PAGE WRAPPER — mirrors problems-page-container
@@ -350,16 +301,16 @@ body.leaderboard-mesh-bg .navbar-right {
 }
 
 /* Gradient palette — 10 distinct gradients, JS cycles lb-avatar-c1..c10 class */
-.lb-avatar-c1,  .lb-avatar-c11, .lb-avatar-c21, .lb-avatar-c31, .lb-avatar-c41 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-.lb-avatar-c2,  .lb-avatar-c12, .lb-avatar-c22, .lb-avatar-c32, .lb-avatar-c42 { background: linear-gradient(135deg, #8b5cf6, #c026d3); }
-.lb-avatar-c3,  .lb-avatar-c13, .lb-avatar-c23, .lb-avatar-c33, .lb-avatar-c43 { background: linear-gradient(135deg, #10b981, #059669); }
-.lb-avatar-c4,  .lb-avatar-c14, .lb-avatar-c24, .lb-avatar-c34, .lb-avatar-c44 { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.lb-avatar-c5,  .lb-avatar-c15, .lb-avatar-c25, .lb-avatar-c35, .lb-avatar-c45 { background: linear-gradient(135deg, #ef4444, #dc2626); }
-.lb-avatar-c6,  .lb-avatar-c16, .lb-avatar-c26, .lb-avatar-c36, .lb-avatar-c46 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.lb-avatar-c7,  .lb-avatar-c17, .lb-avatar-c27, .lb-avatar-c37, .lb-avatar-c47 { background: linear-gradient(135deg, #ec4899, #db2777); }
-.lb-avatar-c8,  .lb-avatar-c18, .lb-avatar-c28, .lb-avatar-c38, .lb-avatar-c48 { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-.lb-avatar-c9,  .lb-avatar-c19, .lb-avatar-c29, .lb-avatar-c39, .lb-avatar-c49 { background: linear-gradient(135deg, #f97316, #ea580c); }
-.lb-avatar-c10, .lb-avatar-c20, .lb-avatar-c30, .lb-avatar-c40, .lb-avatar-c50 { background: linear-gradient(135deg, #a855f7, #9333ea); }
+.lb-avatar-c1,  .lb-avatar-c11, .lb-avatar-c21, .lb-avatar-c31, .lb-avatar-c41 { background: #111111; }
+.lb-avatar-c2,  .lb-avatar-c12, .lb-avatar-c22, .lb-avatar-c32, .lb-avatar-c42 { background: #111111; }
+.lb-avatar-c3,  .lb-avatar-c13, .lb-avatar-c23, .lb-avatar-c33, .lb-avatar-c43 { background: #111111; }
+.lb-avatar-c4,  .lb-avatar-c14, .lb-avatar-c24, .lb-avatar-c34, .lb-avatar-c44 { background: #111111; }
+.lb-avatar-c5,  .lb-avatar-c15, .lb-avatar-c25, .lb-avatar-c35, .lb-avatar-c45 { background: #111111; }
+.lb-avatar-c6,  .lb-avatar-c16, .lb-avatar-c26, .lb-avatar-c36, .lb-avatar-c46 { background: #111111; }
+.lb-avatar-c7,  .lb-avatar-c17, .lb-avatar-c27, .lb-avatar-c37, .lb-avatar-c47 { background: #111111; }
+.lb-avatar-c8,  .lb-avatar-c18, .lb-avatar-c28, .lb-avatar-c38, .lb-avatar-c48 { background: #111111; }
+.lb-avatar-c9,  .lb-avatar-c19, .lb-avatar-c29, .lb-avatar-c39, .lb-avatar-c49 { background: #111111; }
+.lb-avatar-c10, .lb-avatar-c20, .lb-avatar-c30, .lb-avatar-c40, .lb-avatar-c50 { background: #333333; }
 
 .lb-username {
     font-weight: 600;
