@@ -1,0 +1,15 @@
+.venv
+compiler_service/.venv
+
+**/__pycache__
+
+.git
+.gitignore
+
+db.sqlite3
+compiler_service/db.sqlite3
+
+.env.local
+
+.vscode
+.idea

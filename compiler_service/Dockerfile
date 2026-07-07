@@ -4,12 +4,13 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # Install compilers
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
-    default-jdk \
+    default-jdk-headless \
     procps \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Create isolated user
 RUN useradd -m -u 1000 compileruser
@@ -18,13 +19,13 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 # Ownership
-RUN chown -R compileruser:compileruser /app
+COPY --chown=compileruser:compileruser . .
 
 USER compileruser
 

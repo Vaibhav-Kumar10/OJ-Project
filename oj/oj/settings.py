@@ -93,30 +93,28 @@ WSGI_APPLICATION = "oj.wsgi.application"
 # ------------------------------------------------------------------
 _ssl = os.environ.get("DB_SSL", "False") == "True"
 
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
-#         conn_max_age=600,
-#         ssl_require=_ssl,
-#     )
-# }
-
-
-
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "ojdb"),
-        "USER": os.getenv("POSTGRES_USER", "ojuser"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "ojpassword"),
-        "HOST": os.getenv(
-            "DB_HOST",
-            "db" if os.path.exists("/.dockerenv") else "localhost",
-        ),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
+        conn_max_age=600,
+        ssl_require=_ssl,
+    )
 }
+
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB", "ojdb"),
+#         "USER": os.getenv("POSTGRES_USER", "ojuser"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "ojpassword"),
+#         "HOST": os.getenv(
+#             "DB_HOST",
+#             "db" if os.path.exists("/.dockerenv") else "localhost",
+#         ),
+#         "PORT": os.getenv("DB_PORT", "5432"),
+#     }
+# }
 
 # DATABASES = {
 #     "default": {
@@ -130,27 +128,27 @@ DATABASES = {
 # }
 
 
-
 # ------------------------------------------------------------------
 # COMPILER MICROSERVICE URL
 # ------------------------------------------------------------------
 # COMPILER_SERVICE_URL = os.environ.get("COMPILER_SERVICE_URL", "http://localhost:8001")
 COMPILER_SERVICE_URL = os.getenv(
     "COMPILER_SERVICE_URL",
-    "http://compiler:8001"
-    if os.path.exists("/.dockerenv")
-    else "http://127.0.0.1:8001",
+    (
+        "http://compiler:8001"
+        if os.path.exists("/.dockerenv")
+        else "http://127.0.0.1:8001"
+    ),
 )
-
-
-
 
 
 # ------------------------------------------------------------------
 # PASSWORD VALIDATION
 # ------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

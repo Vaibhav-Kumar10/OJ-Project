@@ -1,408 +1,747 @@
 /* =============================================================
    CodeForge — Leaderboard Page Stylesheet
-   leaderboard.css | Leaderboard ranking table and user statistics.
+   leaderboard.css | "Scale the Ranks" — perfectly harmonized
+   with home.css & problems.css design language.
    ============================================================= */
 
 /* ─────────────────────────────────────────────────────────────
-   1. LAYOUT & STATS
+   0. MESH BACKGROUND — identical to home & problems pages
    ───────────────────────────────────────────────────────────── */
-.leaderboard-container {
-    padding: var(--space-2xl);
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-}
+body.leaderboard-mesh-bg {
+    background:
+        radial-gradient(ellipse at 0% 0%,   #b8d9f4 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 80%, #f5bf5a 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 100%, #f0c97e 0%, transparent 40%),
+        #f0ebe1;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #111111;
 
-.leaderboard-header {
-    text-align: center;
-    margin-bottom: var(--space-3xl);
-    animation: fadeInUp 0.8s ease-out;
-}
-
-.leaderboard-header h1 {
-    font-size: clamp(2.5rem, 5vw, 3rem);
-    font-weight: 800;
-    margin-bottom: var(--space-md);
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.1;
-}
-
-.leaderboard-header p {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.4;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--space-lg);
-    margin: var(--space-2xl) 0;
-}
-
-.stat-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-lg);
-    text-align: center;
-    transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-    transition: left 0.6s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--accent-primary);
-}
-
-.stat-card:hover::after {
-    left: 100%;
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--accent-primary);
-    margin-bottom: var(--space-xs);
-    font-family: 'JetBrains Mono', monospace;
-}
-
-.stat-label {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 500;
+    /* Light-palette token overrides — mirrors problems page */
+    --bg-primary:    #f5efe6;
+    --bg-secondary:  #ede8df;
+    --bg-elevated:   #ffffff;
+    --bg-card:       rgba(255, 255, 255, 0.72);
+    --text-primary:   #111111;
+    --text-secondary: #444444;
+    --text-muted:     #888888;
+    --border:       #d6d0c7;
+    --border-hover: #bcb6ae;
+    --glass-bg:     rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.06);
+    --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.09);
+    --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   2. LEADERBOARD CARD & HEADERS
+   1. NAVBAR — transparent, plain dark text (mirrors home/problems)
    ───────────────────────────────────────────────────────────── */
-.leaderboard-section {
-    animation: fadeInUp 0.8s ease-out 0.4s both;
+body.leaderboard-mesh-bg .navbar {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
 }
 
-.leaderboard-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    transition: var(--transition);
-}
-
-.leaderboard-card:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-}
-
-.leaderboard-header-section {
-    padding: var(--space-xl);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-}
-
-[data-theme="light"] .leaderboard-header-section {
-    background: rgba(0, 0, 0, 0.03);
-}
-
-.leaderboard-title {
-    font-size: 1.75rem;
+body.leaderboard-mesh-bg .navbar-brand {
+    background: none !important;
+    background-image: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: #111111 !important;
+    color: #111111 !important;
+    font-size: 1.4rem;
     font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    color: var(--text-primary);
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.02em;
 }
 
-.filters {
-    display: flex;
+body.leaderboard-mesh-bg .navbar-brand::before {
+    content: none !important;
+    display: none !important;
+}
+
+body.leaderboard-mesh-bg .nav-link {
+    color: #333333;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+body.leaderboard-mesh-bg .nav-link:hover,
+body.leaderboard-mesh-bg .nav-link.active {
+    color: #111111;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+body.leaderboard-mesh-bg .navbar-actions {
+    border-left: 1px solid #cccccc;
+    padding-left: var(--space-lg);
+    margin-left: var(--space-sm);
     gap: var(--space-md);
-    align-items: center;
 }
 
-.filter-select {
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    color: var(--text-primary);
-    padding: var(--space-sm) var(--space-md);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: var(--transition);
-}
-
-.filter-select:hover {
-    border-color: var(--accent-primary);
-    background: var(--bg-secondary);
-}
-
-.filter-select:focus {
-    outline: 2px solid var(--accent-primary);
-    outline-offset: 2px;
+body.leaderboard-mesh-bg .navbar-right {
+    gap: var(--space-xl);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   3. LEADERBOARD TABLE & ROWS
+   2. PAGE WRAPPER — mirrors problems-page-container
    ───────────────────────────────────────────────────────────── */
-.leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--bg-card);
+.leaderboard-page-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+    animation: fadeInUp 0.7s ease-out both;
 }
 
-.leaderboard-table th {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-    font-weight: 700;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: var(--space-lg) var(--space-xl);
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-    position: sticky;
-    top: 80px;
-    z-index: 10;
-    backdrop-filter: blur(20px);
+/* ─────────────────────────────────────────────────────────────
+   3. MAIN CANVAS — rounded framed panel, mirrors problems-canvas
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-canvas {
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
 }
 
-[data-theme="light"] .leaderboard-table th {
-    background: rgba(0, 0, 0, 0.03);
-}
-
-.leaderboard-table td {
-    padding: var(--space-lg) var(--space-xl);
-    border-bottom: 1px solid rgba(58, 58, 92, 0.2);
-    transition: var(--transition);
-}
-
-.leaderboard-table tr {
-    transition: var(--transition);
-    cursor: pointer;
+/* ─────────────────────────────────────────────────────────────
+   4. HERO HEADER — giant title + subtitle
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-hero-section {
+    padding: 52px 56px 36px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
     position: relative;
     overflow: hidden;
 }
 
-.leaderboard-table tr::before {
-    content: '';
+/* Decorative sparkle accents (matching mockup corner stars) */
+.leaderboard-hero-section::before,
+.leaderboard-hero-section::after {
+    content: '✦';
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    background: var(--accent-gradient);
-    transition: width 0.3s ease;
-    opacity: 0.1;
-}
-
-.leaderboard-table tr:hover::before {
-    width: 4px;
-}
-
-.leaderboard-table tr::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.05), transparent);
-    transition: left 0.6s ease;
-}
-
-[data-theme="light"] .leaderboard-table tr::after {
-    background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
-}
-
-.leaderboard-table tr:hover::after {
-    left: 100%;
-}
-
-.leaderboard-table tr:hover {
-    background: rgba(255, 255, 255, 0.03);
-    transform: translateX(8px);
-    box-shadow: var(--shadow-md);
-}
-
-[data-theme="light"] .leaderboard-table tr:hover {
-    background: rgba(0, 0, 0, 0.02);
-}
-
-.leaderboard-table tr.highlight-user {
-    background: rgba(255, 161, 22, 0.1);
-    border-left: 4px solid var(--accent-primary);
-    position: relative;
-}
-
-.leaderboard-table tr.highlight-user::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, rgba(255, 161, 22, 0.05), transparent);
+    font-size: 1.1rem;
+    color: rgba(0, 0, 0, 0.15);
     pointer-events: none;
-    width: 100%;
+}
+.leaderboard-hero-section::before {
+    right: 48%;
+    bottom: 36px;
+}
+.leaderboard-hero-section::after {
+    right: 32%;
+    top: 52px;
+    font-size: 0.7rem;
+}
+
+.leaderboard-main-title {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+    color: #111111;
+    margin: 0 0 14px 0;
+}
+
+.leaderboard-subtitle {
+    color: #555555;
+    font-size: 1rem;
+    font-weight: 400;
+    max-width: 52ch;
+    line-height: 1.65;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   4. RANK & USER DESIGN
+   5. TWO-COLUMN LAYOUT — mirrors problems-layout structure
    ───────────────────────────────────────────────────────────── */
-.rank {
-    font-weight: 800;
-    font-size: 1.25rem;
+.leaderboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. LEFT COLUMN — Rankings table
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-main-column {
+    padding: 40px 48px 48px 56px;
+    border-right: 1px solid rgba(0, 0, 0, 0.10);
+    min-width: 0;
+    overflow-x: auto;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. RANKINGS TABLE — clean borderless style like problems table
+   ───────────────────────────────────────────────────────────── */
+.rankings-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+}
+
+.rankings-table thead th {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888888;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0 0 14px;
+    border-bottom: 1px solid #e0dbd3;
+    white-space: nowrap;
+}
+
+/* Align stat headers to the right */
+.rankings-table thead th.th-points,
+.rankings-table thead th.th-solved,
+.rankings-table thead th.th-accuracy {
+    text-align: right;
+}
+
+.rankings-table thead th.th-action {
+    width: 60px;
+    text-align: right;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. TABLE ROWS — podium & regular
+   ───────────────────────────────────────────────────────────── */
+.rankings-table tbody tr {
+    transition: background 0.15s ease, transform 0.2s ease;
+}
+
+.rankings-table tbody tr:hover {
+    background: rgba(0, 0, 0, 0.025);
+    transform: translateX(4px);
+}
+
+/* Gold — Rank 1 */
+.rankings-table tbody tr.lb-rank-1 {
+    background: rgba(254, 243, 199, 0.55);
+}
+.rankings-table tbody tr.lb-rank-1:hover {
+    background: rgba(254, 243, 199, 0.75);
+}
+
+/* Silver — Rank 2 */
+.rankings-table tbody tr.lb-rank-2 {
+    background: rgba(241, 245, 249, 0.55);
+}
+.rankings-table tbody tr.lb-rank-2:hover {
+    background: rgba(241, 245, 249, 0.80);
+}
+
+/* Bronze — Rank 3 */
+.rankings-table tbody tr.lb-rank-3 {
+    background: rgba(255, 247, 237, 0.55);
+}
+.rankings-table tbody tr.lb-rank-3:hover {
+    background: rgba(255, 247, 237, 0.80);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   9. TABLE CELLS
+   ───────────────────────────────────────────────────────────── */
+.rankings-table td {
+    padding: 18px 0;
+    vertical-align: middle;
+    border-bottom: 1px solid #ede8e0;
+    color: #111111;
+    font-size: 0.95rem;
+}
+
+.rankings-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Rank cell */
+.lb-rank-cell {
+    width: 72px;
+    padding-right: 12px !important;
+}
+
+.lb-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #444444;
+}
+
+/* Medal icon wrapper */
+.lb-medal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Gold medal */
+.lb-medal-gold {
+    background: #fef3c7;
+    border: 1.5px solid #fbbf24;
+    color: #92400e;
+}
+
+/* Silver medal */
+.lb-medal-silver {
+    background: #f1f5f9;
+    border: 1.5px solid #cbd5e1;
+    color: #475569;
+}
+
+/* Bronze medal */
+.lb-medal-bronze {
+    background: #fff7ed;
+    border: 1.5px solid #fb923c;
+    color: #9a3412;
+}
+
+/* Plain rank circle for 4+ */
+.lb-rank-plain {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #555555;
+}
+
+/* User cell */
+.lb-user-cell {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    font-family: 'JetBrains Mono', monospace;
+    gap: 12px;
+    padding-right: 16px;
+    min-width: 180px;
 }
 
-.rank-1 {
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-.rank-2 {
-    color: #c0c0c0;
-    text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
-}
-
-.rank-3 {
-    color: #cd7f32;
-    text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
-}
-
-.trophy-icon {
-    width: 24px;
-    height: 24px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-
-.user-avatar {
+/* Initials avatar — colored per position */
+.lb-avatar {
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-full);
-    background: var(--accent-gradient);
-    color: #000;
-    display: flex;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.875rem;
-    box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-    transition: var(--transition);
+    font-size: 0.75rem;
+    color: #ffffff;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
-.user-avatar:hover {
-    transform: scale(1.05);
-    box-shadow: var(--shadow-glow);
-}
+/* Gradient palette — 10 distinct gradients, JS cycles lb-avatar-c1..c10 class */
+.lb-avatar-c1,  .lb-avatar-c11, .lb-avatar-c21, .lb-avatar-c31, .lb-avatar-c41 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.lb-avatar-c2,  .lb-avatar-c12, .lb-avatar-c22, .lb-avatar-c32, .lb-avatar-c42 { background: linear-gradient(135deg, #8b5cf6, #c026d3); }
+.lb-avatar-c3,  .lb-avatar-c13, .lb-avatar-c23, .lb-avatar-c33, .lb-avatar-c43 { background: linear-gradient(135deg, #10b981, #059669); }
+.lb-avatar-c4,  .lb-avatar-c14, .lb-avatar-c24, .lb-avatar-c34, .lb-avatar-c44 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.lb-avatar-c5,  .lb-avatar-c15, .lb-avatar-c25, .lb-avatar-c35, .lb-avatar-c45 { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.lb-avatar-c6,  .lb-avatar-c16, .lb-avatar-c26, .lb-avatar-c36, .lb-avatar-c46 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.lb-avatar-c7,  .lb-avatar-c17, .lb-avatar-c27, .lb-avatar-c37, .lb-avatar-c47 { background: linear-gradient(135deg, #ec4899, #db2777); }
+.lb-avatar-c8,  .lb-avatar-c18, .lb-avatar-c28, .lb-avatar-c38, .lb-avatar-c48 { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+.lb-avatar-c9,  .lb-avatar-c19, .lb-avatar-c29, .lb-avatar-c39, .lb-avatar-c49 { background: linear-gradient(135deg, #f97316, #ea580c); }
+.lb-avatar-c10, .lb-avatar-c20, .lb-avatar-c30, .lb-avatar-c40, .lb-avatar-c50 { background: linear-gradient(135deg, #a855f7, #9333ea); }
 
-[data-theme="light"] .user-avatar {
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-}
-
-.username {
+.lb-username {
     font-weight: 600;
-    color: var(--text-primary);
+    font-size: 0.95rem;
+    color: #111111;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.lb-username:hover {
+    color: #555555;
+}
+
+/* Stat cells — right-aligned monospace numbers */
+.lb-stat-cell {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: #333333;
+    font-size: 0.9rem;
+    text-align: right;
+    padding-right: 16px;
+}
+
+/* Action cell — circular arrow button */
+.lb-action-cell {
+    text-align: right;
+    padding-right: 0 !important;
+    width: 60px;
+}
+
+.lb-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid #999999;
+    background: transparent;
+    color: #333333;
+    text-decoration: none;
     font-size: 1rem;
+    line-height: 1;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    flex-shrink: 0;
 }
 
-.user-location {
-    color: var(--text-muted);
-    font-size: 0.875rem;
-}
-
-.points {
-    font-weight: 800;
-    color: var(--accent-secondary);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem;
-}
-
-.problems-solved {
-    color: var(--success);
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-}
-
-.accuracy {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.fade-in {
-    animation: fadeInUp 0.6s ease forwards;
+.lb-action-btn:hover {
+    border-color: #111111;
+    background: #111111;
+    color: #ffffff;
+    transform: scale(1.08);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   5. RESPONSIVE MEDIA QUERIES
+   10. CURRENT USER ROW HIGHLIGHT
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 1024px) {
-    .leaderboard-container {
-        padding: var(--space-xl) var(--space-lg);
+.rankings-table tbody tr.lb-current-user td {
+    background: rgba(59, 130, 246, 0.05) !important;
+}
+.rankings-table tbody tr.lb-current-user .lb-username {
+    font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11. EMPTY STATE
+   ───────────────────────────────────────────────────────────── */
+.lb-empty-state {
+    text-align: center;
+    padding: 64px 32px;
+    color: #888888;
+}
+
+.lb-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.4;
+}
+
+.lb-empty-state h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.lb-empty-state p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+/* Empty state CTA button */
+.lb-cta-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.15s ease;
+    background: #111111;
+    color: #ffffff;
+    border: 1.5px solid #111111;
+}
+
+.lb-cta-btn:hover {
+    background: #333333;
+    border-color: #333333;
+    transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   12. RIGHT COLUMN — Competitive Segments sidebar
+   ───────────────────────────────────────────────────────────── */
+.leaderboard-sidebar {
+    padding: 36px 28px 48px;
+    min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   13. SEGMENTS CARD — stacked layered paper effect
+   ───────────────────────────────────────────────────────────── */
+.segments-stack {
+    position: relative;
+}
+
+/* Pseudo-elements disabled — layered effect achieved via box-shadow on card */
+.segments-stack::after,
+.segments-stack::before {
+    display: none;
+}
+
+/* Primary card — clean shadow, no horizontal overflow */
+.segments-card {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 20px;
+    padding: 28px 24px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   14. SEGMENTS CARD HEADER
+   ───────────────────────────────────────────────────────────── */
+.segments-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.segments-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #111111;
+    line-height: 1.1;
+    margin: 0;
+}
+
+/* Trophy badge icon */
+.segments-trophy-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(245, 191, 90, 0.15);
+    border: 1.5px solid rgba(245, 191, 90, 0.3);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   15. FILTER FIELDS — matching problems page select style
+   ───────────────────────────────────────────────────────────── */
+.segments-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.segment-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.segment-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333333;
+}
+
+.segment-select {
+    width: 100%;
+    padding: 11px 40px 11px 16px;
+    border: 1px solid #d4cec5;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    color: #111111;
+    font-size: 0.9rem;
+    font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.segment-select:focus {
+    border-color: #888888;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+.segment-select::-ms-expand {
+    display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   16. SPARKLE DECORATION (matching mockup aesthetics)
+   ───────────────────────────────────────────────────────────── */
+.lb-sparkle {
+    position: absolute;
+    pointer-events: none;
+    color: rgba(0, 0, 0, 0.12);
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   17. RESPONSIVE — Tablet and Mobile
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .leaderboard-page-container {
+        padding: 28px 28px 60px;
+    }
+
+    .leaderboard-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .leaderboard-main-column {
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+        padding: 36px 36px 40px;
+    }
+
+    .leaderboard-sidebar {
+        padding: 32px 36px 40px;
+        order: -1; /* Filter above table on smaller screens */
+    }
+
+    .segments-stack::before,
+    .segments-stack::after {
+        display: none; /* hide stacked layers on mobile */
+    }
+
+    body.leaderboard-mesh-bg .navbar-actions {
+        border-left: none;
+        padding-left: 0;
     }
 }
 
 @media (max-width: 768px) {
-    .leaderboard-container {
-        padding: var(--space-lg);
+    .leaderboard-page-container {
+        padding: 16px 16px 48px;
     }
 
-    .leaderboard-header h1 {
-        font-size: 2.5rem;
+    .leaderboard-hero-section {
+        padding: 36px 24px 24px;
     }
 
-    .leaderboard-header-section {
-        flex-direction: column;
-        gap: var(--space-md);
-        align-items: flex-start;
+    .leaderboard-main-title {
+        font-size: 2.8rem;
     }
 
-    .leaderboard-table {
+    .leaderboard-main-column {
+        padding: 28px 20px 32px;
+    }
+
+    .leaderboard-sidebar {
+        padding: 24px 20px 28px;
+    }
+
+    /* Wrap to compact table on mobile */
+    .rankings-table thead th.th-solved,
+    .rankings-table td.lb-stat-cell:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .leaderboard-main-title {
+        font-size: 2.2rem;
+        letter-spacing: -0.04em;
+    }
+
+    .rankings-table thead th.th-accuracy,
+    .rankings-table td.lb-stat-cell:nth-child(5) {
+        display: none;
+    }
+
+    .lb-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 0.65rem;
+    }
+
+    .lb-username {
         font-size: 0.875rem;
     }
 
-    .leaderboard-table th,
-    .leaderboard-table td {
-        padding: var(--space-md);
+    .rankings-table td {
+        padding: 14px 0;
     }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   18. FOOTER — light-mode overrides for leaderboard page
+   ───────────────────────────────────────────────────────────── */
+body.leaderboard-mesh-bg .footer {
+    background: rgba(240, 235, 225, 0.60);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    color: #555555;
+    margin-top: 0;
+}
+
+body.leaderboard-mesh-bg .footer p {
+    color: #666666;
+}
+
+body.leaderboard-mesh-bg .footer-links li a {
+    color: #555555;
+}
+
+body.leaderboard-mesh-bg .footer-links li a:hover {
+    color: #111111;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   19. PROFILE / LOGOUT NAV BUTTONS — light mode match
+   ───────────────────────────────────────────────────────────── */
+body.leaderboard-mesh-bg .profile-btn,
+body.leaderboard-mesh-bg .nav-logout-btn {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    color: #111111;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.leaderboard-mesh-bg .profile-name {
+    color: #111111;
+    font-weight: 600;
+}
+
+body.leaderboard-mesh-bg .auth-toggle-capsule {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+body.leaderboard-mesh-bg .auth-toggle-btn {
+    color: #444444;
+}
+
+body.leaderboard-mesh-bg .auth-toggle-btn:hover {
+    color: #111111;
+}
+
+body.leaderboard-mesh-bg .auth-toggle-btn.active {
+    background: #111111;
+    color: #ffffff;
 }

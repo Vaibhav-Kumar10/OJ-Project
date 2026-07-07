@@ -2,87 +2,132 @@
 {% load static %}
 
 {% block title %}Leaderboard | CodeForge{% endblock %}
+{% block meta_desc %}See who is leading the competitive community on CodeForge. Scale the ranks by solving more problems.{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/leaderboard.css' %}" />
 {% endblock %}
 
+{% block body_attrs %}class="leaderboard-mesh-bg"{% endblock %}
+
 {% block content %}
-<!-- Hero Section -->
-<section class="hero"
-    style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); padding: var(--space-2xl) 0;">
-    <div class="container" style="max-width: 1200px; margin: 0 auto; text-align: center;">
-        <div class="leaderboard-header">
-            <h1>🏆 Leaderboard</h1>
-            <p>Track your progress and see who's leading the competition among our coding community.</p>
-        </div>
-    </div>
-</section>
+<div class="leaderboard-page-container">
+    <div class="leaderboard-canvas">
 
-<!-- Leaderboard Section -->
-<section class="leaderboard-section">
-    <div class="leaderboard-container">
-        <div class="leaderboard-card fade-in">
-            <div class="leaderboard-header-section">
-                <h2 class="leaderboard-title">
-                    <span>Top Performers</span>
-                </h2>
-                <div class="filters">
-                    <select class="filter-select" aria-label="Filter leaderboard duration">
-                        <option>All Time</option>
-                        <option>This Month</option>
-                        <option>This Week</option>
-                    </select>
-                    <select class="filter-select" aria-label="Filter leaderboard scope">
-                        <option>All Users</option>
-                        <option>Friends</option>
-                    </select>
+        <!-- Hero Header -->
+        <div class="leaderboard-hero-section">
+            <h1 class="leaderboard-main-title">Scale the Ranks</h1>
+            <p class="leaderboard-subtitle">Follow the path of mastery and see who is leading the competitive community.</p>
+        </div>
+
+        <!-- Two-Column Layout -->
+        <div class="leaderboard-layout">
+
+            <!-- LEFT COLUMN: Rankings Table -->
+            <div class="leaderboard-main-column">
+                {% if scores and scores|length > 0 %}
+                <table class="rankings-table" aria-label="Leaderboard rankings">
+                    <thead>
+                        <tr>
+                            <th class="th-rank">Rank</th>
+                            <th class="th-user">User</th>
+                            <th class="th-points">Points</th>
+                            <th class="th-solved">Problems Solved</th>
+                            <th class="th-accuracy">Accuracy</th>
+                            <th class="th-action"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in scores %}
+                        {% include "components/leaderboard_row.html" with entry=entry %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="lb-empty-state">
+                    <div class="lb-empty-icon">👥</div>
+                    <h3>No submissions yet</h3>
+                    <p>Be the first to solve a problem and get on the leaderboard.</p>
+                    <a href="{% url 'core:problems' %}" class="lb-cta-btn">Start Coding</a>
                 </div>
+                {% endif %}
             </div>
 
-            {% if scores and scores|length > 0 %}
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>User</th>
-                        <th>Points</th>
-                        <th>Problems Solved</th>
-                        <th>Accuracy</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in scores %}
-                    {% include "components/leaderboard_row.html" with entry=entry %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">👥</div>
-                <h3>No submissions yet</h3>
-                <p>Be the first to solve a problem and get on the leaderboard!</p>
-                <a href="{% url 'core:problems' %}" class="btn btn-primary" style="margin-top: var(--space-lg);">
-                    Start Coding
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</section>
+            <!-- RIGHT COLUMN: Competitive Segments -->
+            <aside class="leaderboard-sidebar" aria-label="Competitive segments filters">
+                <div class="segments-stack">
+                    <div class="segments-card">
+                        <div class="segments-header">
+                            <h2 class="segments-title">Competitive<br>Segments</h2>
+                            <span class="segments-trophy-badge" aria-hidden="true">🏆</span>
+                        </div>
+
+                        <div class="segments-body">
+                            <div class="segment-field">
+                                <label class="segment-label" for="lb-time-filter">Time:</label>
+                                <select id="lb-time-filter" class="segment-select" aria-label="Select leaderboard time range">
+                                    <option>All Time</option>
+                                    <option>This Month</option>
+                                    <option>This Week</option>
+                                    <option>Today</option>
+                                </select>
+                            </div>
+
+                            <div class="segment-field">
+                                <label class="segment-label" for="lb-lang-filter">Language:</label>
+                                <select id="lb-lang-filter" class="segment-select" aria-label="Select programming language">
+                                    <option>All languages</option>
+                                    <option>Python</option>
+                                    <option>C++</option>
+                                    <option>Java</option>
+                                    <option>C</option>
+                                </select>
+                            </div>
+
+                            <div class="segment-field">
+                                <label class="segment-label" for="lb-diff-filter">Problem difficulty</label>
+                                <select id="lb-diff-filter" class="segment-select" aria-label="Select problem difficulty">
+                                    <option>All difficulties</option>
+                                    <option>Easy</option>
+                                    <option>Medium</option>
+                                    <option>Hard</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+        </div><!-- /.leaderboard-layout -->
+    </div><!-- /.leaderboard-canvas -->
+</div><!-- /.leaderboard-page-container -->
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Add hover effects for table rows
-    document.querySelectorAll('.leaderboard-table tbody tr').forEach(row => {
-        row.addEventListener('mouseenter', function () {
-            this.style.transform = 'translateX(8px)';
-        });
-
-        row.addEventListener('mouseleave', function () {
-            this.style.transform = 'translateX(0)';
-        });
+(function () {
+    // Smooth translate on row hover is handled by CSS; this is just a no-op placeholder.
+    // Avatar color cycling: ensure every avatar beyond c50 still gets a gradient
+    const avatars = document.querySelectorAll('.lb-avatar');
+    const gradients = [
+        'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+        'linear-gradient(135deg, #8b5cf6, #c026d3)',
+        'linear-gradient(135deg, #10b981, #059669)',
+        'linear-gradient(135deg, #f59e0b, #d97706)',
+        'linear-gradient(135deg, #ef4444, #dc2626)',
+        'linear-gradient(135deg, #3b82f6, #2563eb)',
+        'linear-gradient(135deg, #ec4899, #db2777)',
+        'linear-gradient(135deg, #14b8a6, #0d9488)',
+        'linear-gradient(135deg, #f97316, #ea580c)',
+        'linear-gradient(135deg, #a855f7, #9333ea)',
+    ];
+    avatars.forEach(function (el, i) {
+        // Only apply fallback if no background-image was set by CSS class
+        const computed = window.getComputedStyle(el).backgroundImage;
+        if (!computed || computed === 'none') {
+            el.style.background = gradients[i % 10];
+        }
     });
+})();
 </script>
 {% endblock %}

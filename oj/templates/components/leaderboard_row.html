@@ -1,59 +1,68 @@
 {# ─────────────────────────────────────────────────────────────────────────── #}
 {# components/leaderboard_row.html                                              #}
-{#                                                                               #}
-{# A single <tr> in the leaderboard table. Used in leaderboard.html.           #}
-{# NOTE: forloop must be active in the parent template.                        #}
-{#                                                                               #}
-{# REQUIRED context variables:                                                  #}
-{#   entry               — UserScore model instance                             #}
-{#     .user             — User object                                          #}
-{#     .username         — str                                                  #}
-{#     .score            — int                                                  #}
-{#     .problems_solved  — int                                                  #}
-{#     .accuracy         — float                                                #}
-{#   forloop.counter     — int (rank number, provided automatically)            #}
+{#                                                                              #}
+{# A single <tr> in the rankings table. Used in contests/leaderboard.html.     #}
+{# Inherits .rankings-table styles from leaderboard.css.                        #}
+{#                                                                              #}
+{# BACKEND CONTEXT (from contests/views.py — leaderboard_view):                 #}
+{#   scores queryset → each row is a User object with annotated fields:         #}
+{#   entry.username       — Django User.username                                #}
+{#   entry.first_name     — Django User.first_name                              #}
+{#   entry.last_name      — Django User.last_name                               #}
+{#   entry.score          — annotated integer points (Sum of accepted scores)   #}
+{#   entry.problems_solved— annotated integer count of accepted submissions     #}
+{#   entry.accuracy       — annotated float accuracy percentage                 #}
+{#   forloop.counter      — rank position number (1-indexed)                   #}
 {# ─────────────────────────────────────────────────────────────────────────── #}
-<tr class="{% if entry.user == request.user %}highlight-user{% endif %}"
+<tr class="{% if forloop.counter == 1 %}lb-rank-1{% elif forloop.counter == 2 %}lb-rank-2{% elif forloop.counter == 3 %}lb-rank-3{% endif %}{% if entry == request.user %} lb-current-user{% endif %}"
     aria-label="Rank {{ forloop.counter }}: {{ entry.username }}">
 
-    {# ── Rank ── top 3 get gold/silver/bronze styling + trophy icon ── #}
+    {# ── Rank cell — medal badge for top 3, plain circle for rest ── #}
+    <td class="lb-rank-cell">
+        {% if forloop.counter == 1 %}
+            <span class="lb-medal-icon lb-medal-gold" aria-label="Gold medal — Rank 1">🥇</span>
+        {% elif forloop.counter == 2 %}
+            <span class="lb-medal-icon lb-medal-silver" aria-label="Silver medal — Rank 2">🥈</span>
+        {% elif forloop.counter == 3 %}
+            <span class="lb-medal-icon lb-medal-bronze" aria-label="Bronze medal — Rank 3">🥉</span>
+        {% else %}
+            <span class="lb-rank-plain" aria-label="Rank {{ forloop.counter }}">{{ forloop.counter }}</span>
+        {% endif %}
+    </td>
+
+    {# ── User cell: initials avatar + username link ── #}
     <td>
-        <div class="rank {% if forloop.counter == 1 %}rank-1
-                         {% elif forloop.counter == 2 %}rank-2
-                         {% elif forloop.counter == 3 %}rank-3{% endif %}">
-            {% if forloop.counter <= 3 %}
-                <span aria-hidden="true">
-                    {% if forloop.counter == 1 %}🥇
-                    {% elif forloop.counter == 2 %}🥈
-                    {% else %}🥉{% endif %}
-                </span>
-            {% endif %}
-            {{ forloop.counter }}
+        <div class="lb-user-cell">
+            {# Colored initials avatar — color class lb-avatar-c{n} maps to CSS gradient #}
+            <div class="lb-avatar lb-avatar-c{{ forloop.counter }}" aria-hidden="true">
+                {% if entry.first_name and entry.last_name %}
+                    {{ entry.first_name|slice:":1"|upper }}{{ entry.last_name|slice:":1"|upper }}
+                {% else %}
+                    {{ entry.username|slice:":2"|upper }}
+                {% endif %}
+            </div>
+            <a href="{% url 'core:user_profile' entry.username %}" class="lb-username">
+                {{ entry.username }}
+            </a>
         </div>
     </td>
 
-    {# ── User info: avatar + username ── #}
-    <td>
-        <div class="user-info">
-            <div class="user-avatar" aria-hidden="true">
-                {{ entry.username|slice:":1"|upper }}
-            </div>
-            <div>
-                <a href="{% url 'core:user_profile' entry.username %}"
-                   class="username"
-                   style="text-decoration:none; color: inherit;">
-                    {{ entry.username }}
-                </a>
-            </div>
-        </div>
-    </td>
+    {# ── Points ── #}
+    <td class="lb-stat-cell">{{ entry.score }}</td>
 
-    {# ── Score ── #}
-    <td class="points font-mono">{{ entry.score }}</td>
-
-    {# ── Problems solved ── #}
-    <td class="problems-solved font-mono">{{ entry.problems_solved }}</td>
+    {# ── Problems Solved ── #}
+    <td class="lb-stat-cell">{{ entry.problems_solved }}</td>
 
     {# ── Accuracy ── #}
-    <td class="accuracy">{{ entry.accuracy|floatformat:1 }}%</td>
+    <td class="lb-stat-cell">{{ entry.accuracy|floatformat:1 }}%</td>
+
+    {# ── Profile link action button ── #}
+    <td class="lb-action-cell">
+        <a href="{% url 'core:user_profile' entry.username %}"
+           class="lb-action-btn"
+           aria-label="View {{ entry.username }}'s profile">
+            ↗
+        </a>
+    </td>
+
 </tr>
