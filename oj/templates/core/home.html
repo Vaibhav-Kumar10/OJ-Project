@@ -421,7 +421,7 @@ int main() {
 
                 const data = await response.json();
 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     if (actionType === 'submit') {
                         outputContent.textContent = (data.output || '(no output)') + '\n\nTest Verdict: All test cases passed successfully!';
                         outputStatus.textContent = '✓ Accepted';
@@ -432,7 +432,7 @@ int main() {
                         outputStatus.className = 'output-status output-success';
                     }
                 } else {
-                    outputContent.textContent = data.error || 'An error occurred.';
+                    outputContent.textContent = data.output || data.error || 'An error occurred.';
                     outputStatus.textContent = actionType === 'submit' ? '✗ Rejected' : '✗ Error';
                     outputStatus.className = 'output-status output-error';
                 }

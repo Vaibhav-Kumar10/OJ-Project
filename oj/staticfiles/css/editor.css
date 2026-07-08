@@ -232,7 +232,7 @@
 }
 
 .input-editor {
-    min-height: 80px;
+    min-height: 10px;
     resize: vertical;
     line-height: 1.5;
 }

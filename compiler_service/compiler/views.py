@@ -12,8 +12,8 @@ def run_code_api(request):
             language = data.get("language")
             code = data.get("code")
             input_data = data.get("input_data", "")
-            output = execute_code(language, code, input_data)
-            return JsonResponse({"output": output})
+            output, success = execute_code(language, code, input_data)
+            return JsonResponse({"output": output, "success": success})
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+            return JsonResponse({"error": str(e), "success": False}, status=500)
+    return JsonResponse({"error": "Invalid request method", "success": False}, status=400)

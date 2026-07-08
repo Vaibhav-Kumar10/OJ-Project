@@ -139,7 +139,7 @@ def get_ai_review(request):
         except Exception as e:
             ai_review = f"⚠️ AI Review failed: {str(e)}"
 
-        ai_review = markdown.markdown(ai_review)
+        ai_review = markdown.markdown(ai_review, extensions=["fenced_code", "tables"])
 
         # Pull previous submissions
         submissions = Submission.objects.filter(

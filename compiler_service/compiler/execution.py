@@ -73,7 +73,7 @@ def limit_resources():
 def get_preexec():
     """
     Linux Docker:
-        create process group + limits
+        create process group + limits (for user code execution)
 
     Windows:
         return None
@@ -85,6 +85,69 @@ def get_preexec():
     def setup():
         os.setsid()
         limit_resources()
+
+    return setup
+
+
+def get_compile_preexec():
+    """
+    Preexec for compilation steps (g++, javac) — no RLIMIT_AS, no RLIMIT_NPROC.
+
+    - g++  spawns cc1plus, as, ld as child processes → needs NPROC headroom
+    - javac runs inside a JVM → needs GB of virtual address space (like java)
+
+    Docker's mem_limit: 1g already enforces actual RAM limits on the container,
+    so RLIMIT_AS is unnecessary and actively harmful for both compilers.
+    Only a CPU time cap is applied to prevent runaway compilations.
+    """
+
+    if os.name == "nt":
+        return None
+
+    def setup():
+        os.setsid()
+        if resource is None:
+            return
+        try:
+            resource.setrlimit(
+                resource.RLIMIT_CPU,
+                (COMPILATION_TIMEOUT + 1, COMPILATION_TIMEOUT + 1),
+            )
+        except Exception:
+            pass
+
+    return setup
+
+
+def get_java_preexec():
+    """
+    Preexec for Java EXECUTION only — no RLIMIT_AS, no RLIMIT_NPROC, no RLIMIT_NOFILE.
+
+    The JVM needs:
+    - Gigabytes of virtual address space (RLIMIT_AS would crash it)
+    - 20+ internal threads: GC, Signal Dispatcher, VM Thread, Finalizer,
+      Compiler threads, etc. (RLIMIT_NPROC=32 causes pthread_create EAGAIN)
+    - Many file descriptors for class loading (RLIMIT_NOFILE=32 is too low)
+
+    Memory is controlled by JVM flags: -Xmx, -XX:MaxMetaspaceSize, etc.
+    Docker's mem_limit: 1g provides the final hard ceiling.
+    Only a CPU time cap is applied to prevent infinite loops.
+    """
+
+    if os.name == "nt":
+        return None
+
+    def setup():
+        os.setsid()
+        if resource is None:
+            return
+        try:
+            resource.setrlimit(
+                resource.RLIMIT_CPU,
+                (EXECUTION_TIMEOUT + 1, EXECUTION_TIMEOUT + 1),
+            )
+        except Exception:
+            pass
 
     return setup
 
@@ -145,7 +208,7 @@ def execute_code(language, code, input_data=""):
     try:
 
         if len(input_data.encode("utf-8")) > MAX_INPUT_SIZE:
-            return "Error: Input Too Large"
+            return "Error: Input Too Large", False
 
         suffix_map = {
             "python": ".py",
@@ -154,7 +217,7 @@ def execute_code(language, code, input_data=""):
         }
 
         if language not in suffix_map:
-            return "Error: Unsupported language"
+            return "Error: Unsupported language", False
 
         suffix = suffix_map[language]
 
@@ -199,13 +262,14 @@ def execute_code(language, code, input_data=""):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout=COMPILATION_TIMEOUT,
+                    preexec_fn=get_compile_preexec(),
                 )
 
                 if compile_proc.returncode != 0:
 
                     compile_output = compile_proc.stdout + compile_proc.stderr
 
-                    return compile_output.decode(errors="replace").strip()
+                    return compile_output.decode(errors="replace").strip(), False
 
                 command = [executable]
 
@@ -220,17 +284,24 @@ def execute_code(language, code, input_data=""):
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     timeout=COMPILATION_TIMEOUT,
+                    preexec_fn=get_compile_preexec(),
                 )
 
                 if compile_proc.returncode != 0:
 
                     compile_output = compile_proc.stdout + compile_proc.stderr
 
-                    return compile_output.decode(errors="replace").strip()
+                    return compile_output.decode(errors="replace").strip(), False
 
                 command = [
                     "java",
-                    "-Xmx128m",
+                    "-Xmx128m",                      # max heap 128 MB
+                    "-Xms16m",                       # initial heap 16 MB
+                    "-Xss512k",                      # thread stack 512 KB
+                    "-XX:+UseSerialGC",              # minimal GC overhead
+                    "-XX:ReservedCodeCacheSize=32m", # cap JIT code cache (default=240MB!)
+                    "-XX:MaxMetaspaceSize=64m",      # cap class metadata
+                    "-XX:TieredStopAtLevel=1",       # disable full JIT (saves memory)
                     "-cp",
                     temp_dir,
                     "Main",
@@ -254,7 +325,7 @@ def execute_code(language, code, input_data=""):
                 stderr=subprocess.PIPE,
                 cwd=temp_dir,
                 shell=False,
-                preexec_fn=get_preexec(),
+                preexec_fn=get_java_preexec() if language == "java" else get_preexec(),
             )
 
             try:
@@ -268,7 +339,7 @@ def execute_code(language, code, input_data=""):
 
                 cleanup_process(process)
 
-                return "Error: Time Limit Exceeded"
+                return "Error: Time Limit Exceeded", False
 
             output = stdout + stderr
 
@@ -276,21 +347,21 @@ def execute_code(language, code, input_data=""):
 
                 cleanup_process(process)
 
-                return "Error: Output Limit Exceeded"
+                return "Error: Output Limit Exceeded", False
 
-            return output.decode(errors="replace").strip()
+            return output.decode(errors="replace").strip(), (process.returncode == 0)
 
     except subprocess.TimeoutExpired:
 
-        return "Error: Compilation Timeout"
+        return "Error: Compilation Timeout", False
 
     except MemoryError:
 
-        return "Error: Memory Limit Exceeded"
+        return "Error: Memory Limit Exceeded", False
 
     except Exception as e:
 
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}", False
 
 
 """
