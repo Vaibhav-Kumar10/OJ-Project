@@ -35,7 +35,10 @@ def quick_run_view(request):
         res = execute_code(language, code, input_data)
         return JsonResponse(res)
     except Exception as e:
-        return JsonResponse({"error": str(e), "success": False}, status=500)
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Execution error in quick_run: {e}", exc_info=True)
+        return JsonResponse({"error": "An internal error occurred during execution.", "success": False}, status=500)
 
 
 
@@ -51,7 +54,10 @@ def run_code_view(request):
             res = execute_code(language, code, input_data)
             output = res.get("output", "")
         except Exception as e:
-            output = f"Error: {str(e)}"
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Execution error in run_code_view: {e}", exc_info=True)
+            output = "Error: An internal error occurred during execution."
 
         problem = Problem.objects.get(id=problem_id)
         submissions = Submission.objects.filter(
