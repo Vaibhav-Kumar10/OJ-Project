@@ -178,7 +178,7 @@ def normalize_java(code):
 
     # Remove package declaration
     code = re.sub(
-        r"^\s*package\s+.*?;",
+        r"^\s*package\s+[^;]*;",
         "",
         code,
         flags=re.MULTILINE,

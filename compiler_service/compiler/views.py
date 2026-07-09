@@ -15,5 +15,8 @@ def run_code_api(request):
             output, success = execute_code(language, code, input_data)
             return JsonResponse({"output": output, "success": success})
         except Exception as e:
-            return JsonResponse({"error": str(e), "success": False}, status=500)
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Execution error: {e}", exc_info=True)
+            return JsonResponse({"error": "An internal error occurred during execution.", "success": False}, status=500)
     return JsonResponse({"error": "Invalid request method", "success": False}, status=400)

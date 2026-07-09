@@ -138,7 +138,7 @@
 <script>
     function navigateToProblem(element) {
         const problemId = element.getAttribute('data-problem-id');
-        window.location = `/problem/${problemId}/`;
+        window.location = `/problem/${encodeURIComponent(problemId)}/`;
     }
 
     // Filter functionality
