@@ -11,7 +11,8 @@ def submit_code(problem, code, language):
         expected_output = testcase.output.strip()
 
         try:
-            output = execute_code(language, code, input_data).strip()
+            res = execute_code(language, code, input_data)
+            output = res.get("output", "").strip()
         except Exception as e:
             return f"Error: {e}"
 

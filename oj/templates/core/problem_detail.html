@@ -6,6 +6,72 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/editor.css' %}" />
+<style>
+    .ai-review-content {
+        line-height: 1.6;
+        color: #333333;
+        font-size: 0.95rem;
+    }
+    .ai-review-content p {
+        margin-bottom: 1rem;
+    }
+    .ai-review-content h1, 
+    .ai-review-content h2, 
+    .ai-review-content h3, 
+    .ai-review-content h4 {
+        color: var(--accent-primary, #111111);
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        font-weight: 700;
+    }
+    .ai-review-content h1 { font-size: 1.4rem; }
+    .ai-review-content h2 { font-size: 1.25rem; }
+    .ai-review-content h3 { font-size: 1.15rem; }
+    .ai-review-content h4 { font-size: 1rem; }
+    
+    .ai-review-content ul, 
+    .ai-review-content ol {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        list-style-position: outside;
+    }
+    .ai-review-content ul {
+        list-style-type: disc;
+    }
+    .ai-review-content ol {
+        list-style-type: decimal;
+    }
+    .ai-review-content li {
+        margin-bottom: 0.4rem;
+    }
+    .ai-review-content pre {
+        background: var(--bg-primary, #f7f7f7);
+        border: 1px solid var(--border, #e0e0e0);
+        border-radius: var(--radius, 8px);
+        padding: var(--space-md, 1rem);
+        margin: 1rem 0;
+        overflow-x: auto;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+    .ai-review-content code {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.875rem;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 0.15rem 0.3rem;
+        border-radius: 4px;
+    }
+    .ai-review-content pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        font-size: inherit;
+    }
+    .ai-review-content strong {
+        font-weight: 700;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -50,9 +116,9 @@
                 <div class="toolbar-left">
                     <label for="language">Language:</label>
                     <select name="language" id="language" class="form-select" required>
-                        <option value="cpp">C++</option>
-                        <option value="java">Java</option>
-                        <option value="python">Python</option>
+                        <option value="cpp" {% if language == 'cpp' or not language %}selected{% endif %}>C++</option>
+                        <option value="java" {% if language == 'java' %}selected{% endif %}>Java</option>
+                        <option value="python" {% if language == 'python' %}selected{% endif %}>Python</option>
                     </select>
                 </div>
                 
@@ -93,7 +159,7 @@
             {% if ai_review %}
             <div class="content-card">
                 <h3>AI Review:</h3>
-                <pre class="code-block">{{ ai_review|safe }}</pre>
+                <div class="ai-review-content">{{ ai_review|safe }}</div>
             </div>
             {% endif %}
         </div>
@@ -161,18 +227,28 @@
                 'java': 'import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        // Write Java code here\n    }\n}'
             };
             
+            const userCodes = {
+                'cpp': templates['cpp'],
+                'python': templates['python'],
+                'java': templates['java']
+            };
+
+            let currentLang = languageSelect ? languageSelect.value : 'cpp';
+            
+            if (codeEditor.value.trim() !== '') {
+                userCodes[currentLang] = codeEditor.value;
+            } else {
+                codeEditor.value = templates[currentLang] || '';
+            }
+            
             function updateTemplate() {
-                const currentVal = codeEditor.value.trim();
-                const isDefault = Object.values(templates).some(t => currentVal === t.trim()) || currentVal === '';
-                if (isDefault) {
-                    codeEditor.value = templates[languageSelect.value] || '';
-                }
+                userCodes[currentLang] = codeEditor.value;
+                currentLang = languageSelect.value;
+                codeEditor.value = userCodes[currentLang];
             }
 
             if (languageSelect) {
                 languageSelect.addEventListener('change', updateTemplate);
-                // Set initial template if empty
-                updateTemplate();
             }
         }
 

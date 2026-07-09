@@ -12,10 +12,20 @@ def execute_code(language, code, input_data):
         )
 
         if response.status_code == 200:
-            return response.json().get("output", "")
-        return f"Error: {response.text}"
+            res_json = response.json()
+            return {
+                "output": res_json.get("output", ""),
+                "success": res_json.get("success", False)
+            }
+        return {
+            "output": f"Error: {response.text}",
+            "success": False
+        }
     except requests.exceptions.RequestException as e:
-        return f"Error: {str(e)}"
+        return {
+            "output": f"Error: {str(e)}",
+            "success": False
+        }
 
 
 # from django.conf import settings

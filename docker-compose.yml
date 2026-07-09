@@ -2,30 +2,30 @@ version: "3.9"
 
 services:
 
-  db:
-    image: postgres:15-alpine
-    container_name: oj_postgres
-    restart: unless-stopped
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: oj_postgres
+  #   restart: unless-stopped
 
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-ojdb}
-      POSTGRES_USER: ${POSTGRES_USER:-ojuser}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ojpassword}
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB:-ojdb}
+  #     POSTGRES_USER: ${POSTGRES_USER:-ojuser}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ojpassword}
 
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
 
-    ports:
-      - "5432:5432"
+  #   ports:
+  #     - "5432:5432"
 
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ojuser} -d ${POSTGRES_DB:-ojdb}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  #   healthcheck:
+  #     test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ojuser} -d ${POSTGRES_DB:-ojdb}" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
-    networks:
-      - oj_network
+  #   networks:
+  #     - oj_network
 
   web:
     build:
@@ -39,14 +39,15 @@ services:
       - .env
 
     depends_on:
-      db:
-        condition: service_healthy
+      # db:
+      #   condition: service_healthy
 
       compiler:
         condition: service_started
 
     ports:
-      - "8000:8000"
+      # - "8000:8000"
+      - "127.0.0.1:8000:8000"
 
     volumes:
       - static_volume:/app/staticfiles
@@ -55,21 +56,25 @@ services:
       sh -c " python manage.py migrate && python manage.py collectstatic --noinput && gunicorn oj.wsgi:application --bind 0.0.0.0:8000 --workers 3 "
 
     networks:
-      - oj_network
+      - oj_network # for Render Postgres, Gemini API, etc.
+      - compiler_internal # to reach compiler by service name
 
   compiler:
     build:
       context: ./compiler_service
       dockerfile: Dockerfile
 
+    mem_limit: 1g
+    cpus: "1.5"
+
     container_name: oj_compiler
     restart: unless-stopped
 
-    ports:
-      - "8001:8001"
+    # ports:
+      # - "127.0.0.1:8001:8001"
 
     networks:
-      - oj_network
+      - compiler_internal # only this — no internet route
 
     security_opt:
       - no-new-privileges:true
@@ -80,9 +85,13 @@ services:
       PYTHONUNBUFFERED: 1
 
 volumes:
-  postgres_data:
+  # postgres_data:
   static_volume:
 
 networks:
   oj_network:
     driver: bridge
+
+  compiler_internal:
+    driver: bridge
+    internal: true # no route out to the internet at all

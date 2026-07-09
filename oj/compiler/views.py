@@ -22,20 +22,20 @@ def quick_run_view(request):
     try:
         body = json.loads(request.body)
     except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON body."}, status=400)
+        return JsonResponse({"error": "Invalid JSON body.", "success": False}, status=400)
 
     code = body.get("code", "")
     language = body.get("language", "python")
     input_data = body.get("input_data", "")
 
     if not code.strip():
-        return JsonResponse({"error": "No code provided."}, status=400)
+        return JsonResponse({"error": "No code provided.", "success": False}, status=400)
 
     try:
-        output = execute_code(language, code, input_data)
-        return JsonResponse({"output": output})
+        res = execute_code(language, code, input_data)
+        return JsonResponse(res)
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({"error": str(e), "success": False}, status=500)
 
 
 
@@ -48,7 +48,8 @@ def run_code_view(request):
         problem_id = request.POST.get("problem_id")
 
         try:
-            output = execute_code(language, code, input_data)
+            res = execute_code(language, code, input_data)
+            output = res.get("output", "")
         except Exception as e:
             output = f"Error: {str(e)}"
 
