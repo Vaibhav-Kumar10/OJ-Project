@@ -1,0 +1,426 @@
+/* =============================================================
+   CodeForge — Authentication Page Stylesheet
+   auth.css | Unified styles for Login and Signup canvas, card,
+   inputs, buttons, typography, and layout transitions.
+   ============================================================= */
+
+/* ─────────────────────────────────────────────────────────────
+   0. MESH BACKGROUND & PALETTE OVERRIDES
+   Matches the Problems/Home page mesh palette.
+   ───────────────────────────────────────────────────────────── */
+/* Force plain black navbar brand on mesh background pages */
+/* ─────────────────────────────────────────────────────────────
+   1. AUTH LAYOUT & CANVAS PANEL
+   ───────────────────────────────────────────────────────────── */
+.auth-layout {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+    animation: fadeInUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-canvas {
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    border-radius: 28px;
+    padding: 60px 40px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Layout style variants */
+.auth-canvas--split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 80px 60px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. TYPOGRAPHY & DISPLAY HEADERS
+   ───────────────────────────────────────────────────────────── */
+.auth-display-title {
+    font-family: Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #111111;
+    margin: 0 0 16px;
+    text-align: center;
+}
+
+.auth-canvas--split .auth-display-title {
+    text-align: left;
+    font-size: clamp(3rem, 6vw, 5rem);
+}
+
+.auth-subtitle {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: #555555;
+    font-weight: 500;
+    margin: 0 0 40px;
+    text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. UNIFIED AUTHENTICATION CARD
+   ───────────────────────────────────────────────────────────── */
+.auth-card-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.auth-canvas--split .auth-card-container {
+    justify-content: flex-start;
+}
+
+.auth-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.auth-card-header {
+    margin-bottom: 28px;
+    text-align: left;
+}
+
+.auth-card-title {
+    font-family: Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111111;
+    margin: 0 0 8px;
+}
+
+.auth-card-subtitle {
+    font-size: 0.95rem;
+    color: #666666;
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. FORM ELEMENTS & INPUTS
+   ───────────────────────────────────────────────────────────── */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333333;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d4cec5;
+    border-radius: 999px; /* Pill layout matching inputs in mockup */
+    color: #111111;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #111111; /* Standardized focus state (brand purple) */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+}
+
+.form-input::placeholder {
+    color: #aaaaaa;
+    font-weight: 400;
+}
+
+/* Password Toggle Icon Button */
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #888888;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: #111111;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. OPTIONS & CHECKBOXES
+   ───────────────────────────────────────────────────────────── */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 0.92rem;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #111111;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.checkbox-wrapper label {
+    color: #555555;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.92rem;
+}
+
+.forgot-link {
+    color: #555555;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    font-size: 0.92rem;
+}
+
+.forgot-link:hover {
+    color: #111111;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. PRIMARY & SECONDARY ACTION BUTTONS
+   ───────────────────────────────────────────────────────────── */
+.submit-btn,
+.auth-btn-primary {
+    width: 100%;
+    padding: 14px 28px;
+    background: #111111; /* Standardized Deep Purple */
+    color: #ffffff;
+    border: none;
+    border-radius: 999px; /* Pill layout matching button in mockup */
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.submit-btn:hover,
+.auth-btn-primary:hover {
+    background: #333333; /* Slightly darker purple on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.submit-btn:active,
+.auth-btn-primary:active {
+    transform: translateY(1px);
+}
+
+.submit-btn:disabled {
+    background: #666666;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Divider Line ("OR") */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #888888;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.auth-divider:not(:empty)::before {
+    margin-right: 12px;
+}
+
+.auth-divider:not(:empty)::after {
+    margin-left: 12px;
+}
+
+/* Secondary Action Button (Outline) */
+.auth-btn-outline {
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    color: #111111;
+    border: 1.5px solid #d4cec5;
+    border-radius: 999px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.auth-btn-outline:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: #111111;
+    transform: translateY(-1px);
+}
+
+.auth-btn-outline:active {
+    transform: translateY(1px);
+}
+
+/* Footer & Navigation links */
+.form-footer,
+.login-link {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.9rem;
+    color: #666666;
+    font-weight: 500;
+}
+
+.form-footer a,
+.login-link a {
+    color: #111111;
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.form-footer a:hover,
+.login-link a:hover {
+    color: #333333;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. ERRORS & MESSAGES
+   ───────────────────────────────────────────────────────────── */
+.error-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: #b91c1c;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. RESPONSIVE BREAKPOINTS
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .auth-canvas--split {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 48px 32px;
+    }
+
+    .auth-canvas--split .auth-display-title {
+        text-align: center;
+    }
+
+    .auth-canvas--split .auth-card-container {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-layout {
+        padding: 20px 16px 60px;
+    }
+
+    .auth-canvas {
+        padding: 40px 24px;
+        border-radius: 20px;
+    }
+
+    .auth-card {
+        padding: 24px 20px;
+        border-radius: 16px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}

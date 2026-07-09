@@ -1,0 +1,586 @@
+/* =============================================================
+   CodeForge — Global Design System
+   base.css | Single source of truth for all design tokens,
+   resets, shared components, and keyframes.
+   Loaded once via base.html → inherited by every page.
+   ============================================================= */
+
+/* ─────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS  (CSS Custom Properties)
+   All colour, spacing, radius, shadow and transition values
+   live here. Pages NEVER redefine these.
+   ───────────────────────────────────────────────────────────── */
+:root {
+    /* Warm Mesh Theme (Default Global) */
+    --bg-primary:    #f5efe6;
+    --bg-secondary:  #ede8df;
+    --bg-elevated:   #ffffff;
+    --bg-card:       rgba(255, 255, 255, 0.72);
+
+    --text-primary:   #111111;
+    --text-secondary: #444444;
+    --text-muted:     #888888;
+
+    --border:       #d6d0c7;
+    --border-hover: #bcb6ae;
+
+    --glass-bg:     rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(0, 0, 0, 0.08);
+
+    --accent-primary:   #111111;
+    --accent-secondary: #666666;
+    --accent-gradient:  linear-gradient(135deg, #111111 0%, #444444 100%);
+
+    --success: #00c851;
+    --error:   #ff4444;
+    --warning: #ffbb33;
+
+    /* Shadows */
+    --shadow-sm:  0 2px 8px  rgba(0, 0, 0, 0.06);
+    --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.09);
+    --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.12);
+    --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.08);
+
+    /* Spacing scale */
+    --space-xs:  4px;
+    --space-sm:  8px;
+    --space-md:  16px;
+    --space-lg:  24px;
+    --space-xl:  32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* Border-radius scale */
+    --radius:      8px;
+    --radius-lg:   12px;
+    --radius-xl:   16px;
+    --radius-full: 9999px;
+
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
+
+    /* Transitions */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. RESET & BASE
+   ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background:
+        radial-gradient(ellipse at 0% 0%,   #b8d9f4 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 80%, #f5bf5a 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 100%, #f0c97e 0%, transparent 40%),
+        var(--bg-primary);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: var(--transition);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. GLOBAL BUTTON SYSTEM
+   ───────────────────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: 0.875rem;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+.btn:hover::before { left: 100%; }
+
+.btn-primary {
+    background: var(--accent-gradient);
+    color: #ffffff;
+    box-shadow: var(--shadow-md);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+.btn-secondary:hover {
+    background: var(--border-hover);
+    border-color: #111111;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: transparent;
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+.btn-danger:hover {
+    background: rgba(255, 68, 68, 0.1);
+    transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. NAVBAR (Warm Mesh Style)
+   ───────────────────────────────────────────────────────────── */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+/* Brand / Logo */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-decoration: none;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+}
+
+/* Right side container */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xl);
+}
+
+/* Nav links list */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    display: inline-block;
+    color: #555555;
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--space-xs) 0;
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #111111;
+}
+
+/* Ultra-fine underline for active items */
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #111111;
+    border-radius: 2px;
+}
+
+/* Right-side actions cluster */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--space-sm);
+    border-radius: var(--radius);
+    transition: var(--transition);
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.theme-toggle:hover {
+    color: var(--text-primary);
+    background: var(--border-hover);
+    transform: scale(1.05);
+}
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Authenticated user avatar button */
+.profile-dropdown { position: relative; }
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border-radius: 50%;
+    text-decoration: none;
+    background: transparent;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+.profile-btn:hover {
+    border-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.nav-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #555555;
+    background: transparent;
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+.nav-logout-btn:hover {
+    color: #111111;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #111111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   5. FOOTER
+   ───────────────────────────────────────────────────────────── */
+.footer {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    padding: var(--space-xl) var(--space-md);
+    text-align: center;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--border);
+    margin-top: var(--space-3xl);
+}
+
+.footer p {
+    margin: 0 0 var(--space-md);
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.footer-links li a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.25s ease;
+}
+.footer-links li a:hover { color: var(--accent-primary); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   6. SHARED DIFFICULTY BADGES
+   Used on home, allproblems, and problem_detail.
+   ───────────────────────────────────────────────────────────── */
+.difficulty-badge,
+.difficulty {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.difficulty-easy,
+.difficulty.easy {
+    background: transparent;
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.difficulty-medium,
+.difficulty.medium {
+    background: transparent;
+    color: var(--warning);
+    border-color: var(--warning);
+}
+
+.difficulty-hard,
+.difficulty.hard {
+    background: transparent;
+    color: var(--error);
+    border-color: var(--error);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   7. SHARED VERDICT BADGES
+   Used on home (recent submissions) and problem_detail.
+   ───────────────────────────────────────────────────────────── */
+.verdict {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+}
+.verdict.accepted {
+    background: transparent;
+    color: var(--success);
+    border-color: var(--success);
+}
+.verdict.wrong-answer {
+    background: transparent;
+    color: var(--error);
+    border-color: var(--error);
+}
+.verdict.time-limit-exceeded {
+    background: transparent;
+    color: var(--warning);
+    border-color: var(--warning);
+}
+.verdict.runtime-error {
+    background: transparent;
+    color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   8. SHARED KEYFRAMES
+   ───────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1;   }
+    50%       { opacity: 0.5; }
+}
+
+@keyframes backgroundShift {
+    0%, 100% { opacity: 1;   }
+    50%       { opacity: 0.7; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Utility animation classes */
+.fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+.pulse      { animation: pulse 2s infinite; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   9. GLOBAL UTILITIES
+   ───────────────────────────────────────────────────────────── */
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.text-accent   { color: var(--accent-primary); }
+.text-muted    { color: var(--text-muted); }
+.text-success  { color: var(--success); }
+.text-error    { color: var(--error); }
+.text-warning  { color: var(--warning); }
+.font-mono     { font-family: var(--font-mono); }
+
+.card {
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    transition: var(--transition);
+}
+.card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   10. RESPONSIVE — Navbar collapses on mobile
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .navbar {
+        padding: var(--space-md);
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .navbar-nav {
+        gap: var(--space-md);
+    }
+
+    .profile-name {
+        display: none; /* show avatar only on small screens */
+    }
+
+    .profile-btn {
+        padding: var(--space-sm);
+    }
+
+    .navbar-actions {
+        gap: var(--space-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-nav {
+        display: none; /* hamburger menu territory — hidden for now */
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11. AUTH TOGGLE CAPSULE (Navbar Login/Register toggle)
+   ───────────────────────────────────────────────────────────── */
+.auth-toggle-capsule {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.home-mesh-background .auth-toggle-capsule {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.auth-toggle-btn {
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.4;
+    color: #b3b3b3;
+}
+
+.auth-toggle-btn:hover {
+    color: #ffffff;
+}
+
+.auth-toggle-btn.active {
+    background: #ffffff;
+    color: #0a0a0f;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+body.home-mesh-background .auth-toggle-btn {
+    color: #444444;
+}
+
+body.home-mesh-background .auth-toggle-btn:hover {
+    color: #111111;
+}
+
+body.home-mesh-background .auth-toggle-btn.active {
+    background: #111111;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+

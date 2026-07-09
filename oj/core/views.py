@@ -47,6 +47,52 @@ def home_view(request):
 # ----------------- List All Problems ----------------- #
 def all_problems_view(request):
     problems = Problem.objects.all()
+    
+    difficulty = request.GET.get('difficulty')
+    category = request.GET.get('category')
+    status = request.GET.get('status')
+    search = request.GET.get('search')
+    sort_by = request.GET.get('sort')
+
+    if difficulty:
+        problems = problems.filter(difficulty__iexact=difficulty)
+    
+    if category:
+        problems = problems.filter(tags__icontains=category)
+        
+    if search:
+        problems = problems.filter(title__icontains=search)
+        
+    if status and request.user.is_authenticated:
+        user_submissions = Submission.objects.filter(user=request.user)
+        if status == 'solved':
+            solved_ids = user_submissions.filter(verdict='Accepted').values_list('problem_id', flat=True)
+            problems = problems.filter(id__in=solved_ids)
+        elif status == 'attempted':
+            solved_ids = user_submissions.filter(verdict='Accepted').values_list('problem_id', flat=True)
+            attempted_ids = user_submissions.exclude(verdict='Accepted').values_list('problem_id', flat=True)
+            problems = problems.filter(id__in=attempted_ids).exclude(id__in=solved_ids)
+        elif status == 'unsolved':
+            attempted_ids = user_submissions.values_list('problem_id', flat=True)
+            problems = problems.exclude(id__in=attempted_ids)
+
+    if sort_by:
+        if sort_by == 'difficulty':
+            from django.db.models import Case, When, Value, IntegerField
+            problems = problems.annotate(
+                diff_order=Case(
+                    When(difficulty__iexact='easy', then=Value(1)),
+                    When(difficulty__iexact='medium', then=Value(2)),
+                    When(difficulty__iexact='hard', then=Value(3)),
+                    default=Value(4),
+                    output_field=IntegerField(),
+                )
+            ).order_by('diff_order', 'title')
+        elif sort_by == 'title':
+            problems = problems.order_by('title')
+        elif sort_by == 'score':
+            problems = problems.order_by('-score', 'title')
+
     return render(request, "core/allproblems.html", {"problems": problems})
 
 

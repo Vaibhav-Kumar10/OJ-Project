@@ -1,0 +1,66 @@
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{# components/problem_row.html                                                  #}
+{#                                                                               #}
+{# A single <tr> row for the problems list table in allproblems.html.          #}
+{# Must be used inside a <tbody> inside a <table class="problems-table">.      #}
+{# Requires {% load custom_filters %} on the parent page (for split & trim).   #}
+{#                                                                               #}
+{# REQUIRED context variable:                                                   #}
+{#   problem       — Problem model instance                                     #}
+{#     .id         — int                                                        #}
+{#     .title      — str                                                        #}
+{#     .difficulty — str: "Easy" | "Medium" | "Hard"                           #}
+{#     .score      — int                                                        #}
+{#     .tags       — str (comma-separated, may be None/empty)                  #}
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{% load custom_filters %}
+<tr class="table-row"
+    data-problem-id="{{ problem.id }}"
+    style="cursor:pointer;"
+    aria-label="Problem {{ problem.id }}: {{ problem.title }}"
+    onclick="navigateToProblem(this)">
+
+    {# ── Column 1: ID ── #}
+    <td class="problem-id">
+        <a href="{% url 'core:problem_detail' problem.id %}"
+           onclick="event.stopPropagation()">
+            #{{ problem.id|stringformat:"03d" }}
+        </a>
+    </td>
+
+    {# ── Column 2: Title ── #}
+    <td class="problem-title">
+        <a href="{% url 'core:problem_detail' problem.id %}"
+           onclick="event.stopPropagation()">
+            {{ problem.title }}
+        </a>
+    </td>
+
+    {# ── Column 3: Difficulty badge ── #}
+    <td>
+        {% with difficulty=problem.difficulty %}
+            {% include "components/difficulty_badge.html" %}
+        {% endwith %}
+    </td>
+
+    {# ── Column 4: Score ── #}
+    <td class="score font-mono">{{ problem.score }}</td>
+
+    {# ── Column 5: Tags ── #}
+    <td class="tags">
+        {% if problem.tags %}
+            {% for tag in problem.tags|split:"," %}
+                <span class="tag-pill outline-badge">{{ tag|trim }}</span>
+            {% endfor %}
+        {% else %}
+            <span class="text-muted">—</span>
+        {% endif %}
+    </td>
+
+    {# ── Column 6: Action ── #}
+    <td class="action-cell">
+        <a href="{% url 'core:problem_detail' problem.id %}" class="action-btn circular" aria-label="Go to problem" onclick="event.stopPropagation()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
+    </td>
+</tr>

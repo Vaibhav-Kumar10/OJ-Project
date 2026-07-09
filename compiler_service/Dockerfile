@@ -1,25 +1,34 @@
 FROM python:3.10-slim
 
-# Install system dependencies for compilation
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    default-jdk \
-    g++ \
-    curl \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Set work directory
+# Install compilers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    default-jdk-headless \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Create isolated user
+RUN useradd -m -u 1000 compileruser
+
 WORKDIR /app
 
-# Copy all project files
-COPY . /app
+COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir django gunicorn requests
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 
-# Expose app port
-EXPOSE 8000
+COPY . .
 
-# Run with Gunicorn (multi-worker, high timeout)
-CMD ["gunicorn", "compiler_service.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120"]
+# Ownership
+COPY --chown=compileruser:compileruser . .
+
+USER compileruser
+
+EXPOSE 8001
+
+CMD ["gunicorn", "compiler_service.wsgi:application", "--bind", "0.0.0.0:8001", "--workers", "2", "--threads", "2", "--timeout", "15"]

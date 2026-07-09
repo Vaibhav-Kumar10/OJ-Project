@@ -231,6 +231,27 @@ COMPILER_SERVICE_URL=https://<aws-compiler-service-url>
 
 ---
 
+# Container structure
+
+┌─────────────────────────────────────────────────┐
+│          Docker Compose (docker-compose.yml)    │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  📦 PostgreSQL (db:5432)                        │
+│     └─ Stores users, problems, submissions      │
+│                                                 │
+│  🌐 Django Web (web:8000)                       │
+│     └─ Your OJ website                          │
+│     └─ Accessible at <http://localhost:8000>    │
+│                                                 │
+│  ⚙️  Compiler Service (compiler:8001)           │
+│     └─ Runs Python/C++/Java code                │
+│     └─ Called by Django when user runs code     │
+│                                                 │
+└─────────────────────────────────────────────────┘
+
+---
+
 ## 📊 Future Improvements
 
 - Real-time WebSocket-based leaderboard

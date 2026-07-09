@@ -1,1118 +1,337 @@
+{% extends "base.html" %}
+{% load static %}
 {% load custom_filters %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CodeForge | Problem Detail</title>
-    <style>
-        :root {
-            /* Dark Theme Colors (Default) */
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #1a1a2e;
-            --bg-elevated: #262641;
-            --bg-card: rgba(26, 26, 46, 0.8);
-            --accent-primary: #ffa116;
-            --accent-secondary: #00d9ff;
-            --accent-gradient: linear-gradient(135deg, #ffa116 0%, #00d9ff 100%);
-            --success: #00c851;
-            --error: #ff4444;
-            --warning: #ffbb33;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #6c6c6c;
-            --border: #3a3a5c;
-            --border-hover: #4a4a6c;
-
-            /* Glass morphism */
-            --glass-bg: rgba(26, 26, 46, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.1);
-
-            /* Shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.2);
-            --shadow-glow: 0 0 20px rgba(255, 161, 22, 0.3);
-
-            /* Spacing */
-            --space-xs: 4px;
-            --space-sm: 8px;
-            --space-md: 16px;
-            --space-lg: 24px;
-            --space-xl: 32px;
-            --space-2xl: 48px;
-            --space-3xl: 64px;
-
-            /* Radius */
-            --radius: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
-            --radius-full: 9999px;
-
-            /* Transitions */
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-            /* Typography */
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
-        }
-
-        [data-theme="light"] {
-            /* Light Theme Colors */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-elevated: #ffffff;
-            --bg-card: rgba(255, 255, 255, 0.9);
-            --accent-primary: #1976d2;
-            --accent-secondary: #dc004e;
-            --accent-gradient: linear-gradient(135deg, #1976d2 0%, #dc004e 100%);
-            --success: #2e7d32;
-            --error: #d32f2f;
-            --warning: #f57c00;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --text-muted: #9ca3af;
-            --border: #e5e7eb;
-            --border-hover: #d1d5db;
-
-            /* Glass morphism for light */
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(0, 0, 0, 0.1);
-
-            /* Light theme shadows */
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.12);
-            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
-            --shadow-glow: 0 0 20px rgba(25, 118, 210, 0.2);
-        }
-
-        /* Reset & Base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(255, 161, 22, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] body {
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(25, 118, 210, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(220, 0, 78, 0.03) 0%, transparent 50%);
-        }
-
-        /* Navigation */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--space-md) var(--space-lg);
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        [data-theme="light"] .navbar {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            text-decoration: none;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-brand::before {
-            content: "⚡";
-            font-size: 2rem;
-            filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
-            -webkit-text-fill-color: var(--accent-primary);
-        }
-
-        [data-theme="light"] .navbar-brand::before {
-            filter: drop-shadow(0 0 8px rgba(25, 118, 210, 0.5));
-        }
-
-        .navbar-nav {
-            display: flex;
-            align-items: center;
-            gap: var(--space-lg);
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-link {
-            display: inline-block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            transition: left 0.5s ease;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--text-primary);
-            background: var(--bg-elevated);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: var(--bg-elevated);
-            box-shadow: inset 0 1px 0 rgba(255, 161, 22, 0.2);
-        }
-
-        [data-theme="light"] .nav-link.active {
-            box-shadow: inset 0 1px 0 rgba(25, 118, 210, 0.2);
-        }
-
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-lg);
-            border: none;
-            border-radius: var(--radius-lg);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.875rem;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            box-shadow: var(--shadow-md);
-        }
-
-        [data-theme="light"] .btn-primary {
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-secondary {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            font-size: 1.2rem;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            color: var(--text-primary);
-            background: var(--border-hover);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle:focus {
-            outline: 2px solid var(--accent-primary);
-            outline-offset: 2px;
-        }
-
-        /* Main Layout */
-        .main-split-view {
-            display: grid;
-            grid-template-columns: 1.2fr 1.8fr;
-            gap: var(--space-lg);
-            padding: var(--space-lg);
-            min-height: calc(100vh - 80px);
-        }
-
-        .left-panel,
-        .right-panel {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            overflow-y: auto;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-        }
-
-        .left-panel:hover,
-        .right-panel:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Problem Details */
-        .problems-header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-md);
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .problem-meta {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-            flex-wrap: wrap;
-        }
-
-        .difficulty {
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid;
-        }
-
-        .difficulty.easy {
-            background: rgba(0, 200, 81, 0.2);
-            color: var(--success);
-            border-color: rgba(0, 200, 81, 0.3);
-        }
-
-        .difficulty.medium {
-            background: rgba(255, 187, 51, 0.2);
-            color: var(--warning);
-            border-color: rgba(255, 187, 51, 0.3);
-        }
-
-        .difficulty.hard {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--error);
-            border-color: rgba(255, 68, 68, 0.3);
-        }
-
-        .meta-item {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-        }
-
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-lg);
-        }
-
-        .tag {
-            background: var(--bg-elevated);
-            color: var(--text-secondary);
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius);
-            font-size: 0.75rem;
-            border: 1px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .tag:hover {
-            background: var(--border-hover);
-            color: var(--text-primary);
-            transform: translateY(-1px);
-        }
-
-        .content-card {
-            background: var(--bg-elevated);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-lg);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .content-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .content-card:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-sm);
-            transform: translateY(-2px);
-        }
-
-        .content-card:hover::before {
-            opacity: 1;
-        }
-
-        .content-card h3,
-        .content-card h4 {
-            color: var(--accent-primary);
-            margin-bottom: var(--space-md);
-            font-weight: 700;
-        }
-
-        .content-card pre {
-            background: var(--bg-primary);
-            padding: var(--space-md);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            line-height: 1.5;
-            transition: var(--transition);
-            overflow-y: auto;
-            /* allow vertical scroll */
-            overflow-x: auto;
-            /* allow horizontal scroll if needed */
-            max-height: 400px;
-            /* limit height */
-            white-space: pre-wrap;
-            /* wrap long lines */
-            word-wrap: break-word;
-        }
-
-        .code-block {
-            background: var(--bg-primary);
-            padding: var(--space-md);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            line-height: 1.5;
-            transition: var(--transition);
-            overflow-y: auto;
-            /* allow vertical scroll */
-            overflow-x: auto;
-            /* allow horizontal scroll if needed */
-            max-height: 400px;
-            /* limit height */
-            white-space: pre-wrap;
-            /* wrap long lines */
-            word-wrap: break-word;
-        }
-
-        .content-card pre:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 1px rgba(255, 161, 22, 0.2);
-        }
-
-        [data-theme="light"] .content-card pre:hover {
-            box-shadow: 0 0 0 1px rgba(25, 118, 210, 0.2);
-        }
-
-        /* Editor Panel */
-        .form-group {
-            margin-bottom: var(--space-lg);
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: var(--space-sm);
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-        }
-
-        .form-select,
-        .code-editor,
-        .input-editor {
-            width: 100%;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-md);
-            font-family: var(--font-mono);
-            transition: var(--transition);
-            font-size: 0.875rem;
-        }
-
-        .form-select:focus,
-        .code-editor:focus,
-        .input-editor:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 2px rgba(255, 161, 22, 0.2);
-            background: var(--bg-elevated);
-        }
-
-        [data-theme="light"] .form-select:focus,
-        [data-theme="light"] .code-editor:focus,
-        [data-theme="light"] .input-editor:focus {
-            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-        }
-
-        .code-editor,
-        .input-editor {
-            min-height: 200px;
-            resize: vertical;
-            line-height: 1.5;
-        }
-
-        .button-group {
-            display: flex;
-            gap: var(--space-md);
-            margin-bottom: var(--space-lg);
-            flex-wrap: wrap;
-        }
-
-        .submit-btn {
-            background: var(--accent-gradient);
-            color: var(--bg-primary);
-            border: none;
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-lg);
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.95rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        [data-theme="light"] .submit-btn {
-            color: #ffffff;
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        /* Output Section */
-        #outputBox {
-            background: var(--bg-primary);
-            border: 2px dashed var(--accent-secondary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-            min-height: 120px;
-            white-space: pre-wrap;
-            overflow-x: auto;
-            transition: var(--transition);
-            line-height: 1.5;
-        }
-
-        #outputBox:hover {
-            border-color: var(--accent-primary);
-            background: var(--bg-elevated);
-        }
-
-        /* Submissions Sidebar */
-        .sidebar-toggle {
-            background: var(--bg-elevated);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar-toggle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 161, 22, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        [data-theme="light"] .sidebar-toggle::before {
-            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.1), transparent);
-        }
-
-        .sidebar-toggle:hover::before {
-            left: 100%;
-        }
-
-        .sidebar-toggle:hover {
-            background: var(--border-hover);
-            border-color: var(--accent-primary);
-            transform: translateY(-1px);
-        }
-
-        .submissions-sidebar {
-            position: fixed;
-            top: 0;
-            right: -500px;
-            width: 400px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid var(--border);
-            padding: var(--space-xl);
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 1001;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .submissions-sidebar.visible {
-            right: 0;
-        }
-
-        .submissions-sidebar h2 {
-            margin-bottom: var(--space-lg);
-            color: var(--accent-primary);
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: var(--space-lg);
-            right: var(--space-lg);
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: var(--space-sm);
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .close-btn:hover {
-            background: var(--bg-elevated);
-            color: var(--accent-primary);
-            transform: scale(1.1);
-        }
-
-        .submissions-sidebar table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: var(--space-xl);
-        }
-
-        .submissions-sidebar th,
-        .submissions-sidebar td {
-            padding: var(--space-md) var(--space-sm);
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            transition: var(--transition);
-        }
-
-        .submissions-sidebar th {
-            color: var(--accent-primary);
-            font-weight: 700;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .submissions-sidebar tr:hover {
-            background: var(--bg-elevated);
-        }
-
-        .verdict {
-            padding: var(--space-xs) var(--space-sm);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid;
-        }
-
-        .verdict.accepted {
-            background: rgba(0, 200, 81, 0.2);
-            color: var(--success);
-            border-color: rgba(0, 200, 81, 0.3);
-        }
-
-        .verdict.wrong-answer {
-            background: rgba(255, 68, 68, 0.2);
-            color: var(--error);
-            border-color: rgba(255, 68, 68, 0.3);
-        }
-
-        .verdict.time-limit-exceeded {
-            background: rgba(255, 187, 51, 0.2);
-            color: var(--warning);
-            border-color: rgba(255, 187, 51, 0.3);
-        }
-
-        /* Profile Button Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-        }
-
-        .profile-btn:hover {
-            background: var(--border-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: var(--radius-full);
-            background: var(--accent-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #000;
-            box-shadow: 0 2px 8px rgba(255, 161, 22, 0.3);
-        }
-
-        [data-theme="light"] .nav-avatar {
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--text-primary);
-            max-width: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .main-split-view {
-                grid-template-columns: 1fr;
-                gap: var(--space-md);
-            }
-
-            .submissions-sidebar {
-                width: 100%;
-                right: -100%;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: var(--space-md);
-            }
-
-            .main-split-view {
-                padding: var(--space-md);
-            }
-
-            .left-panel,
-            .right-panel {
-                padding: var(--space-lg);
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .problems-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .profile-name {
-                display: none;
-            }
-
-            .profile-btn {
-                padding: var(--space-sm);
-            }
-
-            .problem-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--space-sm);
-            }
-        }
-
-        /* Utility Classes */
-        .hidden {
-            display: none;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mb-0 {
-            margin-bottom: 0;
-        }
-
-        .mt-lg {
-            margin-top: var(--space-lg);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="{% url 'core:home' %}" class="navbar-brand">CodeForge</a>
-
-        <ul class="navbar-nav" id="navbarNav">
-            <li>
-                <a href="{% url 'core:home' %} " class="nav-link">Home</a>
-            </li>
-            <li>
-                <a href="{% url 'core:problems' %}" class="nav-link">Problems</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:contest' %}" class="nav-link">Contest</a>
-            </li>
-            <li>
-                <a href="{% url 'contests:leaderboard' %}" class="nav-link">Leaderboard</a>
-            </li>
-        </ul>
-
-        <div class="navbar-actions">
-            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-                <span id="theme-icon">🌙</span>
-            </button>
-            {% if user.is_authenticated %}
-            <!-- Profile Button with Avatar -->
-            <div class="profile-dropdown">
-                <a href="{% url 'core:profile' %}" class="profile-btn">
-                    <div class="nav-avatar">
-                        {% if user.first_name and user.last_name %}
-                        {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
-                        {% else %}
-                        {{ user.username|slice:":2"|upper }}
-                        {% endif %}
-                    </div>
-
-                    <span class="profile-name">{{ user.first_name|default:user.username }}</span>
-                </a>
+{% block title %}{{ problem.title }} | CodeForge{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editor.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="main-split-view">
+    <!-- Left Panel: Problem Details -->
+    <div class="left-panel">
+        <div class="problems-header">
+            <h1>{{ problem.title }}</h1>
+            <div class="problem-meta">
+                {% with difficulty=problem.difficulty %}
+                {% include "components/difficulty_badge.html" %}
+                {% endwith %}
+                <div class="meta-item">Score: {{ problem.score }}</div>
             </div>
-            <a href="{% url 'user_auth:logout' %}" class="btn btn-secondary" id="logoutBtn">Logout</a>
-            {% else %}
-            <a href="{% url 'user_auth:login' %}" class="btn btn-secondary">Sign In</a>
-            <a href="{% url 'user_auth:signup' %}" class="btn btn-primary">Get Started</a>
-            <!-- <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button> -->
-            {% endif %}
-        </div>
-    </nav>
-
-
-    <!-- Main Content -->
-    <div class="main-split-view">
-        <!-- Left Panel: Problem Details -->
-        <div class="left-panel">
-            <div class="problems-header">
-                <h1>{{ problem.title }}</h1>
-                <div class="problem-meta">
-                    <div class="difficulty {{ problem.difficulty|lower }}">{{ problem.difficulty }}</div>
-                    <div class="meta-item">Score: {{ problem.score }}</div>
-                </div>
-                <div class="tags-container">
-                    {% for tag in problem.tag_list %}
-                    <span class="tag">{{ tag }}</span>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="content-card">
-                <h3>Problem Statement</h3>
-                <p>{{ problem.statement }}</p>
-            </div>
-
-            <div class="content-card">
-                <h4>Input Example:</h4>
-                <pre>{{ problem.input_example }}</pre>
-                <h4>Output Example:</h4>
-                <pre>{{ problem.output_example }}</pre>
+            <div class="tags-container">
+                {% for tag in problem.tag_list %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- Right Panel: Editor and Controls -->
-        <div class="right-panel">
-            <form method="POST" id="runCodeForm">
-                {% csrf_token %}
-                <input type="hidden" name="problem_id" value="{{ problem.id }}">
+        <div class="content-card">
+            <h3>Problem Statement</h3>
+            <div class="problem-statement">{{ problem.statement|linebreaks }}</div>
+        </div>
 
-                <div class="form-group">
+        <div class="content-card">
+            <h4>Input Example:</h4>
+            <pre>{{ problem.input_example }}</pre>
+            <h4>Output Example:</h4>
+            <pre>{{ problem.output_example }}</pre>
+        </div>
+    </div>
+
+    <!-- Right Panel: Editor and Controls -->
+    <div class="right-panel">
+        <form method="POST" id="runCodeForm">
+            {% csrf_token %}
+            <input type="hidden" name="problem_id" value="{{ problem.id }}">
+
+            <div class="editor-toolbar">
+                <div class="toolbar-left">
                     <label for="language">Language:</label>
                     <select name="language" id="language" class="form-select" required>
-                        <option value="python">Python</option>
                         <option value="cpp">C++</option>
                         <option value="java">Java</option>
+                        <option value="python">Python</option>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label for="codeEditor">Code:</label>
-                    <textarea name="code" id="codeEditor" class="code-editor" placeholder="Write your code here..."
-                        required>{{ code|default_if_none:"" }}</textarea>
+                
+                <div class="toolbar-right">
+                    <button type="submit" formaction="{% url 'compiler:run_code' %}" class="submit-btn" id="runCodeBtn">Run Code</button>
+                    <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn" id="submitCodeBtn">Submit Code</button>
+                    <button type="submit" form="aiReviewForm" class="submit-btn" id="aiReviewBtn">Get AI Review</button>
                 </div>
-
-                <div class="form-group">
-                    <label for="inputData">Custom Input (optional):</label>
-                    <textarea id="inputData" name="input_data" class="input-editor"
-                        placeholder="Enter input for test run...">{{ input_data|default_if_none:"" }}</textarea>
-                </div>
-
-                <div class="button-group">
-                    <button type="submit" formaction="{% url 'compiler:run_code' %}" class="submit-btn">Run
-                        Code</button>
-                    <button type="submit" formaction="{% url 'compiler:submit_code' %}" class="submit-btn">Submit
-                        Code</button>
-                </div>
-            </form>
-
-            <form method="POST" action="{% url 'core:ai_review' %}">
-                {% csrf_token %}
-                <input type="hidden" name="problem_id" value="{{ problem.id }}">
-                <input type="hidden" name="language" value="{{ language }}">
-                <input type="hidden" name="code" value="{{ code }}">
-                <input type="hidden" name="input_data" value="{{ input_data }}">
-                <button type="submit" class="submit-btn mt-lg">Get AI Review</button>
-            </form>
-
-            <!-- Output -->
-            <div class="content-card">
-                <h3>Output:</h3>
-                <pre id="outputBox">
-                    {% if mode == "run" and output %}
-                        {{ output }}
-                    {% elif mode == "run" %}
-                        Your output will appear here...
-                    {% elif mode == "submit" %}
-                        {% if messages %}
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                        {% endif %}
-                    {% endif %}</pre>
             </div>
 
+            <div class="form-group">
+                <label for="codeEditor">Code:</label>
+                <textarea name="code" id="codeEditor" class="code-editor" placeholder="Write your code here..."
+                    required>{{ code|default_if_none:"" }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="inputData">Custom Input (optional):</label>
+                <textarea id="inputData" name="input_data" class="input-editor"
+                    placeholder="Enter input for test run...">{{ input_data|default_if_none:"" }}</textarea>
+            </div>
+        </form>
+
+        <form method="POST" action="{% url 'core:ai_review' %}" id="aiReviewForm">
+            {% csrf_token %}
+            <input type="hidden" name="problem_id" value="{{ problem.id }}">
+        </form>
+
+        <!-- Output -->
+        <div class="content-card">
+            <h3>Output:</h3>
+            <pre
+                id="outputBox">{% if mode == "run" and output %}{{ output }}{% elif mode == "run" %}Your output will appear here...{% elif mode == "submit" %}{% if messages %}{% for message in messages %}{{ message }}{% endfor %}{% endif %}{% endif %}</pre>
+        </div>
+
+        <!-- AI Review Section -->
+        <div id="aiReviewContainer">
             {% if ai_review %}
             <div class="content-card">
                 <h3>AI Review:</h3>
-                <pre class="'code-block">{{ ai_review|safe }}</pre>
+                <pre class="code-block">{{ ai_review|safe }}</pre>
             </div>
             {% endif %}
-
-            <!-- Toggle Previous Submissions -->
-            <button class="sidebar-toggle" onclick="toggleSubmissions()">📄 View Submissions</button>
         </div>
-    </div>
 
-    <!-- Submissions Sidebar -->
-    <div id="submissionsSidebar" class="submissions-sidebar hidden">
-        <button onclick="toggleSubmissions()" class="close-btn">✖</button>
-        <h2>Your Submissions</h2>
-        {% if submissions %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Lang</th>
-                    <th>Verdict</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in submissions %}
-                <tr>
-                    <td>{{ s.submitted_at|date:"M d, Y H:i" }}</td>
-                    <td>{{ s.language|upper }}</td>
-                    <td><span class="verdict {{ s.verdict|lower|slugify }}">{{ s.verdict }}</span></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>No submissions yet.</p>
-        {% endif %}
+        <!-- Toggle Previous Submissions -->
+        <button class="sidebar-toggle">📄 View Submissions</button>
     </div>
+</div>
 
-    <script>
+<!-- Submissions Sidebar -->
+<div id="submissionsSidebar" class="submissions-sidebar hidden">
+    <button class="close-btn">✖</button>
+    <h2>Your Submissions</h2>
+    {% if submissions %}
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Lang</th>
+                <th>Verdict</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in submissions %}
+            {% include "components/submission_row.html" with s=s %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No submissions yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        // Function to toggle submissions sidebar
         function toggleSubmissions() {
             const sidebar = document.getElementById('submissionsSidebar');
-            sidebar.classList.toggle('visible');
-            sidebar.classList.toggle('hidden');
-        }
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const nav = document.getElementById('navbarNav');
-            nav.classList.toggle('active');
+            if (sidebar) {
+                sidebar.classList.toggle('visible');
+                sidebar.classList.toggle('hidden');
+            }
         }
 
-
-        // Apply saved theme on page load
-        document.addEventListener("DOMContentLoaded", function () {
-            const savedTheme = localStorage.getItem("theme");
-            const body = document.body;
-            const themeIcon = document.getElementById("theme-icon");
-
-            if (savedTheme) {
-                body.setAttribute("data-theme", savedTheme);
-                themeIcon.textContent = savedTheme === "dark" ? "🌙" : "☀";
+        // Event delegation for sidebar toggles
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.sidebar-toggle') || e.target.closest('#submissionsSidebar .close-btn')) {
+                toggleSubmissions();
             }
         });
 
-        // Theme toggle functionality
-        function toggleTheme() {
-            const body = document.body;
-            const themeIcon = document.getElementById('theme-icon');
-            const currentTheme = body.getAttribute('data-theme');
+        // References to editor inputs
+        const runCodeForm = document.getElementById('runCodeForm');
+        const aiReviewForm = document.getElementById('aiReviewForm');
+        const languageSelect = document.getElementById('language');
+        const codeEditor = document.getElementById('codeEditor');
+        const inputData = document.getElementById('inputData');
 
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                themeIcon.textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeIcon.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
+        if (codeEditor) {
+            const templates = {
+                'cpp': '#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write C++ code here\n    return 0;\n}',
+                'python': 'def solve():\n    # Write Python code here\n    pass\n\nif __name__ == "__main__":\n    solve()',
+                'java': 'import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        // Write Java code here\n    }\n}'
+            };
+            
+            function updateTemplate() {
+                const currentVal = codeEditor.value.trim();
+                const isDefault = Object.values(templates).some(t => currentVal === t.trim()) || currentVal === '';
+                if (isDefault) {
+                    codeEditor.value = templates[languageSelect.value] || '';
+                }
+            }
+
+            if (languageSelect) {
+                languageSelect.addEventListener('change', updateTemplate);
+                // Set initial template if empty
+                updateTemplate();
             }
         }
-    </script>
-</body>
 
-</html>
+        // Handle Run / Submit actions
+        if (runCodeForm) {
+            runCodeForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitter = e.submitter;
+                if (!submitter) return;
+
+                const url = submitter.getAttribute('formaction');
+                if (!url) return;
+
+                const isSubmit = url.includes('submit');
+
+                // Find and disable buttons to prevent double click
+                const runBtn = document.getElementById('runCodeBtn');
+                const submitBtn = document.getElementById('submitCodeBtn');
+                const aiReviewBtn = document.getElementById('aiReviewBtn');
+
+                const buttons = [runBtn, submitBtn, aiReviewBtn].filter(Boolean);
+                const originalContents = buttons.map(btn => btn.innerHTML);
+
+                buttons.forEach(btn => btn.disabled = true);
+                submitter.innerHTML = `<span class="spinner"></span> ${isSubmit ? 'Submitting...' : 'Running...'}`;
+
+                try {
+                    const formData = new FormData(runCodeForm);
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const htmlText = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(htmlText, 'text/html');
+
+                        // Extract output
+                        const newOutput = doc.getElementById('outputBox');
+                        const currentOutput = document.getElementById('outputBox');
+                        if (newOutput && currentOutput) {
+                            currentOutput.innerHTML = newOutput.innerHTML;
+                        }
+
+                        // Extract submissions list
+                        const newSidebar = doc.getElementById('submissionsSidebar');
+                        const currentSidebar = document.getElementById('submissionsSidebar');
+                        if (newSidebar && currentSidebar) {
+                            currentSidebar.innerHTML = newSidebar.innerHTML;
+                        }
+
+                        // Extract CSRF token
+                        const newCsrfToken = doc.querySelector('[name=csrfmiddlewaretoken]')?.value;
+                        if (newCsrfToken) {
+                            document.querySelectorAll('[name=csrfmiddlewaretoken]').forEach(input => {
+                                input.value = newCsrfToken;
+                            });
+                        }
+
+                        // If submit action, automatically open submissions sidebar
+                        if (isSubmit && currentSidebar) {
+                            currentSidebar.classList.remove('hidden');
+                            currentSidebar.classList.add('visible');
+                        }
+                    } else {
+                        const currentOutput = document.getElementById('outputBox');
+                        if (currentOutput) {
+                            currentOutput.textContent = `Error: Request failed with status ${response.status}.`;
+                        }
+                    }
+                } catch (error) {
+                    const currentOutput = document.getElementById('outputBox');
+                    if (currentOutput) {
+                        currentOutput.textContent = `Error: ${error.message}`;
+                    }
+                } finally {
+                    buttons.forEach((btn, index) => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalContents[index];
+                    });
+                }
+            });
+        }
+
+        // Handle AI Review action
+        if (aiReviewForm) {
+            aiReviewForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const submitter = e.submitter || document.getElementById('aiReviewBtn');
+                const url = aiReviewForm.getAttribute('action');
+                if (!url) return;
+
+                const runBtn = document.getElementById('runCodeBtn');
+                const submitBtn = document.getElementById('submitCodeBtn');
+
+                const buttons = [runBtn, submitBtn, submitter].filter(Boolean);
+                const originalContents = buttons.map(btn => btn.innerHTML);
+
+                buttons.forEach(btn => btn.disabled = true);
+                submitter.innerHTML = `<span class="spinner"></span> Reviewing...`;
+
+                try {
+                    const formData = new FormData();
+                    formData.append('csrfmiddlewaretoken', aiReviewForm.querySelector('[name=csrfmiddlewaretoken]').value);
+                    formData.append('problem_id', aiReviewForm.querySelector('[name=problem_id]').value);
+                    formData.append('language', languageSelect ? languageSelect.value : '');
+                    formData.append('code', codeEditor ? codeEditor.value : '');
+                    formData.append('input_data', inputData ? inputData.value : '');
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const htmlText = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(htmlText, 'text/html');
+
+                        // Extract AI Review content
+                        const newAiContainer = doc.getElementById('aiReviewContainer');
+                        const currentAiContainer = document.getElementById('aiReviewContainer');
+                        if (newAiContainer && currentAiContainer) {
+                            currentAiContainer.innerHTML = newAiContainer.innerHTML;
+                        }
+
+                        // Extract CSRF token
+                        const newCsrfToken = doc.querySelector('[name=csrfmiddlewaretoken]')?.value;
+                        if (newCsrfToken) {
+                            document.querySelectorAll('[name=csrfmiddlewaretoken]').forEach(input => {
+                                input.value = newCsrfToken;
+                            });
+                        }
+                    } else {
+                        const currentOutput = document.getElementById('outputBox');
+                        if (currentOutput) {
+                            currentOutput.textContent = `Error: AI Review request failed with status ${response.status}.`;
+                        }
+                    }
+                } catch (error) {
+                    const currentOutput = document.getElementById('outputBox');
+                    if (currentOutput) {
+                        currentOutput.textContent = `Error: ${error.message}`;
+                    }
+                } finally {
+                    buttons.forEach((btn, index) => {
+                        btn.disabled = false;
+                        btn.innerHTML = originalContents[index];
+                    });
+                }
+            });
+        }
+    })();
+</script>
+{% endblock %}

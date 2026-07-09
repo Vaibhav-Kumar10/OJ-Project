@@ -1,0 +1,67 @@
+{% load static %}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+{#  base.html — CodeForge Master Layout                                        #}
+{#                                                                              #}
+{#  Every page in the project extends this template.                           #}
+{#                                                                              #}
+{#  BLOCK CONTRACT — child templates may override these blocks:                #}
+{#                                                                              #}
+{#  {% block title %}      Page title text (inside <title> tag)                #}
+{#  {% block meta_desc %}  Meta description for SEO                            #}
+{#  {% block extra_css %}  Page-specific <link> or <style> tags                #}
+{#  {% block body_attrs %} Extra attributes on <body> (e.g. class)             #}
+{#  {% block content %}    ★ The main page payload — REQUIRED                  #}
+{#  {% block extra_js %}   Page-specific <script> tags (bottom of body)        #}
+{# ═══════════════════════════════════════════════════════════════════════════ #}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {# ── SEO ── #}
+    <title>{% block title %}CodeForge{% endblock %} | Online Judge Platform</title>
+    <meta name="description"
+          content="{% block meta_desc %}CodeForge — a competitive programming judge platform for mastering algorithms and data structures.{% endblock %}" />
+    <meta name="robots" content="index, follow" />
+
+    {# ── Favicon placeholder ── #}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+    {# ── Google Fonts ── #}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet" />
+
+    {# ── Global stylesheet — design tokens, reset, navbar, buttons, footer ── #}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+
+    {# ── theme.js loaded in <head> (not deferred) so the correct            ── #}
+    {# ── data-theme is applied before the first paint — no FOUT.           ── #}
+    <script src="{% static 'js/theme.js' %}"></script>
+
+    {# ── Page-specific CSS injected by child templates ── #}
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body {% block body_attrs %}{% endblock %}>
+
+    {# ── Global Navbar — included from its own component file ── #}
+    {% include "components/navbar.html" %}
+
+    {# ── Main content area — every child template fills this block ── #}
+    <main id="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# ── Global Footer — included from its own component file ── #}
+    {% include "components/footer.html" %}
+
+    {# ── Page-specific JavaScript injected by child templates ── #}
+    {# ── Placed at bottom of body so DOM is fully parsed first. ── #}
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

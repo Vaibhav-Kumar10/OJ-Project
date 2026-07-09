@@ -1,0 +1,49 @@
+{# ─────────────────────────────────────────────────────────────────────────── #}
+{# components/submission_row.html                                                #}
+{#                                                                               #}
+{# A single <tr> inside the submissions sidebar table on problem_detail.html.  #}
+{# Also suitable for any other submissions table that shares the same columns.  #}
+{#                                                                               #}
+{# REQUIRED context variable:                                                   #}
+{#   s           — Submission model instance                                    #}
+{#     .submitted_at — datetime                                                 #}
+{#     .language     — str  (e.g. "python", "cpp", "java")                     #}
+{#     .verdict      — str  (e.g. "Accepted", "Wrong Answer",                  #}
+{#                           "Time Limit Exceeded")                             #}
+{#                                                                               #}
+{# VERDICT → CSS CLASS MAPPING  (via |lower|slugify):                          #}
+{#   "Accepted"            → "accepted"                                         #}
+{#   "Wrong Answer"        → "wrong-answer"                                     #}
+{#   "Time Limit Exceeded" → "time-limit-exceeded"                             #}
+{#   "Runtime Error"       → "runtime-error"                                   #}
+{# All are styled in base.css under the .verdict rule family.                  #}
+{# ─────────────────────────────────────────────────────────────────────────── #}
+<tr>
+    {# ── Date & time ── #}
+    <td>{{ s.submitted_at|date:"M d, Y H:i" }}</td>
+
+    {# ── Language badge (uppercase abbreviation) ── #}
+    <td>
+        <span class="font-mono" style="font-size: 0.8rem; color: var(--text-secondary);">
+            {{ s.language|upper }}
+        </span>
+    </td>
+
+    {# ── Verdict pill ── colour driven by CSS class from slugified verdict ── #}
+    <td>
+        <span class="verdict {{ s.verdict|lower|slugify }}"
+              title="{{ s.verdict }}">
+            {% if s.verdict == "Accepted" %}
+                ✓ AC
+            {% elif s.verdict == "Wrong Answer" %}
+                ✗ WA
+            {% elif s.verdict == "Time Limit Exceeded" %}
+                ⏱ TLE
+            {% elif s.verdict == "Runtime Error" %}
+                ⚡ RE
+            {% else %}
+                {{ s.verdict }}
+            {% endif %}
+        </span>
+    </td>
+</tr>

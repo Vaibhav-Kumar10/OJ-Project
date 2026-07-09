@@ -2,11 +2,41 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+import json
 from .execution import execute_code
 from .evaluation import submit_code
 from contests.models import UserScore, ProblemCompletion
 from core.models import Problem, Submission
 from compiler.utils import is_similar
+
+
+@require_POST
+def quick_run_view(request):
+    """Lightweight JSON API for the homepage Quick Compiler widget.
+    Accepts JSON body: { code, language, input_data }
+    Returns JSON: { output } or { error }
+    """
+    try:
+        body = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON body."}, status=400)
+
+    code = body.get("code", "")
+    language = body.get("language", "python")
+    input_data = body.get("input_data", "")
+
+    if not code.strip():
+        return JsonResponse({"error": "No code provided."}, status=400)
+
+    try:
+        output = execute_code(language, code, input_data)
+        return JsonResponse({"output": output})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
 
 
 @login_required
