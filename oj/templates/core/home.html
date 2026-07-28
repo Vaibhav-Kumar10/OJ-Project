@@ -71,8 +71,7 @@
                             <td class="user-cell">
                                 <div class="home-avatar avatar-color-{{ forloop.counter }}" aria-hidden="true">
                                     {% if entry.user.first_name and entry.user.last_name %}
-                                    {{ entry.user.first_name|slice:":1"|upper }}{{ entry.user.last_name|slice:":1"|upper
-                                    }}
+                                    {{ entry.user.first_name|slice:":1"|upper }}{{ entry.user.last_name|slice:":1"|upper }}
                                     {% else %}
                                     {{ entry.user.username|slice:":2"|upper }}
                                     {% endif %}
