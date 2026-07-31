@@ -277,7 +277,8 @@ This project is licensed under the MIT License.
 
 ## Home
 
-<img width="1920" height="1080" alt="Screenshot 2026-07-29 000421" src="https://github.com/user-attachments/assets/df748973-a5dc-4185-a540-3d4977e9f34b" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f5e8fdff-898d-4970-ae6c-0591f8e2e89a" />
+
 <img width="1920" height="1080" alt="Screenshot 2026-07-29 000426" src="https://github.com/user-attachments/assets/ca3a1618-a3a6-4c3f-abdb-2ddf89bfc2e9" />
 <img width="1920" height="1080" alt="Screenshot 2026-07-29 000431" src="https://github.com/user-attachments/assets/e013126f-a12a-4c73-a1a6-97e72111992f" />
 
