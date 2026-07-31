@@ -19,12 +19,12 @@
         <form action="{% url 'user_auth:login' %}" method="POST" id="loginForm">
             {% csrf_token %}
 
-            <!-- Error Messages -->
+            <!-- Messages -->
             {% if messages %}
             <div class="error-container">
                 {% for message in messages %}
-                <div class="error-message" role="alert">
-                    <span>⚠️</span>
+                <div class="error-message {% if message.tags == 'success' %}success-message{% elif message.tags == 'info' %}info-message{% endif %}" role="alert">
+                    <span>{% if message.tags == 'success' %}✅{% elif message.tags == 'info' %}ℹ️{% else %}⚠️{% endif %}</span>
                     {{ message }}
                 </div>
                 {% endfor %}
@@ -91,6 +91,18 @@
 {% endblock %}
 
 {% block auth_extra_js %}
+<style>
+    .success-message {
+        background: rgba(34, 197, 94, 0.12) !important;
+        border-color: rgba(34, 197, 94, 0.4) !important;
+        color: #22c55e !important;
+    }
+    .info-message {
+        background: rgba(59, 130, 246, 0.12) !important;
+        border-color: rgba(59, 130, 246, 0.4) !important;
+        color: #3b82f6 !important;
+    }
+</style>
 <script>
     // Password toggle functionality
     function togglePassword() {

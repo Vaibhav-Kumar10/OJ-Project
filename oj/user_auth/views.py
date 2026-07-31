@@ -2,13 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-import uuid
 
 User = get_user_model()
 
-# In-memory token store for password reset (keyed by token -> user pk)
-# For production use Django's built-in PasswordResetView with an email backend.
-_reset_tokens = {}
+
 
 
 def signup_view(request):
@@ -115,67 +112,119 @@ def logout_view(request):
 
 def forgot_password_view(request):
     """
-    Allow user to request a password reset by entering their email.
-    Generates a one-time token stored in memory and redirects to reset page.
+    Multi-step password reset:
+      Step 1 – Enter email (GET / first POST)
+      Step 2 – Enter date of birth to verify identity
+      Step 3 – Enter new password
+    State is kept in the session (no email sending required).
     """
+    step = request.session.get("fp_step", 1)
+
     if request.method == "POST":
-        email = request.POST.get("email", "").strip()
-        if not email:
-            messages.error(request, "Please enter your email address.")
-            return render(request, "user_auth/forgot_password.html")
+        action = request.POST.get("action", "")
 
-        try:
-            user = User.objects.get(email__iexact=email)
-            token = str(uuid.uuid4())
-            _reset_tokens[token] = user.pk
-            messages.success(
-                request,
-                "A password reset link has been generated. "
-                "Click the link below to reset your password.",
-            )
-            return redirect("user_auth:reset_password", token=token)
-        except User.DoesNotExist:
-            # Don't reveal whether email exists
-            messages.info(
-                request,
-                "If that email is registered, a reset link will appear.",
-            )
-            return render(request, "user_auth/forgot_password.html")
+        # ── Step 1: verify email ──────────────────────────────────────────
+        if action == "verify_email":
+            email = request.POST.get("email", "").strip()
+            if not email:
+                messages.error(request, "Please enter your email address.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
 
-    return render(request, "user_auth/forgot_password.html")
+            try:
+                user = User.objects.get(email__iexact=email)
+                # Store only the PK — never the password
+                request.session["fp_user_pk"] = user.pk
+                request.session["fp_step"] = 2
+                return render(request, "user_auth/forgot_password.html", {"step": 2})
+            except User.DoesNotExist:
+                messages.error(request, "No account found with that email address.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
+
+        # ── Step 2: verify date of birth ─────────────────────────────────
+        elif action == "verify_dob":
+            user_pk = request.session.get("fp_user_pk")
+            if not user_pk:
+                messages.error(request, "Session expired. Please start again.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
+
+            dob_input = request.POST.get("dob", "").strip()
+            if not dob_input:
+                messages.error(request, "Please enter your date of birth.")
+                return render(request, "user_auth/forgot_password.html", {"step": 2})
+
+            try:
+                user = User.objects.get(pk=user_pk)
+            except User.DoesNotExist:
+                messages.error(request, "Session expired. Please start again.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
+
+            if user.dob is None:
+                messages.error(request, "This account has no date of birth set. Please contact support.")
+                return render(request, "user_auth/forgot_password.html", {"step": 2})
+
+            from datetime import date
+            try:
+                entered_dob = date.fromisoformat(dob_input)
+            except ValueError:
+                messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+                return render(request, "user_auth/forgot_password.html", {"step": 2})
+
+            if entered_dob != user.dob:
+                messages.error(request, "Date of birth does not match our records.")
+                return render(request, "user_auth/forgot_password.html", {"step": 2})
+
+            # DOB verified — proceed to step 3
+            request.session["fp_step"] = 3
+            return render(request, "user_auth/forgot_password.html", {"step": 3})
+
+        # ── Step 3: set new password ──────────────────────────────────────
+        elif action == "set_password":
+            user_pk = request.session.get("fp_user_pk")
+            if not user_pk or request.session.get("fp_step") != 3:
+                messages.error(request, "Session expired. Please start again.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
+
+            password = request.POST.get("password", "")
+            repassword = request.POST.get("repassword", "")
+
+            if not password or not repassword:
+                messages.error(request, "Both password fields are required.")
+                return render(request, "user_auth/forgot_password.html", {"step": 3})
+
+            if password != repassword:
+                messages.error(request, "Passwords do not match.")
+                return render(request, "user_auth/forgot_password.html", {"step": 3})
+
+            try:
+                user = User.objects.get(pk=user_pk)
+                user.set_password(password)
+                user.save()
+                # Clear session state
+                for key in ("fp_user_pk", "fp_step"):
+                    request.session.pop(key, None)
+                messages.success(request, "Password reset successful! Please sign in.")
+                return redirect("user_auth:login")
+            except User.DoesNotExist:
+                messages.error(request, "User not found. Please start again.")
+                request.session["fp_step"] = 1
+                return render(request, "user_auth/forgot_password.html", {"step": 1})
+
+    # GET request — always start at step 1
+    for key in ("fp_user_pk", "fp_step"):
+        request.session.pop(key, None)
+    return render(request, "user_auth/forgot_password.html", {"step": 1})
 
 
 def reset_password_view(request, token):
     """
-    Handle the actual password reset using a one-time token.
+    Legacy token-based reset – kept for URL compatibility but redirects
+    to the new multi-step forgot-password flow.
     """
-    user_pk = _reset_tokens.get(token)
-    if user_pk is None:
-        messages.error(request, "This password reset link is invalid or has expired.")
-        return redirect("user_auth:forgot_password")
+    messages.info(request, "Please use the form below to reset your password.")
+    return redirect("user_auth:forgot_password")
 
-    if request.method == "POST":
-        password = request.POST.get("password", "")
-        repassword = request.POST.get("repassword", "")
-
-        if not password or not repassword:
-            messages.error(request, "Both password fields are required.")
-            return render(request, "user_auth/reset_password.html", {"token": token})
-
-        if password != repassword:
-            messages.error(request, "Passwords do not match.")
-            return render(request, "user_auth/reset_password.html", {"token": token})
-
-        try:
-            user = User.objects.get(pk=user_pk)
-            user.set_password(password)
-            user.save()
-            # Invalidate the token after use
-            del _reset_tokens[token]
-            messages.success(request, "Password reset successful! Please sign in.")
-            return redirect("user_auth:login")
-        except User.DoesNotExist:
-            messages.error(request, "User not found.")
-            return redirect("user_auth:forgot_password")
-
-    return render(request, "user_auth/reset_password.html", {"token": token})

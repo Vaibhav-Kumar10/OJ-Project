@@ -17,7 +17,8 @@
         <!-- Hero Header -->
         <div class="leaderboard-hero-section">
             <h1 class="leaderboard-main-title">Scale the Ranks</h1>
-            <p class="leaderboard-subtitle">Follow the path of mastery and see who is leading the competitive community.</p>
+            <p class="leaderboard-subtitle">Follow the path of mastery and see who is leading the competitive community.
+            </p>
         </div>
 
         <!-- Two-Column Layout -->
@@ -65,7 +66,8 @@
                         <div class="segments-body">
                             <div class="segment-field">
                                 <label class="segment-label" for="lb-time-filter">Time:</label>
-                                <select id="lb-time-filter" class="segment-select" aria-label="Select leaderboard time range">
+                                <select id="lb-time-filter" class="segment-select"
+                                    aria-label="Select leaderboard time range">
                                     <option>All Time</option>
                                     <option>This Month</option>
                                     <option>This Week</option>
@@ -75,7 +77,8 @@
 
                             <div class="segment-field">
                                 <label class="segment-label" for="lb-lang-filter">Language:</label>
-                                <select id="lb-lang-filter" class="segment-select" aria-label="Select programming language">
+                                <select id="lb-lang-filter" class="segment-select"
+                                    aria-label="Select programming language">
                                     <option>All languages</option>
                                     <option>Python</option>
                                     <option>C++</option>
@@ -86,7 +89,8 @@
 
                             <div class="segment-field">
                                 <label class="segment-label" for="lb-diff-filter">Problem difficulty</label>
-                                <select id="lb-diff-filter" class="segment-select" aria-label="Select problem difficulty">
+                                <select id="lb-diff-filter" class="segment-select"
+                                    aria-label="Select problem difficulty">
                                     <option>All difficulties</option>
                                     <option>Easy</option>
                                     <option>Medium</option>
@@ -105,29 +109,29 @@
 
 {% block extra_js %}
 <script>
-(function () {
-    // Smooth translate on row hover is handled by CSS; this is just a no-op placeholder.
-    // Avatar color cycling: ensure every avatar beyond c50 still gets a gradient
-    const avatars = document.querySelectorAll('.lb-avatar');
-    const gradients = [
-        'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-        'linear-gradient(135deg, #8b5cf6, #c026d3)',
-        'linear-gradient(135deg, #10b981, #059669)',
-        'linear-gradient(135deg, #f59e0b, #d97706)',
-        'linear-gradient(135deg, #ef4444, #dc2626)',
-        'linear-gradient(135deg, #3b82f6, #2563eb)',
-        'linear-gradient(135deg, #ec4899, #db2777)',
-        'linear-gradient(135deg, #14b8a6, #0d9488)',
-        'linear-gradient(135deg, #f97316, #ea580c)',
-        'linear-gradient(135deg, #a855f7, #9333ea)',
-    ];
-    avatars.forEach(function (el, i) {
-        // Only apply fallback if no background-image was set by CSS class
-        const computed = window.getComputedStyle(el).backgroundImage;
-        if (!computed || computed === 'none') {
-            el.style.background = gradients[i % 10];
-        }
-    });
-})();
+    (function () {
+        // Smooth translate on row hover is handled by CSS; this is just a no-op placeholder.
+        // Avatar color cycling: ensure every avatar beyond c50 still gets a gradient
+        const avatars = document.querySelectorAll('.lb-avatar');
+        const gradients = [
+            'linear-gradient(135deg, #8b5cf6, #6d28d9)',
+            'linear-gradient(135deg, #8b5cf6, #c026d3)',
+            'linear-gradient(135deg, #10b981, #059669)',
+            'linear-gradient(135deg, #f59e0b, #d97706)',
+            'linear-gradient(135deg, #ef4444, #dc2626)',
+            'linear-gradient(135deg, #3b82f6, #2563eb)',
+            'linear-gradient(135deg, #ec4899, #db2777)',
+            'linear-gradient(135deg, #14b8a6, #0d9488)',
+            'linear-gradient(135deg, #f97316, #ea580c)',
+            'linear-gradient(135deg, #a855f7, #9333ea)',
+        ];
+        avatars.forEach(function (el, i) {
+            // Only apply fallback if no background-image was set by CSS class
+            const computed = window.getComputedStyle(el).backgroundImage;
+            if (!computed || computed === 'none') {
+                el.style.background = gradients[i % 10];
+            }
+        });
+    })();
 </script>
 {% endblock %}

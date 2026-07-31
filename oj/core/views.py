@@ -6,7 +6,7 @@ from google import genai
 import markdown
 import os
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from datetime import datetime, timedelta
 import json
 from django.contrib.auth import get_user_model
@@ -31,9 +31,15 @@ def home_view(request):
             .order_by("-submitted_at")[:5]  # Get last 5 submissions
         )
 
-    scores = UserScore.objects.select_related("user").order_by(
-        "-score", "-problems_solved"
+    scores = list(
+        UserScore.objects.select_related("user").order_by("-score", "-problems_solved")
     )
+
+    # Compute accuracy for each score entry
+    for entry in scores:
+        total = Submission.objects.filter(user=entry.user).count()
+        accepted = Submission.objects.filter(user=entry.user, verdict="Accepted").count()
+        entry.accuracy = (accepted / total * 100) if total > 0 else 0.0
 
     context = {
         "featured_problems": featured_problems,

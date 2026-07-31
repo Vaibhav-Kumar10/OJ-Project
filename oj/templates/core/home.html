@@ -213,7 +213,7 @@ int main() {
         {# ── Mini Stats strip at the bottom of the canvas ── #}
         <div class="home-stats-strip">
             <div class="stat-item">
-                <span class="stat-number">{{ scores.count }}+</span>
+                <span class="stat-number">{{ scores|length }}+</span>
                 <span class="stat-label">Active Users</span>
             </div>
             <div class="stat-divider"></div>
@@ -273,12 +273,10 @@ int main() {
                     <a href="{% url 'core:problem_detail' problem_completion.problem.id %}" class="problem-thin-item">
                         <div class="problem-thin-meta">
                             <span class="problem-thin-title">{{ problem_completion.problem.title }}</span>
-                            <span class="difficulty-badge {{ problem_completion.problem.difficulty|lower }}">{{
-                                problem_completion.problem.difficulty }}</span>
+                            <span class="difficulty-badge {{ problem_completion.problem.difficulty|lower }}">{{ problem_completion.problem.difficulty }}</span>
                         </div>
                         <div class="problem-thin-action">
-                            <span class="points-text">{{
-                                problem_completion.score_awarded|default:problem_completion.problem.score }} pts</span>
+                            <span class="points-text">{{ problem_completion.score_awarded|default:problem_completion.problem.score }} pts</span>
                             <span class="thin-arrow-btn">↗</span>
                         </div>
                     </a>
